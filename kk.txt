@@ -1,0 +1,20 @@
+ El volumen de la unidad C no tiene etiqueta.
+ El n£mero de serie del volumen es: B2B1-6E3A
+
+ Directorio de C:\Users\Usuario\final-project-durum-studio
+
+31/03/2022  19:31    <DIR>          .
+31/03/2022  19:31    <DIR>          ..
+31/03/2022  19:18             1.928 .gitignore
+31/03/2022  19:24    <DIR>          .idea
+31/03/2022  19:18    <DIR>          assets
+31/03/2022  19:18                37 AUTHORS
+31/03/2022  19:18    <DIR>          Development team documents
+31/03/2022  19:31                 0 kk.txt
+31/03/2022  19:18            35.823 LICENSE
+31/03/2022  19:18               467 README.md
+31/03/2022  19:18                 8 requirements.txt
+31/03/2022  19:22    <DIR>          src
+31/03/2022  19:19    <DIR>          venv
+               6 archivos         38.263 bytes
+               7 dirs  32.004.362.240 bytes libres
