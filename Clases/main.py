@@ -1,3 +1,5 @@
+## TODAVIA HACE FALTA COMENTAR Y DOCUMENTAR TODO, PERO SE HARÁ DURANTE ESTE FIN DE SEMANA
+
 import arcade
 import personaje # Aquí se importa la clase de personaje
 
