@@ -1,4 +1,3 @@
-
 import arcade
 import personaje # Aquí se importa la clase de personaje
 
