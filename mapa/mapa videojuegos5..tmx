@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.8" tiledversion="1.8.4" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="32" tileheight="32" infinite="0" nextlayerid="13" nextobjectid="1">
- <editorsettings>
-  <export target="mapa videojuegos5..tmx" format="tmx"/>
- </editorsettings>
  <tileset firstgid="1" source="../dd7i2k7-09c714e4-64c0-4aae-9acc-eedecac91373.tsx"/>
  <tileset firstgid="13" source="d8tqktg-cf0701db-7c62-46e0-b219-7680ed321410.tsx"/>
  <tileset firstgid="61" source="d3ferof-fd7558c3-8827-4c4d-9394-481f9f19af12.tsx"/>
