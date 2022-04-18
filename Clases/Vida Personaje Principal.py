@@ -1,6 +1,5 @@
 import random
 import arcade
-import main
 
 SPRITE_SCALING_PLAYER = 0.5
 SPRITE_SCALING_COIN = 0.6
@@ -36,8 +35,8 @@ class SpriteWithHealth(arcade.Sprite):
 
         health_string = f"{self.cur_health}/{self.max_health}"
         arcade.draw_text(health_string,
-                         start_x=73 + HEALTH_NUMBER_OFFSET_X,
-                         start_y=45 + HEALTH_NUMBER_OFFSET_Y,
+                         start_x=80 + HEALTH_NUMBER_OFFSET_X,
+                         start_y=602 + HEALTH_NUMBER_OFFSET_Y,
                          font_size=12,
                          color=arcade.color.WHITE)
 
@@ -55,24 +54,21 @@ class SpriteWithHealth(arcade.Sprite):
         # Calculate width based on health
         health_width = HEALTHBAR_WIDTH * (self.cur_health / self.max_health)
 
-        arcade.draw_rectangle_filled(center_x=65- 0.5 * (HEALTHBAR_WIDTH - health_width),
-                                     center_y=20 - 10,
+        arcade.draw_rectangle_filled(center_x=62- 0.5 * (HEALTHBAR_WIDTH - health_width),
+                                     center_y=576 - 10,
                                      width=health_width+30,
                                      height=HEALTHBAR_HEIGHT,
                                      color=arcade.color.GREEN)
 
 
-class MyGame(arcade.Window):
+class Vida(arcade.Sprite):
     """ Main application class. """
 
-
-    def setup(self):
-        self.score =""
-
+    def __init__(self):
+        self.score = ""
 
     def on_draw(self):
         self.personaje_principal.draw_health_number()
         self.personaje_principal.draw_health_bar()
-
-        arcade.draw_text(f"Health: {self.score}", 10, 20, arcade.color.WHITE, 14)
+        arcade.draw_text(f"Health: {self.score}", 10, 575, arcade.color.WHITE, 14)
 

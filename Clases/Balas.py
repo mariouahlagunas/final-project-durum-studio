@@ -45,13 +45,3 @@ class Bala(arcade.Sprite):
         for bullet in self.bullet_list:
             if bullet.bottom > self.width or bullet.top < 0 or bullet.right < 0 or bullet.left > self.width:
                 bullet.remove_from_sprite_lists()
-
-
-def main():
-    game = Bala()
-    game.setup()
-    arcade.run()
-
-
-if __name__ == "__main__":
-    main()
