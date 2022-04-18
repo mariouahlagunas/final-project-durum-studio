@@ -125,6 +125,8 @@ class MyGame(arcade.Window):
         # Set the background color
         arcade.set_background_color(arcade.color.AMAZON)
 
+    self.camera_for_gui = arcade.Camera(SCREEN_WIDTH, SCREEN_HEIGHT)
+
     def on_draw(self):
         """
         Render the screen.
@@ -136,6 +138,8 @@ class MyGame(arcade.Window):
         # Draw all the sprites.
         self.coin_list.draw()
         self.player_list.draw()
+        self.camera_for_gui.use()
+        arcade.draw_text(f"Score: {self.score}", 10, 10, arcade.color.WHITE, 24)
         for player in self.player_list:
             player.draw_health_number()
             player.draw_health_bar()
@@ -181,9 +185,6 @@ class MyGame(arcade.Window):
                 else:
                     # Not dead
                     arcade.play_sound(self.hit_sound)
-
-
-
 def main():
     """ Main Program """
     window = MyGame()

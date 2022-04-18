@@ -3,6 +3,9 @@
 import arcade
 import personaje # Aquí se importa la clase de personaje
 
+BULLET_SPEED = 15
+SPRITE_SCALING_LASER = 0.8
+
 SCREEN_TITLE = "Juego de equipo Durum studio"
 SPRITE_SCALING_PLAYER = 0.5
 MOVEMENT_SPEED = 3
@@ -51,6 +54,7 @@ class MyWindow(arcade.Window):
         elif key == arcade.key.S:
             self.personaje_principal.set_change_y(-velocidad_de_movimiento)
 
+
     def on_key_release(self, key, modifiers):
         """ Called whenever a user releases a key. """
         if key == arcade.key.LSHIFT:
@@ -59,8 +63,6 @@ class MyWindow(arcade.Window):
             self.personaje_principal.change_x = 0
         elif key == arcade.key.W or key == arcade.key.S:
             self.personaje_principal.change_y = 0
-
-
 def main():
     """ Main method """
     window = MyWindow(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
@@ -70,3 +72,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
