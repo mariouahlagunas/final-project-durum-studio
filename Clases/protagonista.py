@@ -27,7 +27,7 @@ import arcade
 
 class Protagonista(arcade.Sprite):
 
-    def __init__(self, position_x, position_y, change_x, change_y, sprite, size, velocidad):
+    def __init__(self, position_x, position_y, change_x, change_y, sprite, size, velocidad, hp):
         super().__init__()
         self.position_x = position_x
         self.position_y = position_y
@@ -36,7 +36,10 @@ class Protagonista(arcade.Sprite):
         self.player_sprite = arcade.Sprite(sprite, size)
         self.player_list = arcade.SpriteList()
         self.player_list.append(self.player_sprite)
-        self.hp = None
+
+        self.hp_full = hp
+        self.hp_now = hp
+
         self.velocidad_de_movimiento = velocidad
 
     def setup(self):
@@ -56,7 +59,7 @@ class Protagonista(arcade.Sprite):
         self.change_y = y
 
     def get_hp(self):
-        return self.hp
+        return self.hp_now
 
     def set_hp(self, new_hp):
         self.hp = new_hp
@@ -70,6 +73,30 @@ class Protagonista(arcade.Sprite):
     def cambiar_velocidad_de_movimiento(self,multiplicador,signo):
         self.set_velocidad_de_movimiento(self.get_velocidad_de_movimiento() * multiplicador)
 
+    def quitar_vida(self,cantidad):
+        self.hp_now -= cantidad
+
+    def poner_vida(self,cantidad):
+        self.hp_now += cantidad
+
+    def disparar(start_x, start_y, end_x, end_y):
+        # mirar con que arma se esta disparando
+        # mirar si hay municion de esas arma en el inventario
+        # en caso de que hay muncion, pues disparo
+        bullet = Balas.Bala(1, start_x, start_y, end_x, end_y)
+        #retun bullet
+
+
+
+
+        x_diff = dest_x - start_x
+        y_diff = dest_y - start_y
+        angle = math.atan2(y_diff, x_diff)
+        bullet.angle = math.degrees(angle)
+        print(f"Bullet angle: {bullet.angle:.2f}")
+        bullet.change_x = math.cos(angle) * bullet.get_BULLET_SPEED()
+        bullet.change_y = math.sin(angle) * bullet.get_BULLET_SPEED()
+        self.bullet_list.append(bullet)
 
     def draw(self):
         """ Draw everything """
