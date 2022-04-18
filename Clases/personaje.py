@@ -20,6 +20,8 @@
 # Para el lunes, pantalla vacia con un sprite que se mueva bien
 
 import arcade
+import main
+import Balas
 
 
 class Protagonista(arcade.Sprite):
@@ -35,6 +37,23 @@ class Protagonista(arcade.Sprite):
         self.player_list.append(self.player_sprite)
         self.hp = None
         self.velocidad_de_movimiento = velocidad
+
+    def disparar(self,button, modifiers):
+        self.bullet = Balas.Bala(":resources:images/space_shooter/laserBlue01.png", SPRITE_SCALING_LASER)
+        start_x = self.player_sprite.center_x
+        start_y = self.player_sprite.center_y
+        bullet.center_x = start_x
+        bullet.center_y = start_y
+        dest_x = bullet.get_change_x()
+        dest_y = bullet.get_change_y()
+        x_diff = dest_x - start_x
+        y_diff = dest_y - start_y
+        angle = math.atan2(y_diff, x_diff)
+        bullet.angle = math.degrees(angle)
+        print(f"Bullet angle: {bullet.angle:.2f}")
+        bullet.change_x = math.cos(angle) * bullet.get_BULLET_SPEED()
+        bullet.change_y = math.sin(angle) * bullet.get_BULLET_SPEED()
+        self.bullet_list.append(bullet)
 
     def setup(self):
         self.player_sprite.center_x = self.position_x
@@ -67,7 +86,9 @@ class Protagonista(arcade.Sprite):
     def draw(self):
         """ Draw everything """
         self.player_list.draw()
+        self.bullet_list.draw()
 
     def update(self):
         self.player_sprite.center_y = self.player_sprite.center_y + self.change_y
         self.player_sprite.center_x = self.player_sprite.center_x + self.change_x
+        self.bullet.update()

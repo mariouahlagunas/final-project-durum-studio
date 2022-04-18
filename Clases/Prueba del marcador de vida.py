@@ -35,8 +35,8 @@ class SpriteWithHealth(arcade.Sprite):
 
         health_string = f"{self.cur_health}/{self.max_health}"
         arcade.draw_text(health_string,
-                         start_x=self.center_x + HEALTH_NUMBER_OFFSET_X,
-                         start_y=self.center_y + HEALTH_NUMBER_OFFSET_Y,
+                         start_x=80 + HEALTH_NUMBER_OFFSET_X,
+                         start_y=602 + HEALTH_NUMBER_OFFSET_Y,
                          font_size=12,
                          color=arcade.color.WHITE)
 
@@ -54,9 +54,9 @@ class SpriteWithHealth(arcade.Sprite):
         # Calculate width based on health
         health_width = HEALTHBAR_WIDTH * (self.cur_health / self.max_health)
 
-        arcade.draw_rectangle_filled(center_x=self.center_x - 0.5 * (HEALTHBAR_WIDTH - health_width),
-                                     center_y=self.center_y - 10,
-                                     width=health_width,
+        arcade.draw_rectangle_filled(center_x=62- 0.5 * (HEALTHBAR_WIDTH - health_width),
+                                     center_y=576 - 10,
+                                     width=health_width+30,
                                      height=HEALTHBAR_HEIGHT,
                                      color=arcade.color.GREEN)
 
@@ -96,7 +96,7 @@ class MyGame(arcade.Window):
         self.coin_list = arcade.SpriteList()
 
         # Set up the player
-        self.score = 0
+        self.score = ""
 
         # Image from kenney.nl
         self.player_sprite = SpriteWithHealth(":resources:images/animated_characters/female_person/femalePerson_idle.png",
@@ -125,8 +125,6 @@ class MyGame(arcade.Window):
         # Set the background color
         arcade.set_background_color(arcade.color.AMAZON)
 
-    self.camera_for_gui = arcade.Camera(SCREEN_WIDTH, SCREEN_HEIGHT)
-
     def on_draw(self):
         """
         Render the screen.
@@ -138,8 +136,6 @@ class MyGame(arcade.Window):
         # Draw all the sprites.
         self.coin_list.draw()
         self.player_list.draw()
-        self.camera_for_gui.use()
-        arcade.draw_text(f"Score: {self.score}", 10, 10, arcade.color.WHITE, 24)
         for player in self.player_list:
             player.draw_health_number()
             player.draw_health_bar()
@@ -147,7 +143,7 @@ class MyGame(arcade.Window):
 
 
         # Render the text
-        arcade.draw_text(f"Score: {self.score}", 10, 20, arcade.color.WHITE, 14)
+        arcade.draw_text(f"Health: {self.score}", 10, 575, arcade.color.WHITE, 14)
 
     def on_mouse_motion(self, x, y, dx, dy):
         """
@@ -185,6 +181,9 @@ class MyGame(arcade.Window):
                 else:
                     # Not dead
                     arcade.play_sound(self.hit_sound)
+
+
+
 def main():
     """ Main Program """
     window = MyGame()
