@@ -35,7 +35,6 @@ class MyWindow(arcade.Window):
         self.up_pressed = False
         self.down_pressed = False
 
-
         self.camera_for_sprites = arcade.Camera(SCREEN_WIDTH, SCREEN_HEIGHT)
         self.camera_for_gui = arcade.Camera(SCREEN_WIDTH, SCREEN_HEIGHT)
 
