@@ -35,6 +35,7 @@ class MyWindow(arcade.Window):
         self.up_pressed = False
         self.down_pressed = False
 
+
         self.camera_for_sprites = arcade.Camera(SCREEN_WIDTH, SCREEN_HEIGHT)
         self.camera_for_gui = arcade.Camera(SCREEN_WIDTH, SCREEN_HEIGHT)
 
@@ -91,7 +92,6 @@ class MyWindow(arcade.Window):
 
     def on_key_press(self, key, modifiers):
         """ Called whenever the user presses a key. """
-        velocidad_de_movimiento = self.personaje_principal.get_velocidad_de_movimiento()
         if key == arcade.key.LSHIFT:
             self.shift_pressed = True
             self.personaje_principal.cambiar_velocidad_de_movimiento(2)
