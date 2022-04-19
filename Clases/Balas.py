@@ -2,35 +2,57 @@ import random
 import arcade
 import math
 import os
+
+
 class Bala(arcade.Sprite):
 
-    def __init__(self,x,y,BULLET_SPEED):
-        super().__init__()
-        file_path = os.path.dirname(os.path.abspath(__file__))
-        os.chdir(file_path)
-        self.x = x
-        self.y= y
-        self.BULLET_SPEED=BULLET_SPEED
-        self.bullet = arcade.Sprite(sprite, size)
-        self.bullet_list = None
-        self.gun_sound = arcade.sound.load_sound(":resources:sounds/laser1.wav")
-        self.hit_sound = arcade.sound.load_sound(":resources:sounds/phaseJump1.wav")
+    def __init__(self, tipo, start_x, start_y, end_x, end_y):
+        if 1(tipo)
+            velocidad = oqebtiowe
+            scala = woubgow
+            imagen = owbnegowe
+            sonido
+            de
+            salida
+            sonido
+            de
+            choque
+        elif 2
+            velocidad = oqebtiowe
+            scala = woubgow
+            imagen = owbnegowe
 
-        arcade.set_background_color(arcade.color.AMAZON)
+        super().__init__(img, scala)
+
+        self.center_x = start_x
+        self.center_y = start_y
+
+        x_diff = end_x - start_x
+        y_diff = end_y - start_y
+
+        angle = math.atan2(y_diff, x_diff)
+        self.angle = math.degrees(angle)
+
+        bullet.change_x = math.cos(angle) * self.get_BULLET_SPEED()
+        bullet.change_y = math.sin(angle) * self.get_BULLET_SPEED()
+
     def get_change_x(self, x):
         return self.x
+
     def set_change_x(self, x):
         self.x = x
+
     def get_change_y(self, y):
         return self.y
+
     def set_change_y(self, y):
         self.y = y
+
     def get_BULLET_SPEED(self):
         return self.BULLET_SPEED
 
     def set_BULLET_SPEED(self, BULLET_SPEED):
         self.BULLET_SPEED = BULLET_SPEED
-
 
     def setup(self):
 
