@@ -1,6 +1,10 @@
 
+
+
                 #CAMBIAR EL CÓDIGO TOTALMENTE A INGLÉS
                 #LOS COMENTARIOS SERÁN EN ESPAÑOL
+                #Clases en mayusculas
+                #Métodos en minúsculas.
 
 # CLASE MAIN DE PRUEBA PERO SIN DISPARO, LO DEJO AQUI PARA PODER UTILIZAR DE ÉL EL MOVIMIENTO ACTUALIZADO
 
