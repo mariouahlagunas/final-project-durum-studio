@@ -39,7 +39,7 @@ class Protagonista(arcade.Sprite):
         self.velocidad_de_movimiento = velocidad
 
     def disparar(self,button, modifiers):
-        self.bullet = Balas.Bala(":resources:images/space_shooter/laserBlue01.png", SPRITE_SCALING_LASER)
+        bullet = Balas.Bala(":resources:images/space_shooter/laserBlue01.png", SPRITE_SCALING_LASER)
         start_x = self.player_sprite.center_x
         start_y = self.player_sprite.center_y
         bullet.center_x = start_x
