@@ -23,6 +23,7 @@
 # CLASE PROTAGONISTA ACTUALISADO PERO SIN DISPARO, LO DEJO AQUI PARA PODER UTILIZAR DE ÉL EL MOVIMIENTO ACTUALIZADO
 
 import arcade
+import Balas
 
 
 class Protagonista(arcade.Sprite):
@@ -58,6 +59,9 @@ class Protagonista(arcade.Sprite):
     def set_change_y(self, y):
         self.change_y = y
 
+    def get_hpfull(self):
+        return self.hp_full
+
     def get_hp(self):
         return self.hp_now
 
@@ -70,32 +74,45 @@ class Protagonista(arcade.Sprite):
     def set_velocidad_de_movimiento(self, velocidad_nueva):
         self.velocidad_de_movimiento = velocidad_nueva
 
-    def cambiar_velocidad_de_movimiento(self,multiplicador):
+    def cambiar_velocidad_de_movimiento(self, multiplicador):
         self.set_velocidad_de_movimiento(self.get_velocidad_de_movimiento() * multiplicador)
 
-    def quitar_vida(self,cantidad):
+    def quitar_vida(self, cantidad):
         self.hp_now -= cantidad
 
-    def poner_vida(self,cantidad):
+    def imprimir_vida(self, width,HEALTHBAR_HEIGHT,cur_health,max_health):
+        health_width = width * (cur_health /max_health)
+        Bar_total= width * (max_health / max_health)
+        if 0<cur_health<=max_health:
+            arcade.draw_rectangle_filled(center_x=103 - 0.5 * (width - health_width),
+                                         center_y=25 - 10,
+                                         width=Bar_total + 10,
+                                         height=HEALTHBAR_HEIGHT,
+                                         color=arcade.color.RED)
+            arcade.draw_rectangle_filled(center_x=103 - 0.5 * (width- health_width),
+                                     center_y=25 - 10,
+                                     width=health_width + 10,
+                                     height=HEALTHBAR_HEIGHT,
+                                     color=arcade.color.GREEN)
+
+
+    def poner_vida(self, cantidad):
         self.hp_now += cantidad
 
-    def disparar(start_x, start_y, end_x, end_y):
+    def disparar(self, start_x, start_y, end_x, end_y):
         # mirar con que arma se esta disparando
         # mirar si hay municion de esas arma en el inventario
         # en caso de que hay muncion, pues disparo
-        bullet = Balas.Bala(1, start_x, start_y, end_x, end_y)
-        #retun bullet
-
-
-
+        bullet =Balas.Bala("laser", start_x, start_y, end_x, end_y)
+        return bullet
 
         x_diff = dest_x - start_x
         y_diff = dest_y - start_y
         angle = math.atan2(y_diff, x_diff)
         bullet.angle = math.degrees(angle)
         print(f"Bullet angle: {bullet.angle:.2f}")
-        bullet.change_x = math.cos(angle) * bullet.get_BULLET_SPEED()
-        bullet.change_y = math.sin(angle) * bullet.get_BULLET_SPEED()
+        bullet.change_x = math.cos(angle) * velocidad
+        bullet.change_y = math.sin(angle) * velocidad
         self.bullet_list.append(bullet)
 
     def draw(self):

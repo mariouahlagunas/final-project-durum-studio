@@ -4,6 +4,7 @@
 
 import arcade
 import protagonista # Aquí se importa la clase de personaje
+import Balas
 
 SCREEN_TITLE = "Juego de equipo Durum studio"
 
@@ -13,6 +14,8 @@ MOVEMENT_SPEED = 3
 
 SPRITE_IMAGE_SIZE = 128
 SPRITE_SIZE = int(SPRITE_IMAGE_SIZE * SPRITE_SCALING_PLAYER)
+HEALTHBAR_WIDTH = 80
+HEALTHBAR_HEIGHT = 7
 
 SCREEN_WIDTH = SPRITE_SIZE * 15
 SCREEN_HEIGHT = SPRITE_SIZE * 10
@@ -69,24 +72,26 @@ class MyWindow(arcade.Window):
         self.camera_for_sprites.use()
 
         self.personaje_principal.draw()
+        self.bullet_list.draw()
         # imprimir las balas
 
         self.camera_for_gui.use()
         # 1
-        arcade.draw_text(f"Score: {self.personaje_principal.get_hp()}", 10, 10, arcade.color.WHITE, 24)
+        arcade.draw_text(f"Health: {self.personaje_principal.get_hp()}", 10, 30, arcade.color.WHITE, 24)
 
         # 2
-        #self.personaje_principal.imprimir_vida()
+        self.personaje_principal.imprimir_vida(HEALTHBAR_WIDTH,HEALTHBAR_HEIGHT, self.personaje_principal.get_hp(), self.personaje_principal.get_hpfull())
 
     def on_update(self, delta_time):
         """ Movement and game logic """
         self.personaje_principal.update()
 
         #actualizar la bala
+        self.bullet_list.update()
         #MIRO SI SALE DE PANTALLA PARA BORRARLA EN ESE CASO
-        #for bullet in self.bullet_list:
-        #    if bullet.bottom > self.width or bullet.top < 0 or bullet.right < 0 or bullet.left > self.width:
-        #        bullet.remove_from_sprite_lists()
+        for bullet in self.bullet_list:
+            if bullet.bottom > self.width or bullet.top < 0 or bullet.right < 0 or bullet.left > self.width:
+                bullet.remove_from_sprite_lists()
         #MIRAR SI CHOCA CON ALGO (de momento no hacer)
 
     def on_key_press(self, key, modifiers):
@@ -125,8 +130,8 @@ class MyWindow(arcade.Window):
             self.right_pressed = False
             self.update_player_speed()
 
-    #def on_mouse_press(self, x, y, button, modifiers):
-        #self.bullet_list.append(self.personaje_principal.disparar(self.personaje_principal.center_x, self.personaje_principal.center_y, x, y))
+    def on_mouse_press(self, x, y, button, modifiers):
+        self.bullet_list.append(self.personaje_principal.disparar(self.personaje_principal.center_x, self.personaje_principal.center_y, x, y))
 
 def main():
     """ Main method """
