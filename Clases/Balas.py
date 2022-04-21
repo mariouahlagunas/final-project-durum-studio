@@ -2,6 +2,7 @@ import random
 import arcade
 import math
 import os
+import Globals
 
 
 class Bala(arcade.Sprite):

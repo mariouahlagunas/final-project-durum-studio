@@ -22,95 +22,87 @@
 
 # CLASE PROTAGONISTA ACTUALISADO PERO SIN DISPARO, LO DEJO AQUI PARA PODER UTILIZAR DE ÉL EL MOVIMIENTO ACTUALIZADO
 
+
+
+
+
+
+
+
+
+
 import arcade
-import Balas
+
 import math
+
+from Globals import *
+import Balas
+
 
 
 class Protagonista(arcade.Sprite):
 
-    def __init__(self, position_x, position_y, change_x, change_y, sprite, size, velocidad, hp):
-        super().__init__()
-        self.position_x = position_x
-        self.position_y = position_y
+    def __init__(self, center_x, center_y, change_x, change_y):
+
+        super().__init__(IMG, SCALE)
+
+        self.center_x = center_x
+        self.center_y = center_y
         self.change_x = change_x
         self.change_y = change_y
-        self.player_sprite = arcade.Sprite(sprite, size)
-        self.player_list = arcade.SpriteList()
-        self.player_list.append(self.player_sprite)
 
-        self.hp_full = hp
-        self.hp_now = hp
+        self.movement_speed_normal = VELOCIDAD
+        self.movement_speed_now = VELOCIDAD
 
-        self.velocidad_de_movimiento = velocidad
-
-    def setup(self):
-        self.player_sprite.center_x = self.position_x
-        self.player_sprite.center_y = self.position_y
-
-    def get_change_x(self, x):
-        return self.change_x
-
-    def set_change_x(self, x):
-        self.change_x = x
-
-    def get_change_y(self, y):
-        return self.change_y
-
-    def set_change_y(self, y):
-        self.change_y = y
-
-    def get_position_x(self):
-        return self.player_sprite.center_x
-
-    def set_position_x(self, x):
-        self.player_sprite.center_x = x
-
-    def get_position_y(self):
-        return self.player_sprite.center_y
-
-    def set_position_y(self, y):
-        self.player_sprite.center_y = y
-
-    def get_hpfull(self):
-        return self.hp_full
-
-    def get_hp(self):
-        return self.hp_now
-
-    def set_hp(self, new_hp):
-        self.hp = new_hp
-
-    def get_velocidad_de_movimiento(self):
-        return self.velocidad_de_movimiento
-
-    def set_velocidad_de_movimiento(self, velocidad_nueva):
-        self.velocidad_de_movimiento = velocidad_nueva
-
-    def cambiar_velocidad_de_movimiento(self, multiplicador):
-        self.set_velocidad_de_movimiento(self.get_velocidad_de_movimiento() * multiplicador)
-
-    def quitar_vida(self, cantidad):
-        self.hp_now -= cantidad
-
-    def imprimir_vida(self, width,HEALTHBAR_HEIGHT,cur_health,max_health):
-        health_width = width * (cur_health /max_health)
-        Bar_total= width * (max_health / max_health)
-        if 0<cur_health<=max_health:
-            arcade.draw_rectangle_filled(center_x=103 - 0.5 * (width - health_width),
-                                         center_y=25 - 10,
-                                         width=Bar_total + 10,
-                                         height=HEALTHBAR_HEIGHT,
-                                         color=arcade.color.RED)
-            arcade.draw_rectangle_filled(center_x=103 - 0.5 * (width- health_width),
-                                     center_y=25 - 10,
-                                     width=health_width + 10,
-                                     height=HEALTHBAR_HEIGHT,
-                                     color=arcade.color.GREEN)
+        self.hp_max = HP
+        self.hp_now = HP
 
 
-    def poner_vida(self, cantidad):
-        self.hp_now += cantidad
+    def change_movement_speed(self, multiplier):
+        self.movement_speed_now = self.movement_speed_normal * multiplier
+
+
+    def lose_life(self, amount):
+        self.hp_now -= amount
+        # Mirar el método en el que implementemos esto, ya que si la vida llega a 0 se pierde la partida.
+        # Y depende de como se haga ese, ver como completamos este
+
+    def gain_life(self, amount):
+        self.hp_now += amount
+        #Completar con el tema de que no se puede superar el hp_max nunca.
+
+
+    def imprimir_vida(self):
+        healthbar_height = HEALTHBAR_HEIGHT
+        healthbar_height_framework = HEALTHBAR_HEIGHT + 4
+        healthbar_width = HEALTHBAR_WIDTH * self.hp_now
+        healthbar_width_framework = HEALTHBAR_WIDTH * self.hp_max + 4
+
+        if self.hp_now > self.hp_max * 0.5:
+            healthbar_color = arcade.color.GREEN
+        elif self.hp_now > self.hp_max * 0.25:
+            healthbar_color = arcade.color.YELLOW
+        else:
+            healthbar_color = arcade.color.RED
+        healthbar_color_framework = arcade.color.BLACK
+
+        arcade.draw_rectangle_filled(center_x = self.center_x,
+                                     center_y = self.top + 5,
+                                     width = healthbar_width_framework,
+                                     height = healthbar_height_framework,
+                                     color = healthbar_color_framework)
+
+        arcade.draw_rectangle_filled(center_x = self.center_x - HEALTHBAR_WIDTH * 0.5 * (self.hp_max - self.hp_now),
+                                     center_y = self.top + 5,
+                                     width = healthbar_width,
+                                     height = healthbar_height,
+                                     color = healthbar_color)
+
+
+
+
+
+
 
     def disparar(self, start_x, start_y, end_x, end_y):
         # mirar con que arma se esta disparando
@@ -128,10 +120,41 @@ class Protagonista(arcade.Sprite):
         bullet.change_y = math.sin(angle) * 10
         return bullet
 
-    def draw(self):
-        """ Draw everything """
-        self.player_list.draw()
 
-    def update(self):
-        self.player_sprite.center_y = self.player_sprite.center_y + self.change_y
-        self.player_sprite.center_x = self.player_sprite.center_x + self.change_x
+
+
+
+
+
+
+
+
+    def get_hp(self):
+        return self.hp_now
+
+    def get_change_x(self, x):
+        return self.change_x
+
+    def set_change_x(self, x):
+        self.change_x = x
+
+    def get_change_y(self, y):
+        return self.change_y
+
+    def set_change_y(self, y):
+        self.change_y = y
+
+    def get_hpfull(self):
+        return self.hp_max
+
+    def get_hp(self):
+        return self.hp_now
+
+    def set_hp(self, new_hp):
+        self.hp = new_hp
+
+    def get_velocidad_de_movimiento(self):
+        return self.movement_speed_now
+
+    def set_velocidad_de_movimiento(self, velocidad_nueva):
+        self.velocidad_de_movimiento = velocidad_nueva

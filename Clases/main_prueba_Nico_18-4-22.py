@@ -8,6 +8,7 @@
 import arcade
 import protagonista # Aquí se importa la clase de personaje
 import Balas
+import Globals
 
 SCREEN_TITLE = "Juego de equipo Durum studio"
 
@@ -31,8 +32,8 @@ class MyWindow(arcade.Window):
         """ Init """
         super().__init__(width, height, title)
         #self.set_mouse_visible(False)
-        arcade.set_background_color(arcade.color.BLACK)
-        self.personaje_principal = protagonista.Protagonista(SCREEN_WIDTH/2,SCREEN_HEIGHT/2,0,0, ":resources:images/animated_characters/female_person/femalePerson_idle.png", SPRITE_SCALING_PLAYER, MOVEMENT_SPEED, 100)
+        arcade.set_background_color(arcade.color.WHITE)
+        self.personaje_principal = protagonista.Protagonista(SCREEN_WIDTH/2,SCREEN_HEIGHT/2,0,0)
 
         # Track the current state of what key is pressed
         self.shift_pressed = False
@@ -48,7 +49,6 @@ class MyWindow(arcade.Window):
 
     def setup(self):
         """ Set up everything """
-        self.personaje_principal.setup()
         self.bullet_list = arcade.SpriteList()
 
     def update_player_speed(self):
@@ -80,10 +80,10 @@ class MyWindow(arcade.Window):
 
         self.camera_for_gui.use()
         # 1
-        arcade.draw_text(f"Health: {self.personaje_principal.get_hp()}", 10, 30, arcade.color.WHITE, 24)
+        arcade.draw_text(f"Health: {self.personaje_principal.get_hp()}", 10, 30, arcade.color.BLACK, 24)
 
         # 2
-        self.personaje_principal.imprimir_vida(HEALTHBAR_WIDTH,HEALTHBAR_HEIGHT, self.personaje_principal.get_hp(), self.personaje_principal.get_hpfull())
+        self.personaje_principal.imprimir_vida()
 
     def on_update(self, delta_time):
         """ Movement and game logic """
@@ -114,6 +114,11 @@ class MyWindow(arcade.Window):
         elif key == arcade.key.S:
             self.down_pressed = True
             self.update_player_speed()
+        #Son solo para probar el tema de la vida (para eliminar)
+        elif key == arcade.key.Q:
+            self.personaje_principal.lose_life(5)
+        elif key == arcade.key.E:
+            self.personaje_principal.gain_life(5)
 
     def on_key_release(self, key, modifiers):
         """ Called whenever a user releases a key. """
