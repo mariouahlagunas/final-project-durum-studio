@@ -60,6 +60,18 @@ class Protagonista(arcade.Sprite):
     def set_change_y(self, y):
         self.change_y = y
 
+    def get_position_x(self):
+        return self.player_sprite.center_x
+
+    def set_position_x(self, x):
+        self.player_sprite.center_x = x
+
+    def get_position_y(self):
+        return self.player_sprite.center_y
+
+    def set_position_y(self, y):
+        self.player_sprite.center_y = y
+
     def get_hpfull(self):
         return self.hp_full
 
@@ -104,8 +116,7 @@ class Protagonista(arcade.Sprite):
         # mirar con que arma se esta disparando
         # mirar si hay municion de esas arma en el inventario
         # en caso de que hay muncion, pues disparo
-        bullet =Balas.Bala("laser", start_x, start_y, end_x, end_y)
-
+        bullet =Balas.Bala("laser", start_x, start_y)
 
 
         x_diff = end_x - start_x
