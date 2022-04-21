@@ -17,19 +17,3 @@ class Bala(arcade.Sprite):
             imagen =":resources:images/space_shooter/laserBlue01.png"
 
         super().__init__(imagen, scala)
-
-
-
-    def setup(self):
-
-        """ Set up the game and initialize the variables. """
-        self.bullet_list = arcade.SpriteList()
-
-    def on_draw(self):
-        self.bullet_list.draw()
-
-    def on_update(self, delta_time):
-        self.bullet_list.update()
-        for bullet in self.bullet_list:
-            if bullet.bottom > self.width or bullet.top < 0 or bullet.right < 0 or bullet.left > self.width:
-                bullet.remove_from_sprite_lists()

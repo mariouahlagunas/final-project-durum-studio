@@ -24,6 +24,7 @@
 
 import arcade
 import Balas
+import math
 
 
 class Protagonista(arcade.Sprite):
@@ -104,16 +105,17 @@ class Protagonista(arcade.Sprite):
         # mirar si hay municion de esas arma en el inventario
         # en caso de que hay muncion, pues disparo
         bullet =Balas.Bala("laser", start_x, start_y, end_x, end_y)
-        return bullet
 
-        x_diff = dest_x - start_x
-        y_diff = dest_y - start_y
+
+
+        x_diff = end_x - start_x
+        y_diff = end_y - start_y
         angle = math.atan2(y_diff, x_diff)
         bullet.angle = math.degrees(angle)
         print(f"Bullet angle: {bullet.angle:.2f}")
-        bullet.change_x = math.cos(angle) * velocidad
-        bullet.change_y = math.sin(angle) * velocidad
-        self.bullet_list.append(bullet)
+        bullet.change_x = math.cos(angle) * 10
+        bullet.change_y = math.sin(angle) * 10
+        return bullet
 
     def draw(self):
         """ Draw everything """

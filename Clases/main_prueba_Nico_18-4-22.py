@@ -1,7 +1,4 @@
-
-
-
-                #CAMBIAR EL CÓDIGO TOTALMENTE A INGLÉS
+#CAMBIAR EL CÓDIGO TOTALMENTE A INGLÉS
                 #LOS COMENTARIOS SERÁN EN ESPAÑOL
                 #Clases en mayusculas
                 #Métodos en minúsculas.
@@ -138,6 +135,7 @@ class MyWindow(arcade.Window):
 
     def on_mouse_press(self, x, y, button, modifiers):
         self.bullet_list.append(self.personaje_principal.disparar(self.personaje_principal.center_x, self.personaje_principal.center_y, x, y))
+
 
 def main():
     """ Main method """
