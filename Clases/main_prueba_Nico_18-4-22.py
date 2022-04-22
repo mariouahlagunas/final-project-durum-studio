@@ -39,27 +39,8 @@ class MyWindow(arcade.Window):
         self.protagonist_list = arcade.SpriteList()
         self.bullet_list = arcade.SpriteList()
 
-
         self.protagonist = Protagonista(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 0, 0)
         self.protagonist_list.append(self.protagonist)
-
-
-    def update_player_speed(self):
-
-        # Calculate speed based on the keys pressed
-        self.protagonist.set_change_x(0)
-        self.protagonist.set_change_y(0)
-
-        velocidad_de_movimiento = self.protagonist.get_velocidad_de_movimiento()
-
-        if self.up_pressed and not self.down_pressed:
-            self.protagonist.set_change_y(velocidad_de_movimiento)
-        elif self.down_pressed and not self.up_pressed:
-            self.protagonist.set_change_y(-velocidad_de_movimiento)
-        if self.left_pressed and not self.right_pressed:
-            self.protagonist.set_change_x(-velocidad_de_movimiento)
-        elif self.right_pressed and not self.left_pressed:
-            self.protagonist.set_change_x(velocidad_de_movimiento)
 
 
     def on_draw(self):
@@ -69,7 +50,7 @@ class MyWindow(arcade.Window):
 
         self.camera_for_sprites.use()
 
-        self.protagonist_list.draw()
+        self.protagonist.draw()
         self.bullet_list.draw()
 
         self.camera_for_gui.use()
@@ -82,55 +63,78 @@ class MyWindow(arcade.Window):
         self.protagonist_list.update()
         self.bullet_list.update()
 
-        #MIRO SI SALE DE PANTALLA PARA BORRARLA EN ESE CASO
         for bullet in self.bullet_list:
-            if bullet.bottom > self.width or bullet.top < 0 or bullet.right < 0 or bullet.left > self.width:
+
+            if bullet.bottom > self.height or bullet.top < 0 or bullet.right < 0 or bullet.left > self.width:
                 bullet.remove_from_sprite_lists()
 
 
     def on_key_press(self, key, modifiers):
+
         if key == arcade.key.LSHIFT:
             self.shift_pressed = True
-            self.protagonist.change_movement_speed(2)
+            self.protagonist_movement()
         if key == arcade.key.A:
             self.left_pressed = True
-            self.update_player_speed()
+            self.protagonist_movement()
         elif key == arcade.key.D:
             self.right_pressed = True
-            self.update_player_speed()
+            self.protagonist_movement()
         elif key == arcade.key.W:
             self.up_pressed = True
-            self.update_player_speed()
+            self.protagonist_movement()
         elif key == arcade.key.S:
             self.down_pressed = True
-            self.update_player_speed()
+            self.protagonist_movement()
+
         #Son solo para probar el tema de la vida (para eliminar)
         elif key == arcade.key.Q:
             self.protagonist.lose_life(5)
         elif key == arcade.key.E:
             self.protagonist.gain_life(5)
 
+
     def on_key_release(self, key, modifiers):
-        """ Called whenever a user releases a key. """
+
         if key == arcade.key.LSHIFT:
             self.shift_pressed = False
-            self.protagonist.change_movement_speed(1)
+            self.protagonist_movement()
         if key == arcade.key.W:
             self.up_pressed = False
-            self.update_player_speed()
+            self.protagonist_movement()
         elif key == arcade.key.S:
             self.down_pressed = False
-            self.update_player_speed()
+            self.protagonist_movement()
         elif key == arcade.key.A:
             self.left_pressed = False
-            self.update_player_speed()
+            self.protagonist_movement()
         elif key == arcade.key.D:
             self.right_pressed = False
-            self.update_player_speed()
+            self.protagonist_movement()
+
 
     def on_mouse_press(self, x, y, button, modifiers):
+
         bullet = self.protagonist.shoot(x, y)
         self.bullet_list.append(bullet)
+
+
+    def protagonist_movement(self):
+
+        if self.shift_pressed:
+            self.protagonist.change_movement_speed(1.5)
+        else:
+            self.protagonist.change_movement_speed(1)
+
+        self.protagonist.not_move()
+        if self.up_pressed and not self.down_pressed:
+            self.protagonist.move_up()
+        elif self.down_pressed and not self.up_pressed:
+            self.protagonist.move_down()
+        if self.left_pressed and not self.right_pressed:
+            self.protagonist.move_left()
+        elif self.right_pressed and not self.left_pressed:
+            self.protagonist.move_right()
 
 
 def main():

@@ -56,13 +56,30 @@ class Protagonista(arcade.Sprite):
 
 
     def draw(self):
-        super()
+
+        super().draw()
 
         self.print_life()
 
 
     def change_movement_speed(self, multiplier):
         self.movement_speed_now = self.movement_speed_normal * multiplier
+
+    def not_move(self):
+        self.change_x = 0
+        self.change_y = 0
+
+    def move_up(self):
+        self.change_y = self.movement_speed_now
+
+    def move_down(self):
+        self.change_y = -self.movement_speed_now
+
+    def move_left(self):
+        self.change_x = -self.movement_speed_now
+
+    def move_right(self):
+        self.change_x = self.movement_speed_now
 
 
     def lose_life(self, amount):
@@ -73,7 +90,6 @@ class Protagonista(arcade.Sprite):
     def gain_life(self, amount):
         self.hp_now += amount
         #Completar con el tema de que no se puede superar el hp_max nunca.
-
 
     def print_life(self):
         healthbar_height = HEALTHBAR_HEIGHT

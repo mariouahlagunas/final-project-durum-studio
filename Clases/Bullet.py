@@ -28,7 +28,6 @@ class Bullet(arcade.Sprite):
             printf("Error")
             #completar
 
-
         super().__init__(img, scale)
 
         self.center_x = start_x
