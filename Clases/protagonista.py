@@ -33,11 +33,8 @@
 
 import arcade
 
-import math
-
 from Globals import *
-import Balas
-
+from Bullet import *
 
 
 class Protagonista(arcade.Sprite):
@@ -51,8 +48,8 @@ class Protagonista(arcade.Sprite):
         self.change_x = change_x
         self.change_y = change_y
 
-        self.movement_speed_normal = VELOCIDAD
-        self.movement_speed_now = VELOCIDAD
+        self.movement_speed_normal = SPEED
+        self.movement_speed_now = SPEED
 
         self.hp_max = HP
         self.hp_now = HP
@@ -97,28 +94,32 @@ class Protagonista(arcade.Sprite):
                                      width = healthbar_width,
                                      height = healthbar_height,
                                      color = healthbar_color)
+        # Con lo que tenemos ahora mismo, en función de la vida maxima del personaje se imprime la barra.
+        # Por lo que a más vida, la barra más grande. Y a menos vida, más pequeña.
+        # Y si ponemos vidas diferentes, puede que quede raro
 
 
+    def shoot(self, end_x, end_y):
+        # Mirar con que arma se está disparando
+        # Mirar potenciadores que pueda tener el personaje
+        # Mirar si hay munición de esa arma en el inventario
+        # En caso de que hay munición, pues disparo.
+        # En caso contrario, alguna animación o mensaje de que no hay munición
 
+        start_x = self.center_x
+        start_y = self.center_y
 
+        # Esto, obvio hay que hacerlo pillando el tipo de arma y los potenciadores que tenga el personaje
+        type = "water"
+        multiplier_scale = 1
+        multiplier_damage = 1
+        multiplier_speed = 1
 
+        bullet = Bullet(start_x, start_y, end_x, end_y, type, multiplier_scale, multiplier_damage, multiplier_speed)
 
-
-    def disparar(self, start_x, start_y, end_x, end_y):
-        # mirar con que arma se esta disparando
-        # mirar si hay municion de esas arma en el inventario
-        # en caso de que hay muncion, pues disparo
-        bullet =Balas.Bala("laser", start_x, start_y)
-
-
-        x_diff = end_x - start_x
-        y_diff = end_y - start_y
-        angle = math.atan2(y_diff, x_diff)
-        bullet.angle = math.degrees(angle)
-        print(f"Bullet angle: {bullet.angle:.2f}")
-        bullet.change_x = math.cos(angle) * 10
-        bullet.change_y = math.sin(angle) * 10
         return bullet
+
+
 
 
 

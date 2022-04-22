@@ -7,7 +7,7 @@
 
 import arcade
 import protagonista # Aquí se importa la clase de personaje
-import Balas
+import Bullet
 import Globals
 
 SCREEN_TITLE = "Juego de equipo Durum studio"
@@ -139,8 +139,8 @@ class MyWindow(arcade.Window):
             self.update_player_speed()
 
     def on_mouse_press(self, x, y, button, modifiers):
-        self.bullet_list.append(self.personaje_principal.disparar(self.personaje_principal.get_position_x(), self.personaje_principal.get_position_y(), x, y))
-        print (self.personaje_principal.get_position_x(), ",", self.personaje_principal.get_position_y())
+        self.bullet_list.append(self.personaje_principal.shoot(x, y))
+
 
 def main():
     """ Main method """
