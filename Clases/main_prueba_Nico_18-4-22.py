@@ -107,7 +107,10 @@ class MyWindow(arcade.Window):
             ##Vemos si tenemos setas en el inventario
             if self.Inventario.get_setas() > 0:
                 #Si tiene, realiza su accion y se gasta 1 en el inventario
-                self.protagonist.change_movement_speed(800)
+                print(self.protagonist.movement_speed_now)
+
+                self.protagonist.change_movement_speed(4)
+                print(self.protagonist.movement_speed_now)
                 self.Inventario.set_setas((self.Inventario.get_setas()) - 1)
 
 
