@@ -7,6 +7,8 @@ from Bullet import *
 from escudo import *
 from Setas import *
 
+
+
 class MyWindow(arcade.Window):
 
     def __init__(self):
