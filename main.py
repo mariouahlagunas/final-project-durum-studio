@@ -1,7 +1,7 @@
 #Todavia no funciona
 
 import arcade
-from Clases.mainWindow import MyWindow
+from Clases.mainWindow import *
 
 
 def main():

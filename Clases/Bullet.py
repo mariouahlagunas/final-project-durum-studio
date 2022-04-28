@@ -1,7 +1,7 @@
 import arcade
 import math
 
-from Globals import *
+from Clases.Globals import *
 
 
 class Bullet(arcade.Sprite):

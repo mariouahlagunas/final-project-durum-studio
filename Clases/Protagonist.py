@@ -2,8 +2,8 @@
 # Que tenga getters y setters.
 import arcade
 
-from Globals import *
-from Bullet import *
+from Clases.Globals import *
+from Clases.Bullet import *
 
 
 class Protagonista(arcade.Sprite):

@@ -1,12 +1,12 @@
 import arcade
 #import os
-from Inventario import *
+from Clases.Inventario import *
 
-from Globals import *
-from Protagonist import *
-from Bullet import *
-from escudo import *
-from Setas import *
+from Clases.Globals import *
+from Clases.Protagonist import *
+from Clases.Bullet import *
+from Clases.escudo import *
+from Clases.Setas import *
 
 
 
@@ -27,6 +27,7 @@ class MyWindow(arcade.Window):
         self.escudo = None
         self.Setas = None
 
+        self.physics_engine = None
 
         # Track the current state of what key is pressed
         self.shift_pressed = False
@@ -62,7 +63,7 @@ class MyWindow(arcade.Window):
         #Carga de mapa
 
         #map_name = "mapa2/mapa2..tmx"
-        map_name = "pruebaMapa/mapa.tmx"
+        map_name = "assets/tilemaps/pruebaMapa/mapa.tmx"
         #map_name = "\pruebaMapa\mapa.tmx"
 
         #Terreno
@@ -83,7 +84,7 @@ class MyWindow(arcade.Window):
             "suelo":{
                 "use_spatial_hash": True
             },
-            "caja":{
+            "cajas":{
                 "use_spatial_hash": True,
                 "hit_box_algorithm": "Detailed"
             },
@@ -92,9 +93,10 @@ class MyWindow(arcade.Window):
                 "hit_box_algorithm": "Detailed"
             },
         }
-        my_map = arcade.load_tilemap(map_name,0.5,layer_options)
+        my_map = arcade.load_tilemap(map_name,1,layer_options)
         self.scene = arcade.Scene.from_tilemap(my_map)
 
+        self.physics_engine = arcade.PhysicsEngineSimple(self.protagonist,self.scene["cajas"])
         #self.ground = arcade.tilemap.process_layer(map_object = my_map, layer_name = ground_layer, scaling = 0.5)
         #self.boxes = arcade.tilemap.process_layer(map_object = my_map, layer_name = boxes_layer, scaling = 0.5, use_spatial_hash = True)
         #self.edna_sprite = arcade.tilemap.process_layer(map_object = my_map, layer_name = edna_layer, scaling = 0.5, use_spatial_hash = True)
@@ -198,26 +200,28 @@ class MyWindow(arcade.Window):
         if (self.timer - self.time_for_comparing) > 5:
             self.speed_potion_activated = False
 
-        player_collision_list = arcade.check_for_collision_with_lists(
-            self.protagonist,
-            [
-                self.scene["caja"],
-            ],
-        )
-
-        for collision in player_collision_list:
-            if self.scene["caja"] in collision.sprite_lists:
-                print ("caja")
-                self.timer_for_collision = self.timer
-                self.protagonist.not_move()
-                if self.up_pressed:
-                    self.protagonist.move_down()
-                if self.down_pressed:
-                    self.protagonist.move_up()
-                if self.left_pressed:
-                    self.protagonist.move_right()
-                if self.right_pressed:
-                    self.protagonist.move_left()
+        self.physics_engine.update()
+        #player_collision_list = arcade.check_for_collision_with_lists(
+        #    self.bullet_list,
+        #    [
+        #        self.scene["edna"],
+        #    ],
+        #)
+#
+        #for collision in player_collision_list:
+            #if self.scene["edna"] in collision.sprite_lists:
+                #print ("edna")
+                #collision.remove_from_sprite_lists()
+                #self.timer_for_collision = self.timer
+                #self.protagonist.not_move()
+                #if self.up_pressed:
+                #    self.protagonist.move_down()
+                #if self.down_pressed:
+                #    self.protagonist.move_up()
+                #if self.left_pressed:
+                #    self.protagonist.move_right()
+                #if self.right_pressed:
+                #    self.protagonist.move_left()
 
 
     def on_key_press(self, key, modifiers):
@@ -249,7 +253,7 @@ class MyWindow(arcade.Window):
             if self.Inventario.get_setas() > 0:
                 #Si tiene, realiza su accion y se gasta 1 en el inventario
                 print(self.protagonist.movement_speed_now)
-                self.protagonist.change_movement_speed(4)
+                self.protagonist.change_movement_speed(2)
                 print(self.protagonist.movement_speed_now)
                 self.Inventario.set_setas((self.Inventario.get_setas()) - 1)
                 self.time_for_comparing = self.timer
@@ -290,10 +294,10 @@ class MyWindow(arcade.Window):
     def protagonist_movement(self):
 
         if self.shift_pressed:
-            self.protagonist.change_movement_speed(1.5)
+            self.protagonist.change_movement_speed(1)
         else:
             if not self.speed_potion_activated:
-                self.protagonist.change_movement_speed(1)
+                self.protagonist.change_movement_speed(0.5)
 
         self.protagonist.not_move()
         if self.up_pressed and not self.down_pressed:
@@ -306,11 +310,11 @@ class MyWindow(arcade.Window):
             self.protagonist.move_right()
 
 
-def main():
-    window = MyWindow()
-    window.setup()
-    arcade.run()
-
-
-if __name__ == "__main__":
-    main()
+# def main():
+#     window = MyWindow()
+#     window.setup()
+#     arcade.run()
+#
+#
+# if __name__ == "__main__":
+#     main()
