@@ -1,12 +1,12 @@
 import arcade
 #import os
-from Inventario import *
+from Clases.Inventario import *
 
-from Globals import *
-from Protagonist import *
-from Bullet import *
-from escudo import *
-from Setas import *
+from Clases.Globals import *
+from Clases.Protagonist import *
+from Clases.Bullet import *
+from Clases.escudo import *
+from Clases.Setas import *
 
 
 
@@ -310,11 +310,11 @@ class MyWindow(arcade.Window):
             self.protagonist.move_right()
 
 
-def main():
-    window = MyWindow()
-    window.setup()
-    arcade.run()
-
-
-if __name__ == "__main__":
-    main()
+# def main():
+#     window = MyWindow()
+#     window.setup()
+#     arcade.run()
+#
+#
+# if __name__ == "__main__":
+#     main()

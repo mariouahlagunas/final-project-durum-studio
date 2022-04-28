@@ -1,5 +1,5 @@
 import arcade
-import Globals
+import Clases.Globals
 class setas(arcade.Sprite):
     def __init__(self,x_SETAS, y_SETAS):
         IMG_SETAS= ":resources:images/topdown_tanks/tank_green.png"
