@@ -36,7 +36,7 @@ class MyWindow(arcade.Window):
         self.camera_for_sprites = arcade.Camera(SCREEN_WIDTH, SCREEN_HEIGHT)
         self.camera_for_gui = arcade.Camera(SCREEN_WIDTH, SCREEN_HEIGHT)
 
-        self.timer = 0
+        self.timer = 0 #atributo de timer
         self.time_for_comparing = 0
 
 
