@@ -42,7 +42,7 @@ class MyWindow(arcade.Window):
 
         self.timer = 0 #atributo de timer
         self.time_for_comparing = 0
-
+        self.timer_for_collision = 0
 
     def setup(self):
 
@@ -70,17 +70,32 @@ class MyWindow(arcade.Window):
         #ground_layer = "suelo"
 
         #Cajas
-        #self.boxes = arcade.sprite_list()
+        #self.boxes = arcade.sprite_list(use_spatial_hash = True)
         #boxes_layer = "caja"
 
         #Edna moda sprite
-        #self.edna_sprite = arcade.sprite_list()
+        #self.edna_sprite = arcade.sprite_list(use_spatial_hash = True)
         #edna_layer = "edna"
 
         #Creamos el mapa
-        my_map = arcade.load_tilemap(map_name)
+
+        layer_options = {
+            "suelo":{
+                "use_spatial_hash": True
+            },
+            "caja":{
+                "use_spatial_hash": True,
+                "hit_box_algorithm": "Detailed"
+            },
+            "edna":{
+                "use_spatial_hash": True,
+                "hit_box_algorithm": "Detailed"
+            },
+        }
+        my_map = arcade.load_tilemap(map_name,0.5,layer_options)
         self.scene = arcade.Scene.from_tilemap(my_map)
-        #self.ground = arcade.tilemap.process_layer(map_object = my_map, layer_name = ground_layer, scaling = 0.5, use_spatial_hash = True)
+
+        #self.ground = arcade.tilemap.process_layer(map_object = my_map, layer_name = ground_layer, scaling = 0.5)
         #self.boxes = arcade.tilemap.process_layer(map_object = my_map, layer_name = boxes_layer, scaling = 0.5, use_spatial_hash = True)
         #self.edna_sprite = arcade.tilemap.process_layer(map_object = my_map, layer_name = edna_layer, scaling = 0.5, use_spatial_hash = True)
 
@@ -154,10 +169,12 @@ class MyWindow(arcade.Window):
 
         self.camera_for_sprites.use()
 
+        self.scene.draw()
         self.protagonist.draw()
         self.bullet_list.draw()
         self.escudo.draw()
         self.Setas.draw()
+
 
         self.camera_for_gui.use()
         arcade.draw_text(f"Health:{self.protagonist.now_hp()} / {self.protagonist.max_hp()}", 10, 30, arcade.color.WHITE, 24)
@@ -180,6 +197,27 @@ class MyWindow(arcade.Window):
 
         if (self.timer - self.time_for_comparing) > 5:
             self.speed_potion_activated = False
+
+        player_collision_list = arcade.check_for_collision_with_lists(
+            self.protagonist,
+            [
+                self.scene["caja"],
+            ],
+        )
+
+        for collision in player_collision_list:
+            if self.scene["caja"] in collision.sprite_lists:
+                print ("caja")
+                self.timer_for_collision = self.timer
+                self.protagonist.not_move()
+                if self.up_pressed:
+                    self.protagonist.move_down()
+                if self.down_pressed:
+                    self.protagonist.move_up()
+                if self.left_pressed:
+                    self.protagonist.move_right()
+                if self.right_pressed:
+                    self.protagonist.move_left()
 
 
     def on_key_press(self, key, modifiers):
