@@ -6,9 +6,8 @@ from Protagonist import *
 from Bullet import *
 from escudo import *
 from Setas import *
-
-
-
+from Armeria import *
+from Bullet_Inventario import *
 class MyWindow(arcade.Window):
 
     def __init__(self):
@@ -22,6 +21,8 @@ class MyWindow(arcade.Window):
         self.Inventario = None
         self.escudo = None
         self.Setas = None
+        self.Bullet_fire = None
+        self.Bullet_water = None
 
 
         # Track the current state of what key is pressed
@@ -31,8 +32,15 @@ class MyWindow(arcade.Window):
         self.up_pressed = False
         self.down_pressed = False
 
+        self.speed_potion_activated = False
+
         self.camera_for_sprites = arcade.Camera(SCREEN_WIDTH, SCREEN_HEIGHT)
         self.camera_for_gui = arcade.Camera(SCREEN_WIDTH, SCREEN_HEIGHT)
+
+        self.Type = ""
+
+        self.timer = 0 #atributo de timer
+        self.time_for_comparing = 0
 
 
     def setup(self):
@@ -46,7 +54,7 @@ class MyWindow(arcade.Window):
         self.protagonist = Protagonista(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 0, 0)
         self.protagonist_list.append(self.protagonist)
 
-        self.Inventario = inventario(2, 1)
+        self.Inventario = inventario(2, 1,30,30)
         self.escudo = Escudo(1300, 41)
         self.Setas=setas(1350,41)
 
@@ -135,9 +143,13 @@ class MyWindow(arcade.Window):
         #Imprimimos en la pantalla los numeros de setas y escudos que hay encima del objeto
         arcade.draw_text(f"{self.Inventario.get_escudos()}", 1290, 30, arcade.color.WHITE, 24)
         arcade.draw_text(f"{self.Inventario.get_setas()}", 1340, 30, arcade.color.WHITE, 24)
+        arcade.draw_text(f"{self.Inventario.get_water()}", 1200, 30, arcade.color.WHITE, 24)
+        arcade.draw_text(f"{self.Inventario.get_fire()}", 1150, 30, arcade.color.WHITE, 24)
 
 
     def on_update(self, delta_time):
+
+        self.timer += delta_time
 
         self.protagonist_list.update()
         self.bullet_list.update()
@@ -146,6 +158,9 @@ class MyWindow(arcade.Window):
 
             if bullet.bottom > self.height or bullet.top < 0 or bullet.right < 0 or bullet.left > self.width:
                 bullet.remove_from_sprite_lists()
+
+        if (self.timer - self.time_for_comparing) > 5:
+            self.speed_potion_activated = False
 
 
     def on_key_press(self, key, modifiers):
@@ -165,6 +180,10 @@ class MyWindow(arcade.Window):
         elif key == arcade.key.S:
             self.down_pressed = True
             self.protagonist_movement()
+        if key == arcade.key.R:
+            self.Type = "agua"
+        if key == arcade.key.T:
+            self.Type = "fuego"
         elif key == arcade.key.Q:
             #Vemos si tenemos escudos en el inventario
             if self.Inventario.get_escudos()>0:
@@ -172,14 +191,15 @@ class MyWindow(arcade.Window):
                 self.protagonist.gain_life(20)
                 self.Inventario.set_escudo((self.Inventario.get_escudos())-1)
         elif key == arcade.key.E:
+            self.speed_potion_activated = True
             ##Vemos si tenemos setas en el inventario
             if self.Inventario.get_setas() > 0:
                 #Si tiene, realiza su accion y se gasta 1 en el inventario
                 print(self.protagonist.movement_speed_now)
-
                 self.protagonist.change_movement_speed(4)
                 print(self.protagonist.movement_speed_now)
                 self.Inventario.set_setas((self.Inventario.get_setas()) - 1)
+                self.time_for_comparing = self.timer
 
 
         #Son solo para probar el tema de la vida (para eliminar)
@@ -209,9 +229,28 @@ class MyWindow(arcade.Window):
 
 
     def on_mouse_press(self, x, y, button, modifiers):
+        # Mirar con que arma se está disparando
+        # Mirar potenciadores que pueda tener el personaje
+        # Mirar si hay munición de esa arma en el inventario
+        Armeria = Armas(self.Type)
+        if Armeria.get_arma() == "fuego":
+            type = "fire"
+            if self.Inventario.get_fire() > 0:
+                self.Inventario.set_fire((self.Inventario.get_fire()) - 1)
+                bullet = self.protagonist.shoot(x, y, type)
+                self.bullet_list.append(bullet)
 
-        bullet = self.protagonist.shoot(x, y)
-        self.bullet_list.append(bullet)
+            else:
+                print("No hay municion de esta arma")
+        if Armeria.get_arma() == "agua":
+            type = "water"
+            if self.Inventario.get_water() > 0:
+                self.Inventario.set_water((self.Inventario.get_water()) - 1)
+                bullet = self.protagonist.shoot(x, y, type)
+                self.bullet_list.append(bullet)
+
+            else:
+                print("No hay municion de esta arma")
 
 
     def protagonist_movement(self):
@@ -219,7 +258,8 @@ class MyWindow(arcade.Window):
         if self.shift_pressed:
             self.protagonist.change_movement_speed(1.5)
         else:
-            self.protagonist.change_movement_speed(1)
+            if not self.speed_potion_activated:
+                self.protagonist.change_movement_speed(1)
 
         self.protagonist.not_move()
         if self.up_pressed and not self.down_pressed:

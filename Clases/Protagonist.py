@@ -4,6 +4,7 @@ import arcade
 
 from Globals import *
 from Bullet import *
+from Armeria import *
 
 
 class Protagonista(arcade.Sprite):
@@ -96,18 +97,12 @@ class Protagonista(arcade.Sprite):
         # Y si ponemos vidas diferentes, puede que quede raro
 
 
-    def shoot(self, end_x, end_y):
-        # Mirar con que arma se está disparando
-        # Mirar potenciadores que pueda tener el personaje
-        # Mirar si hay munición de esa arma en el inventario
-        # En caso de que hay munición, pues disparo.
-        # En caso contrario, alguna animación o mensaje de que no hay munición
+    def shoot(self, end_x, end_y, type):
 
         start_x = self.center_x
         start_y = self.center_y
 
         # Esto, obvio hay que hacerlo pillando el tipo de arma y los potenciadores que tenga el personaje
-        type = "water"
         multiplier_scale = 1
         multiplier_damage = 1
         multiplier_speed = 1
