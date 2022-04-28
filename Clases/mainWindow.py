@@ -83,7 +83,7 @@ class MyWindow(arcade.Window):
             "suelo":{
                 "use_spatial_hash": True
             },
-            "caja":{
+            "cajas":{
                 "use_spatial_hash": True,
                 "hit_box_algorithm": "Detailed"
             },
@@ -92,7 +92,7 @@ class MyWindow(arcade.Window):
                 "hit_box_algorithm": "Detailed"
             },
         }
-        my_map = arcade.load_tilemap(map_name,0.5,layer_options)
+        my_map = arcade.load_tilemap(map_name,1,layer_options)
         self.scene = arcade.Scene.from_tilemap(my_map)
 
         #self.ground = arcade.tilemap.process_layer(map_object = my_map, layer_name = ground_layer, scaling = 0.5)
@@ -201,13 +201,13 @@ class MyWindow(arcade.Window):
         player_collision_list = arcade.check_for_collision_with_lists(
             self.protagonist,
             [
-                self.scene["caja"],
+                self.scene["cajas"],
             ],
         )
 
         for collision in player_collision_list:
-            if self.scene["caja"] in collision.sprite_lists:
-                print ("caja")
+            if self.scene["cajas"] in collision.sprite_lists:
+                print ("cajas")
                 self.timer_for_collision = self.timer
                 self.protagonist.not_move()
                 if self.up_pressed:
