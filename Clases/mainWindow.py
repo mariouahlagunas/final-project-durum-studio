@@ -1,4 +1,5 @@
 import arcade
+#import os
 from Inventario import *
 
 from Globals import *
@@ -14,6 +15,9 @@ class MyWindow(arcade.Window):
     def __init__(self):
 
         super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+
+        #file_path = os.path.dirname(os.path.abspath(__file__))
+        #os.chdir(file_path)
 
         self.protagonist_list = None
         self.bullet_list = None
@@ -58,7 +62,27 @@ class MyWindow(arcade.Window):
         #Carga de mapa
 
         #map_name = "mapa2/mapa2..tmx"
-        #map_name = ":mapa2:/mapa2..tmx"
+        map_name = "pruebaMapa/mapa.tmx"
+        #map_name = "\pruebaMapa\mapa.tmx"
+
+        #Terreno
+        #self.ground = arcade.sprite_list()
+        #ground_layer = "suelo"
+
+        #Cajas
+        #self.boxes = arcade.sprite_list()
+        #boxes_layer = "caja"
+
+        #Edna moda sprite
+        #self.edna_sprite = arcade.sprite_list()
+        #edna_layer = "edna"
+
+        #Creamos el mapa
+        my_map = arcade.load_tilemap(map_name)
+        self.scene = arcade.Scene.from_tilemap(my_map)
+        #self.ground = arcade.tilemap.process_layer(map_object = my_map, layer_name = ground_layer, scaling = 0.5, use_spatial_hash = True)
+        #self.boxes = arcade.tilemap.process_layer(map_object = my_map, layer_name = boxes_layer, scaling = 0.5, use_spatial_hash = True)
+        #self.edna_sprite = arcade.tilemap.process_layer(map_object = my_map, layer_name = edna_layer, scaling = 0.5, use_spatial_hash = True)
 
         #Terrenos
         #self.desert_layer = arcade.sprite_list()
