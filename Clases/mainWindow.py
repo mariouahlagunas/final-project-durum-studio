@@ -63,7 +63,7 @@ class MyWindow(arcade.Window):
         #Carga de mapa
 
         #map_name = "mapa2/mapa2..tmx"
-        map_name = "pruebaMapa/mapa.tmx"
+        map_name = "assets/tilemaps/pruebaMapa/mapa.tmx"
         #map_name = "\pruebaMapa\mapa.tmx"
 
         #Terreno
