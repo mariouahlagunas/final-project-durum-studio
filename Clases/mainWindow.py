@@ -31,8 +31,13 @@ class MyWindow(arcade.Window):
         self.up_pressed = False
         self.down_pressed = False
 
+        self.speed_potion_activated = False
+
         self.camera_for_sprites = arcade.Camera(SCREEN_WIDTH, SCREEN_HEIGHT)
         self.camera_for_gui = arcade.Camera(SCREEN_WIDTH, SCREEN_HEIGHT)
+
+        self.timer = 0
+        self.time_for_comparing = 0
 
 
     def setup(self):
@@ -139,6 +144,8 @@ class MyWindow(arcade.Window):
 
     def on_update(self, delta_time):
 
+        self.timer += delta_time
+
         self.protagonist_list.update()
         self.bullet_list.update()
 
@@ -146,6 +153,9 @@ class MyWindow(arcade.Window):
 
             if bullet.bottom > self.height or bullet.top < 0 or bullet.right < 0 or bullet.left > self.width:
                 bullet.remove_from_sprite_lists()
+
+        if (self.timer - self.time_for_comparing) > 5:
+            self.speed_potion_activated = False
 
 
     def on_key_press(self, key, modifiers):
@@ -172,14 +182,15 @@ class MyWindow(arcade.Window):
                 self.protagonist.gain_life(20)
                 self.Inventario.set_escudo((self.Inventario.get_escudos())-1)
         elif key == arcade.key.E:
+            self.speed_potion_activated = True
             ##Vemos si tenemos setas en el inventario
             if self.Inventario.get_setas() > 0:
                 #Si tiene, realiza su accion y se gasta 1 en el inventario
                 print(self.protagonist.movement_speed_now)
-
                 self.protagonist.change_movement_speed(4)
                 print(self.protagonist.movement_speed_now)
                 self.Inventario.set_setas((self.Inventario.get_setas()) - 1)
+                self.time_for_comparing = self.timer
 
 
         #Son solo para probar el tema de la vida (para eliminar)
@@ -219,7 +230,8 @@ class MyWindow(arcade.Window):
         if self.shift_pressed:
             self.protagonist.change_movement_speed(1.5)
         else:
-            self.protagonist.change_movement_speed(1)
+            if not self.speed_potion_activated:
+                self.protagonist.change_movement_speed(1)
 
         self.protagonist.not_move()
         if self.up_pressed and not self.down_pressed:
