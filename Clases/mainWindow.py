@@ -27,7 +27,7 @@ class MyWindow(arcade.Window):
         self.escudo = None
         self.Setas = None
 
-        self.physics_engine = None
+        #self.physics_engine = None # no se usará por ahora esto debido a los distintos cambios que he comentado sobre las colisiones, esto se usará probablemente para paredes.
 
         # Track the current state of what key is pressed
         self.shift_pressed = False
@@ -61,22 +61,8 @@ class MyWindow(arcade.Window):
         self.Setas=setas(1350,41)
 
         #Carga de mapa
-
-        #map_name = "mapa2/mapa2..tmx"
-        map_name = "assets/tilemaps/pruebaMapa/mapa.tmx"
-        #map_name = "\pruebaMapa\mapa.tmx"
-
-        #Terreno
-        #self.ground = arcade.sprite_list()
-        #ground_layer = "suelo"
-
-        #Cajas
-        #self.boxes = arcade.sprite_list(use_spatial_hash = True)
-        #boxes_layer = "caja"
-
-        #Edna moda sprite
-        #self.edna_sprite = arcade.sprite_list(use_spatial_hash = True)
-        #edna_layer = "edna"
+        #map_name = "assets/tilemaps/pruebaMapa/mapa.tmx"
+        map_name = "assets/tilemaps/pruebaMapa2/mapa.tmx"
 
         #Creamos el mapa
 
@@ -86,83 +72,16 @@ class MyWindow(arcade.Window):
             },
             "cajas":{
                 "use_spatial_hash": True,
-                "hit_box_algorithm": "Detailed"
             },
             "edna":{
                 "use_spatial_hash": True,
-                "hit_box_algorithm": "Detailed"
             },
         }
         my_map = arcade.load_tilemap(map_name,1,layer_options)
         self.scene = arcade.Scene.from_tilemap(my_map)
 
-        self.physics_engine = arcade.PhysicsEngineSimple(self.protagonist,self.scene["cajas"])
-        #self.ground = arcade.tilemap.process_layer(map_object = my_map, layer_name = ground_layer, scaling = 0.5)
-        #self.boxes = arcade.tilemap.process_layer(map_object = my_map, layer_name = boxes_layer, scaling = 0.5, use_spatial_hash = True)
-        #self.edna_sprite = arcade.tilemap.process_layer(map_object = my_map, layer_name = edna_layer, scaling = 0.5, use_spatial_hash = True)
+        #self.physics_engine = arcade.PhysicsEngineSimple(self.protagonist,self.scene["cajas"]) # no se usará por ahora esto debido a los distintos cambios que he comentado sobre las colisiones, esto se usará probablemente para paredes.
 
-        #Terrenos
-        #self.desert_layer = arcade.sprite_list()
-        #self.camino_layer_1 = arcade.sprite_list(use_spatial_hash = True)
-        #self.camino_layer_2 = arcade.sprite_list(use_spatial_hash = True)
-        #self.camino_layer_3 = arcade.sprite_list(use_spatial_hash = True)
-        #self.camino_layer_4 = arcade.sprite_list(use_spatial_hash = True)
-
-        #desert_layer = "desierto3"
-        #camino_layer_1 = "camino2"
-        #camino_layer_2 = "camino2.1"
-        #camino_layer_3 = "camino2.2"
-        #camino_layer_4 = "camino2.3"
-
-        #Colisiones
-
-        #self.valla_layer = arcade.sprite_list(use_spatial_hash = True)
-        #self.agua_layer = arcade.sprite_list(use_spatial_hash = True)
-        #self.montanas_layer = arcade.sprite_list(use_spatial_hash = True)
-        #self.arbol_layer = arcade.sprite_list(use_spatial_hash = True)
-        #self.casa1_layer = arcade.sprite_list(use_spatial_hash = True)
-        #self.casa2_layer = arcade.sprite_list(use_spatial_hash = True)
-
-        #valla_layer = "valla"
-        #agua_layer = "agua"
-        #montanas_layer = "montañas"
-        #arbol_layer = "arbol sin hojas"
-        #casa1_layer = "casa1"
-        #casa2_layer = "casa2"
-
-        #Sprites
-
-        #self.enemigo_sprite = arcade.sprite_list(use_spatial_hash = True)
-        #self.npc1_sprite = arcade.sprite_list(use_spatial_hash = True)
-        #self.npc2_sprite = arcade.sprite_list(use_spatial_hash = True)
-        #self.npc3_sprite = arcade.sprite_list(use_spatial_hash = True)
-        #self.me_sprite = arcade.sprite_list(use_spatial_hash = True)
-
-        #enemigo_sprite = "enemigo"
-        #npc1_sprite = "npc 1"
-        #npc2_sprite = "npc 2"
-        #npc3_sprite = "npc 3"
-        #me_sprite = "yo"
-
-
-        #my_map = arcade.tilemap.load_tilemap(map_name)
-
-        #self.desert_layer = arcade.tilemap.process_layer(map_object = my_map, layer_name = desert_layer, scaling = 0.5, use_spatial_hash = True)
-        #self.camino_layer_1 = arcade.tilemap.process_layer(map_object = my_map, layer_name = camino_layer_1, scaling = 0.5, use_spatial_hash = True)
-        #self.camino_layer_2 = arcade.tilemap.process_layer(map_object = my_map, layer_name = camino_layer_2, scaling = 0.5, use_spatial_hash = True)
-        #self.camino_layer_3 = arcade.tilemap.process_layer(map_object = my_map, layer_name = camino_layer_3, scaling = 0.5, use_spatial_hash = True)
-        #self.camino_layer_4 = arcade.tilemap.process_layer(map_object = my_map, layer_name = camino_layer_4, scaling = 0.5, use_spatial_hash = True)
-        #self.valla_layer = arcade.tilemap.process_layer(map_object = my_map, layer_name = valla_layer, scaling = 0.5, use_spatial_hash = True)
-        #self.agua_layer = arcade.tilemap.process_layer(map_object = my_map, layer_name = agua_layer, scaling = 0.5, use_spatial_hash = True)
-        #self.montanas_layer = arcade.tilemap.process_layer(map_object = my_map, layer_name = montanas_layer, scaling = 0.5, use_spatial_hash = True)
-        #self.arbol_layer = arcade.tilemap.process_layer(map_object = my_map, layer_name = arbol_layer, scaling = 0.5, use_spatial_hash = True)
-        #self.casa1_layer = arcade.tilemap.process_layer(map_object = my_map, layer_name = casa1_layer, scaling = 0.5, use_spatial_hash = True)
-        #self.casa2_layer = arcade.tilemap.process_layer(map_object = my_map, layer_name = casa2_layer, scaling = 0.5, use_spatial_hash = True)
-        #self.enemigo_sprite = arcade.tilemap.process_layer(map_object = my_map, layer_name = enemigo_sprite, scaling = 0.5, use_spatial_hash = True)
-        #self.npc1_sprite = arcade.tilemap.process_layer(map_object = my_map, layer_name = npc1_sprite, scaling = 0.5, use_spatial_hash = True)
-        #self.npc2_sprite = arcade.tilemap.process_layer(map_object = my_map, layer_name = npc2_sprite, scaling = 0.5, use_spatial_hash = True)
-        #self.npc3_sprite = arcade.tilemap.process_layer(map_object = my_map, layer_name = npc3_sprite, scaling = 0.5, use_spatial_hash = True)
-        #self.me_sprite = arcade.tilemap.process_layer(map_object = my_map, layer_name = me_sprite, scaling = 0.5, use_spatial_hash = True)
 
     def on_draw(self):
 
@@ -200,28 +119,51 @@ class MyWindow(arcade.Window):
         if (self.timer - self.time_for_comparing) > 5:
             self.speed_potion_activated = False
 
-        self.physics_engine.update()
-        #player_collision_list = arcade.check_for_collision_with_lists(
-        #    self.bullet_list,
-        #    [
-        #        self.scene["edna"],
-        #    ],
-        #)
-#
-        #for collision in player_collision_list:
-            #if self.scene["edna"] in collision.sprite_lists:
-                #print ("edna")
+
+        #self.physics_engine.update() # no se usará por ahora esto debido a los distintos cambios que he comentado sobre las colisiones, esto se usará probablemente para paredes.
+        edna_hit_list = arcade.check_for_collision_with_list(self.protagonist,self.scene["edna"])
+
+        # PARA PRUEBAS. cada vez que se interactua con edna se imprime la ubicación de donde está esa edna
+        for edna in edna_hit_list:
+            print ("(",edna.center_x,",",edna.center_y,")")
+
+        # Cuando se dispara a edna, edna y la bala desaparecen
+        for bullet in self.bullet_list:
+            hit_list = arcade.check_for_collision_with_list(bullet, self.scene["edna"])
+            if len(hit_list) > 0:
+                bullet.remove_from_sprite_lists()
+            for edna in hit_list:
+                edna.remove_from_sprite_lists()
+                print ("edna is hit")
+
+            # Cuando tengamos nivels con paredes miraremos si la bala choca con la pared y si lo hace desaparece
+            #if bullet.bottom > SCREEN_HEIGHT:
+            #    bullet.remove_from_sprite_lists()
+
+        box_hit_list = arcade.check_for_collision_with_list(self.protagonist,self.scene["cajas"])
+
+        #Se añadió esto debido a las siguientes razones:
+        #1.El sistema anterior de:
+        #       self.physics_engine = arcade.PhysicsEngineSimple(self.protagonist,self.scene["cajas"])
+        #solo funciona con paredes, no se puede añadir más objetes con el que el personaje se choca, esto es según la documentación de arcade, si intentas hacer lo siguiente da errores:
+        #       self.physics_engine = arcade.PhysicsEngineSimple(self.protagonist,self.scene["cajas"])
+        #       self.physics_engine = arcade.PhysicsEngineSimple(self.protagonist,self.scene["edna"])
+        #y también esto dará errores:
+        #       #self.physics_engine = arcade.PhysicsEngineSimple(self.protagonist,self.scene["cajas"],self.scene["edna"])
+        #ya que, como he dicho antes, esto es solo para que el personaje no se choque con los que son los paredes del nivel, se podrá utilizar en un futuro con lo que serán las paredes de las habitaciones
+        for collision in box_hit_list:
+            if self.scene["cajas"] in collision.sprite_lists:
+                print ("box")
                 #collision.remove_from_sprite_lists()
-                #self.timer_for_collision = self.timer
-                #self.protagonist.not_move()
-                #if self.up_pressed:
-                #    self.protagonist.move_down()
-                #if self.down_pressed:
-                #    self.protagonist.move_up()
-                #if self.left_pressed:
-                #    self.protagonist.move_right()
-                #if self.right_pressed:
-                #    self.protagonist.move_left()
+                self.protagonist.not_move()
+                if self.up_pressed:
+                    self.protagonist.center_y = self.protagonist.center_y - 10
+                if self.down_pressed:
+                    self.protagonist.center_y = self.protagonist.center_y + 10
+                if self.left_pressed:
+                    self.protagonist.center_x = self.protagonist.center_x + 10
+                if self.right_pressed:
+                    self.protagonist.center_x = self.protagonist.center_x - 10
 
 
     def on_key_press(self, key, modifiers):

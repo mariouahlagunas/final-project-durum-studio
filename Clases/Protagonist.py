@@ -50,7 +50,6 @@ class Protagonista(arcade.Sprite):
     def move_right(self):
         self.change_x = self.movement_speed_now
 
-
     def max_hp(self):
         return self.hp_max
 
