@@ -2,12 +2,12 @@
 
 import arcade
 from Clases.mainWindow import *
-from Clases.menuWindow import *
 
 
 def main():
-    window = MenuWindow()
-    window.setup()
+    window = arcade.Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+    start_view = MenuScreen()
+    window.show_view(start_view)
     arcade.run()
 
 
