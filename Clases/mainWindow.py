@@ -20,10 +20,6 @@ class MenuScreen(arcade.View):
 
         self.option_hovered_on = 1
 
-        self.timer = 0 #atributo de timer
-        self.time_for_comparing = 0
-        self.timer_for_collision = 0
-
         arcade.set_background_color(arcade.color.BLACK)
 
 
@@ -268,7 +264,7 @@ class MainGame(arcade.View):
             if self.Inventario.get_setas() > 0:
                 #Si tiene, realiza su accion y se gasta 1 en el inventario
                 print(self.protagonist.movement_speed_now)
-                self.protagonist.change_movement_speed(2)
+                self.protagonist.change_movement_speed(2.5)
                 print(self.protagonist.movement_speed_now)
                 self.Inventario.set_setas((self.Inventario.get_setas()) - 1)
                 self.time_for_comparing = self.timer
@@ -309,10 +305,10 @@ class MainGame(arcade.View):
     def protagonist_movement(self):
 
         if self.shift_pressed:
-            self.protagonist.change_movement_speed(1)
+            self.protagonist.change_movement_speed(1.5)
         else:
             if not self.speed_potion_activated:
-                self.protagonist.change_movement_speed(0.5)
+                self.protagonist.change_movement_speed(1)
 
         self.protagonist.not_move()
         if self.up_pressed and not self.down_pressed:
