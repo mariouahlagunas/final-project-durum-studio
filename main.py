@@ -2,10 +2,11 @@
 
 import arcade
 from Clases.mainWindow import *
+from Clases.menuWindow import *
 
 
 def main():
-    window = MyWindow()
+    window = MenuWindow()
     window.setup()
     arcade.run()
 
