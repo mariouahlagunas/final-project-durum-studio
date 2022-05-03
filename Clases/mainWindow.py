@@ -1,18 +1,88 @@
 import arcade
-from Inventario import *
+#import os
+from Clases.Inventario import *
 
-from Globals import *
-from Protagonist import *
-from Bullet import *
-from escudo import *
-from Setas import *
+from Clases.Globals import *
+from Clases.Protagonist import *
+from Clases.Bullet import *
+from Clases.escudo import *
+from Clases.Setas import *
 from Armeria import *
 from Bullet_Inventario import *
-class MyWindow(arcade.Window):
+
+
+
+class MenuScreen(arcade.View):
 
     def __init__(self):
 
-        super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+        super().__init__()
+
+        self.enter_pressed = False
+
+        self.option_hovered_on = 1
+
+        arcade.set_background_color(arcade.color.BLACK)
+
+
+    def on_draw(self):
+
+        self.clear()
+        arcade.start_render()
+
+        if  self.option_hovered_on == 1:
+            arcade.draw_rectangle_filled(280, 710, 420, 70, arcade.color.GRAY)
+            arcade.draw_circle_filled(90, 710, 6, arcade.color.WHITE)
+        if  self.option_hovered_on == 2:
+            arcade.draw_rectangle_filled(280, 510, 420, 70, arcade.color.GRAY)
+            arcade.draw_circle_filled(90, 510, 6, arcade.color.WHITE)
+        if  self.option_hovered_on == 3:
+            arcade.draw_rectangle_filled(280, 310, 420, 70, arcade.color.GRAY)
+            arcade.draw_circle_filled(90, 310, 6, arcade.color.WHITE)
+        arcade.draw_text("Jugar", 100, 700, arcade.color.WHITE, 24)
+        arcade.draw_text("Jugar pero en otra línea", 100, 500, arcade.color.WHITE, 24)
+        arcade.draw_text("Salir del juego", 100, 300, arcade.color.WHITE, 24)
+
+
+    def on_update(self, delta_time):
+
+        if self.option_hovered_on > 3:
+            self.option_hovered_on = 1
+        if self.option_hovered_on < 1:
+            self.option_hovered_on = 3
+        if self.enter_pressed == True:
+            if self.option_hovered_on == 1:
+                self.window.show_view(MainGame())
+            if self.option_hovered_on == 2:
+                self.window.show_view(MainGame())
+            if self.option_hovered_on == 3:
+                self.window.close()
+
+
+    def on_key_press(self, key, modifiers):
+
+        if key == arcade.key.ENTER:
+            self.enter_pressed = True
+        elif key == arcade.key.W or key == arcade.key.UP:
+            self.option_hovered_on -= 1
+        elif key == arcade.key.S or key == arcade.key.DOWN:
+            self.option_hovered_on += 1
+
+
+    def on_key_release(self, key, modifiers):
+
+        if key == arcade.key.ENTER:
+            self.enter_pressed = False
+
+
+class MainGame(arcade.View):
+
+    def __init__(self):
+
+        super().__init__()
+
+        #file_path = os.path.dirname(os.path.abspath(__file__))
+        #os.chdir(file_path)
 
         self.protagonist_list = None
         self.bullet_list = None
@@ -23,7 +93,10 @@ class MyWindow(arcade.Window):
         self.Setas = None
         self.Bullet_fire = None
         self.Bullet_water = None
+        self.FIREBULLET_INV= None
+        self.WATERBULLET_INV = None
 
+        #self.physics_engine = None # no se usará por ahora esto debido a los distintos cambios que he comentado sobre las colisiones, esto se usará probablemente para paredes.
 
         # Track the current state of what key is pressed
         self.shift_pressed = False
@@ -32,16 +105,19 @@ class MyWindow(arcade.Window):
         self.up_pressed = False
         self.down_pressed = False
 
+        self.Type = ""
+
         self.speed_potion_activated = False
 
         self.camera_for_sprites = arcade.Camera(SCREEN_WIDTH, SCREEN_HEIGHT)
         self.camera_for_gui = arcade.Camera(SCREEN_WIDTH, SCREEN_HEIGHT)
 
-        self.Type = ""
-
         self.timer = 0 #atributo de timer
         self.time_for_comparing = 0
+        self.timer_for_collision = 0
 
+    def on_show(self):
+        self.setup()
 
     def setup(self):
 
@@ -54,77 +130,35 @@ class MyWindow(arcade.Window):
         self.protagonist = Protagonista(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 0, 0)
         self.protagonist_list.append(self.protagonist)
 
-        self.Inventario = inventario(2, 1,30,30)
+        self.FIREBULLET_INV = Bullet_num("rojo", 1145, 41)
+        self.WATERBULLET_INV = Bullet_num("azul", 1195, 41)
+        self.WATERBULLET_INV.angle = 90
+        self.Inventario = inventario(2, 1, 30, 30)
         self.escudo = Escudo(1300, 41)
         self.Setas=setas(1350,41)
 
         #Carga de mapa
+        #map_name = "assets/tilemaps/pruebaMapa/mapa.tmx"
+        map_name = "assets/tilemaps/pruebaMapa2/mapa.tmx"
 
-        #map_name = "mapa2/mapa2..tmx"
-        #map_name = ":mapa2:/mapa2..tmx"
+        #Creamos el mapa
 
-        #Terrenos
-        #self.desert_layer = arcade.sprite_list()
-        #self.camino_layer_1 = arcade.sprite_list(use_spatial_hash = True)
-        #self.camino_layer_2 = arcade.sprite_list(use_spatial_hash = True)
-        #self.camino_layer_3 = arcade.sprite_list(use_spatial_hash = True)
-        #self.camino_layer_4 = arcade.sprite_list(use_spatial_hash = True)
+        layer_options = {
+            "suelo":{
+                "use_spatial_hash": True
+            },
+            "cajas":{
+                "use_spatial_hash": True,
+            },
+            "edna":{
+                "use_spatial_hash": True,
+            },
+        }
+        my_map = arcade.load_tilemap(map_name,1,layer_options)
+        self.scene = arcade.Scene.from_tilemap(my_map)
 
-        #desert_layer = "desierto3"
-        #camino_layer_1 = "camino2"
-        #camino_layer_2 = "camino2.1"
-        #camino_layer_3 = "camino2.2"
-        #camino_layer_4 = "camino2.3"
+        #self.physics_engine = arcade.PhysicsEngineSimple(self.protagonist,self.scene["cajas"]) # no se usará por ahora esto debido a los distintos cambios que he comentado sobre las colisiones, esto se usará probablemente para paredes.
 
-        #Colisiones
-
-        #self.valla_layer = arcade.sprite_list(use_spatial_hash = True)
-        #self.agua_layer = arcade.sprite_list(use_spatial_hash = True)
-        #self.montanas_layer = arcade.sprite_list(use_spatial_hash = True)
-        #self.arbol_layer = arcade.sprite_list(use_spatial_hash = True)
-        #self.casa1_layer = arcade.sprite_list(use_spatial_hash = True)
-        #self.casa2_layer = arcade.sprite_list(use_spatial_hash = True)
-
-        #valla_layer = "valla"
-        #agua_layer = "agua"
-        #montanas_layer = "montañas"
-        #arbol_layer = "arbol sin hojas"
-        #casa1_layer = "casa1"
-        #casa2_layer = "casa2"
-
-        #Sprites
-
-        #self.enemigo_sprite = arcade.sprite_list(use_spatial_hash = True)
-        #self.npc1_sprite = arcade.sprite_list(use_spatial_hash = True)
-        #self.npc2_sprite = arcade.sprite_list(use_spatial_hash = True)
-        #self.npc3_sprite = arcade.sprite_list(use_spatial_hash = True)
-        #self.me_sprite = arcade.sprite_list(use_spatial_hash = True)
-
-        #enemigo_sprite = "enemigo"
-        #npc1_sprite = "npc 1"
-        #npc2_sprite = "npc 2"
-        #npc3_sprite = "npc 3"
-        #me_sprite = "yo"
-
-
-        #my_map = arcade.tilemap.load_tilemap(map_name)
-
-        #self.desert_layer = arcade.tilemap.process_layer(map_object = my_map, layer_name = desert_layer, scaling = 0.5, use_spatial_hash = True)
-        #self.camino_layer_1 = arcade.tilemap.process_layer(map_object = my_map, layer_name = camino_layer_1, scaling = 0.5, use_spatial_hash = True)
-        #self.camino_layer_2 = arcade.tilemap.process_layer(map_object = my_map, layer_name = camino_layer_2, scaling = 0.5, use_spatial_hash = True)
-        #self.camino_layer_3 = arcade.tilemap.process_layer(map_object = my_map, layer_name = camino_layer_3, scaling = 0.5, use_spatial_hash = True)
-        #self.camino_layer_4 = arcade.tilemap.process_layer(map_object = my_map, layer_name = camino_layer_4, scaling = 0.5, use_spatial_hash = True)
-        #self.valla_layer = arcade.tilemap.process_layer(map_object = my_map, layer_name = valla_layer, scaling = 0.5, use_spatial_hash = True)
-        #self.agua_layer = arcade.tilemap.process_layer(map_object = my_map, layer_name = agua_layer, scaling = 0.5, use_spatial_hash = True)
-        #self.montanas_layer = arcade.tilemap.process_layer(map_object = my_map, layer_name = montanas_layer, scaling = 0.5, use_spatial_hash = True)
-        #self.arbol_layer = arcade.tilemap.process_layer(map_object = my_map, layer_name = arbol_layer, scaling = 0.5, use_spatial_hash = True)
-        #self.casa1_layer = arcade.tilemap.process_layer(map_object = my_map, layer_name = casa1_layer, scaling = 0.5, use_spatial_hash = True)
-        #self.casa2_layer = arcade.tilemap.process_layer(map_object = my_map, layer_name = casa2_layer, scaling = 0.5, use_spatial_hash = True)
-        #self.enemigo_sprite = arcade.tilemap.process_layer(map_object = my_map, layer_name = enemigo_sprite, scaling = 0.5, use_spatial_hash = True)
-        #self.npc1_sprite = arcade.tilemap.process_layer(map_object = my_map, layer_name = npc1_sprite, scaling = 0.5, use_spatial_hash = True)
-        #self.npc2_sprite = arcade.tilemap.process_layer(map_object = my_map, layer_name = npc2_sprite, scaling = 0.5, use_spatial_hash = True)
-        #self.npc3_sprite = arcade.tilemap.process_layer(map_object = my_map, layer_name = npc3_sprite, scaling = 0.5, use_spatial_hash = True)
-        #self.me_sprite = arcade.tilemap.process_layer(map_object = my_map, layer_name = me_sprite, scaling = 0.5, use_spatial_hash = True)
 
     def on_draw(self):
 
@@ -133,10 +167,14 @@ class MyWindow(arcade.Window):
 
         self.camera_for_sprites.use()
 
+        self.scene.draw()
         self.protagonist.draw()
         self.bullet_list.draw()
         self.escudo.draw()
         self.Setas.draw()
+        self.FIREBULLET_INV.draw()
+        self.WATERBULLET_INV()
+
 
         self.camera_for_gui.use()
         arcade.draw_text(f"Health:{self.protagonist.now_hp()} / {self.protagonist.max_hp()}", 10, 30, arcade.color.WHITE, 24)
@@ -156,11 +194,60 @@ class MyWindow(arcade.Window):
 
         for bullet in self.bullet_list:
 
-            if bullet.bottom > self.height or bullet.top < 0 or bullet.right < 0 or bullet.left > self.width:
+            if bullet.bottom > SCREEN_HEIGHT or bullet.top < 0 or bullet.right < 0 or bullet.left > SCREEN_WIDTH:
                 bullet.remove_from_sprite_lists()
 
         if (self.timer - self.time_for_comparing) > 5:
             self.speed_potion_activated = False
+
+
+        #self.physics_engine.update() # no se usará por ahora esto debido a los distintos cambios que he comentado sobre las colisiones, esto se usará probablemente para paredes.
+        edna_hit_list = arcade.check_for_collision_with_list(self.protagonist,self.scene["edna"])
+
+        # PARA PRUEBAS. cada vez que se interactua con edna se imprime la ubicación de donde está esa edna
+        for edna in edna_hit_list:
+            print ("(",edna.center_x,",",edna.center_y,")")
+
+        # Cuando se dispara a edna, edna y la bala desaparecen
+        for bullet in self.bullet_list:
+            hit_list = arcade.check_for_collision_with_list(bullet, self.scene["edna"])
+            if len(hit_list) > 0:
+                bullet.remove_from_sprite_lists()
+            for edna in hit_list:
+                edna.remove_from_sprite_lists()
+                print ("edna is hit")
+        if len(self.scene["edna"]) == 0:
+            game_view = GameOverWindow()
+            self.window.show_view(game_view)
+
+            # Cuando tengamos nivels con paredes miraremos si la bala choca con la pared y si lo hace desaparece
+            #if bullet.bottom > SCREEN_HEIGHT:
+            #    bullet.remove_from_sprite_lists()
+
+        box_hit_list = arcade.check_for_collision_with_list(self.protagonist,self.scene["cajas"])
+
+        #Se añadió esto debido a las siguientes razones:
+        #1.El sistema anterior de:
+        #       self.physics_engine = arcade.PhysicsEngineSimple(self.protagonist,self.scene["cajas"])
+        #solo funciona con paredes, no se puede añadir más objetes con el que el personaje se choca, esto es según la documentación de arcade, si intentas hacer lo siguiente da errores:
+        #       self.physics_engine = arcade.PhysicsEngineSimple(self.protagonist,self.scene["cajas"])
+        #       self.physics_engine = arcade.PhysicsEngineSimple(self.protagonist,self.scene["edna"])
+        #y también esto dará errores:
+        #       #self.physics_engine = arcade.PhysicsEngineSimple(self.protagonist,self.scene["cajas"],self.scene["edna"])
+        #ya que, como he dicho antes, esto es solo para que el personaje no se choque con los que son los paredes del nivel, se podrá utilizar en un futuro con lo que serán las paredes de las habitaciones
+        for collision in box_hit_list:
+            if self.scene["cajas"] in collision.sprite_lists:
+                print ("box")
+                #collision.remove_from_sprite_lists()
+                self.protagonist.not_move()
+                if self.up_pressed:
+                    self.protagonist.center_y = self.protagonist.center_y - 10
+                if self.down_pressed:
+                    self.protagonist.center_y = self.protagonist.center_y + 10
+                if self.left_pressed:
+                    self.protagonist.center_x = self.protagonist.center_x + 10
+                if self.right_pressed:
+                    self.protagonist.center_x = self.protagonist.center_x - 10
 
 
     def on_key_press(self, key, modifiers):
@@ -196,7 +283,7 @@ class MyWindow(arcade.Window):
             if self.Inventario.get_setas() > 0:
                 #Si tiene, realiza su accion y se gasta 1 en el inventario
                 print(self.protagonist.movement_speed_now)
-                self.protagonist.change_movement_speed(4)
+                self.protagonist.change_movement_speed(2.5)
                 print(self.protagonist.movement_speed_now)
                 self.Inventario.set_setas((self.Inventario.get_setas()) - 1)
                 self.time_for_comparing = self.timer
@@ -272,11 +359,77 @@ class MyWindow(arcade.Window):
             self.protagonist.move_right()
 
 
-def main():
-    window = MyWindow()
-    window.setup()
-    arcade.run()
+class GameOverWindow(arcade.View):
+
+    def __init__(self):
+
+        super().__init__()
+
+        self.enter_pressed = False
+
+        self.option_hovered_on = 1
+
+        arcade.set_background_color(arcade.color.BLACK)
 
 
-if __name__ == "__main__":
-    main()
+    def on_draw(self):
+
+        self.clear()
+        arcade.start_render()
+
+        if  self.option_hovered_on == 1:
+            arcade.draw_rectangle_filled(645, 310, 100, 50, arcade.color.GRAY)
+        if  self.option_hovered_on == 2:
+            arcade.draw_rectangle_filled(755, 310, 100, 50, arcade.color.GRAY)
+        if  self.option_hovered_on == 3:
+            arcade.draw_rectangle_filled(700, 210, 200, 50, arcade.color.GRAY)
+        arcade.draw_text("GAME OVER", 340, 600, arcade.color.WHITE, 80)
+        arcade.draw_text("RETRY?", 590, 500, arcade.color.WHITE, 40)
+        arcade.draw_text("YES", 610, 300, arcade.color.WHITE, 24)
+        arcade.draw_text("NO", 730, 300, arcade.color.WHITE, 24)
+        arcade.draw_text("MAIN MENU", 605, 200, arcade.color.WHITE, 24)
+
+    def on_update(self, delta_time):
+
+        #if self.option_hovered_on > 2:
+        #    self.option_hovered_on = 1
+        #if self.option_hovered_on < 1:
+        #    self.option_hovered_on = 2
+        if self.enter_pressed == True:
+            if self.option_hovered_on == 1:
+                self.window.show_view(MainGame())
+            if self.option_hovered_on == 2:
+                self.window.close()
+            if self.option_hovered_on == 3:
+                self.window.show_view(MenuScreen())
+
+
+    def on_key_press(self, key, modifiers):
+
+        if key == arcade.key.ENTER:
+            self.enter_pressed = True
+        elif (key == arcade.key.A or key == arcade.key.LEFT) and (self.option_hovered_on == 1):
+            self.option_hovered_on = 2
+        elif (key == arcade.key.D or key == arcade.key.RIGHT) and (self.option_hovered_on == 1):
+            self.option_hovered_on = 2
+        elif (key == arcade.key.A or key == arcade.key.LEFT) and (self.option_hovered_on == 2):
+            self.option_hovered_on = 1
+        elif (key == arcade.key.D or key == arcade.key.RIGHT) and (self.option_hovered_on == 2):
+            self.option_hovered_on = 1
+        elif key == arcade.key.S or key == arcade.key.DOWN:
+            self.option_hovered_on = 3
+        elif key == arcade.key.W or key == arcade.key.UP:
+            self.option_hovered_on = 1
+
+    def on_key_release(self, key, modifiers):
+
+        if key == arcade.key.ENTER:
+            self.enter_pressed = False
+# def main():
+#     window = MyWindow()
+#     window.setup()
+#     arcade.run()
+#
+#
+# if __name__ == "__main__":
+#     main()
