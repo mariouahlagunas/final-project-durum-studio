@@ -17,9 +17,9 @@ HEALTHBAR_WIDTH = 0.4
 
 # Variables para las balas
 IMG_BULLET_FIRE = ":resources:images/space_shooter/laserRed01.png"
-SCALE_BULLET_FIRE = 0.5
+SCALE_BULLET_FIRE = 2
 DAMAGE_BULLET_FIRE = 20
-SPEED_BULLET_FIRE = 5
+SPEED_BULLET_FIRE = 10
 
 IMG_BULLET_WATER = ":resources:images/space_shooter/laserBlue01.png"
 SCALE_BULLET_WATER = 0.75
@@ -27,9 +27,9 @@ DAMAGE_BULLET_WATER = 10
 SPEED_BULLET_WATER = 5
 
 #Variable para escudo
-IMG_ESCUDO = "escudo.png"
-SCALE_ESCUDO = .5
+IMG_ESCUDO = ":resources:images/items/coinGold.png"
+SCALE_ESCUDO = 0.6
 
 #Variables para setas
-IMG_SETAS = "setas.png"
-SCALE_SETAS = .5
+IMG_SETAS = ":resources:images/topdown_tanks/tank_green.png"
+SCALE_SETAS = 0.8

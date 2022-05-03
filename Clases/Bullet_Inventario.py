@@ -1,5 +1,5 @@
 import arcade
-import Globals
+import Clases.Globals
 class Bullet_num(arcade.Sprite):
     def __init__(self, tipo, x_BULLET, y_BULLET):
         imagen_b=""
