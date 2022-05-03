@@ -1,5 +1,6 @@
 import arcade
 
+
 # Variables de la pantalla de juego
 SCREEN_HEIGHT = 800
 SCREEN_WIDTH = 1400

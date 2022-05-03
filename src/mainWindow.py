@@ -1,17 +1,13 @@
 import arcade
-#import os
-from Clases.Inventario import *
 
-from Clases.Globals import *
-from Clases.Protagonist import *
-from Clases.Bullet import *
-from Clases.escudo import *
-from Clases.Setas import *
-
-from Clases.Armeria import *
-from Clases.Bullet_Inventario import *
-
-
+from src.Globals import *
+from src.Protagonist import *
+from src.Bullet import *
+from src.Inventario import *
+from src.escudo import *
+from src.Setas import *
+from src.Armeria import *
+from src.Bullet_Inventario import *
 
 
 class MenuScreen(arcade.View):

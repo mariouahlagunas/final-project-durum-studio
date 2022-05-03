@@ -1,5 +1,7 @@
 import arcade
-from Clases.Globals import *
+
+from src.Globals import *
+
 
 class Escudo(arcade.Sprite):
 
@@ -9,4 +11,3 @@ class Escudo(arcade.Sprite):
 
         self.center_x = x_SETA
         self.center_y = y_SETA
-

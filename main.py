@@ -1,5 +1,6 @@
 import arcade
-from Clases.mainWindow import *
+
+from src.mainWindow import *
 
 
 def main():
