@@ -7,8 +7,11 @@ from Clases.Protagonist import *
 from Clases.Bullet import *
 from Clases.escudo import *
 from Clases.Setas import *
+<<<<<<< HEAD
 from Armeria import *
 from Bullet_Inventario import *
+=======
+>>>>>>> b1b272fe2307987cbacdd5d7f13264b6ac8256c3
 
 
 
@@ -425,6 +428,11 @@ class GameOverWindow(arcade.View):
 
         if key == arcade.key.ENTER:
             self.enter_pressed = False
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> b1b272fe2307987cbacdd5d7f13264b6ac8256c3
 # def main():
 #     window = MyWindow()
 #     window.setup()

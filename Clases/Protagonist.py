@@ -2,9 +2,14 @@
 # Que tenga getters y setters.
 import arcade
 
+<<<<<<< HEAD
 from Globals import *
 from Bullet import *
 from Armeria import *
+=======
+from Clases.Globals import *
+from Clases.Bullet import *
+>>>>>>> b1b272fe2307987cbacdd5d7f13264b6ac8256c3
 
 
 class Protagonista(arcade.Sprite):
@@ -50,7 +55,6 @@ class Protagonista(arcade.Sprite):
 
     def move_right(self):
         self.change_x = self.movement_speed_now
-
 
     def max_hp(self):
         return self.hp_max
