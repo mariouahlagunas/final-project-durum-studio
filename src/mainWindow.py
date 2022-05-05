@@ -79,10 +79,8 @@ class MainGame(arcade.View):
 
         super().__init__()
 
-        #file_path = os.path.dirname(os.path.abspath(__file__))
-        #os.chdir(file_path)
-
         self.protagonist_list = None
+        self.enemies_list = None
         self.bullet_list = None
 
         self.protagonist = None
@@ -119,15 +117,25 @@ class MainGame(arcade.View):
 
     def setup(self):
 
-        arcade.set_background_color(arcade.color.BLACK)
+        # Cargamos el mapa generado con Tiled Map
+        self.tile_map = arcade.load_tilemap(map_file=MAP_NAME, scaling= MAP_SCALE, layer_options=MAP_LAYER_OPTIONS)
+        self.scene = arcade.Scene.from_tilemap(self.tile_map)
 
+        # Inicializamos las listas de Sprites
         self.protagonist_list = arcade.SpriteList()
+        self.enemies_list = arcade.SpriteList()
         self.bullet_list = arcade.SpriteList()
 
-
+        # Cargamos a nuestro protagonista en la escena
         self.protagonist = Protagonista(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 0, 0)
         self.protagonist_list.append(self.protagonist)
 
+        # Cargamos a los enemigos en la escena
+        for position_enemie in self.scene["edna"]:
+            enemie = Protagonista(position_enemie.center_x, position_enemie.center_y, 0, 0)
+            self.enemies_list.append(enemie)
+
+        # COSITAS SOBRE LAS BALAS Y EL INVENTARIO QUE TENGO QUE MIRAR
         self.FIREBULLET_INV = Bullet_num("rojo", 1145, 41)
         self.WATERBULLET_INV = Bullet_num("azul", 1195, 41)
         self.WATERBULLET_INV.angle = 90
@@ -135,25 +143,9 @@ class MainGame(arcade.View):
         self.escudo = Escudo(1300, 41)
         self.Setas=setas(1350,41)
 
-        #Carga de mapa
-        #map_name = "assets/tilemaps/pruebaMapa/mapa.tmx"
-        map_name = "assets/tilemaps/pruebaMapa2/mapa.tmx"
 
-        #Creamos el mapa
 
-        layer_options = {
-            "suelo":{
-                "use_spatial_hash": True
-            },
-            "cajas":{
-                "use_spatial_hash": True,
-            },
-            "edna":{
-                "use_spatial_hash": True,
-            },
-        }
-        my_map = arcade.load_tilemap(map_name,1,layer_options)
-        self.scene = arcade.Scene.from_tilemap(my_map)
+
 
         #self.physics_engine = arcade.PhysicsEngineSimple(self.protagonist,self.scene["cajas"]) # no se usará por ahora esto debido a los distintos cambios que he comentado sobre las colisiones, esto se usará probablemente para paredes.
 
@@ -167,6 +159,8 @@ class MainGame(arcade.View):
 
         self.scene.draw()
         self.protagonist.draw()
+        for enemie in self.enemies_list:
+             enemie.draw()
         self.bullet_list.draw()
         self.escudo.draw()
         self.Setas.draw()
@@ -188,6 +182,7 @@ class MainGame(arcade.View):
         self.timer += delta_time
 
         self.protagonist_list.update()
+        self.enemies_list.update()
         self.bullet_list.update()
 
         for bullet in self.bullet_list:
