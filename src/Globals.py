@@ -1,4 +1,14 @@
 import arcade
+import os
+
+# VARIABLES PARA CARGAR EL MAPA
+MAP_NAME = 'assets' + os.path.sep + 'tilemaps' + os.path.sep + 'pruebaMapa2' + os.path.sep + 'mapa.tmx'
+MAP_SCALE = 1
+MAP_LAYER_OPTIONS = {
+    "suelo": {"use_spatial_hash": True},
+    "cajas": {"use_spatial_hash": True},
+    "edna": {"use_spatial_hash": True, },
+}
 
 
 # Variables de la pantalla de juego
@@ -23,9 +33,9 @@ DAMAGE_BULLET_FIRE = 20
 SPEED_BULLET_FIRE = 10
 
 IMG_BULLET_WATER = ":resources:images/space_shooter/laserBlue01.png"
-SCALE_BULLET_WATER = 0.75
+SCALE_BULLET_WATER = 1.75
 DAMAGE_BULLET_WATER = 10
-SPEED_BULLET_WATER = 5
+SPEED_BULLET_WATER = 20
 
 #Variable para escudo
 IMG_ESCUDO = ":resources:images/items/coinGold.png"

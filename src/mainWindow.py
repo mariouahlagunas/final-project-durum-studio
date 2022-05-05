@@ -79,10 +79,8 @@ class MainGame(arcade.View):
 
         super().__init__()
 
-        #file_path = os.path.dirname(os.path.abspath(__file__))
-        #os.chdir(file_path)
-
         self.protagonist_list = None
+        self.enemies_list = None
         self.bullet_list = None
 
         self.protagonist = None
@@ -119,15 +117,25 @@ class MainGame(arcade.View):
 
     def setup(self):
 
-        arcade.set_background_color(arcade.color.BLACK)
+        # Cargamos el mapa generado con Tiled Map
+        self.tile_map = arcade.load_tilemap(map_file=MAP_NAME, scaling= MAP_SCALE, layer_options=MAP_LAYER_OPTIONS)
+        self.scene = arcade.Scene.from_tilemap(self.tile_map)
 
+        # Inicializamos las listas de Sprites
         self.protagonist_list = arcade.SpriteList()
+        self.enemies_list = arcade.SpriteList()
         self.bullet_list = arcade.SpriteList()
 
-
+        # Cargamos a nuestro protagonista en la escena
         self.protagonist = Protagonista(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 0, 0)
         self.protagonist_list.append(self.protagonist)
 
+        # Cargamos a los enemigos en la escena
+        for position_enemie in self.scene["edna"]:
+            enemie = Protagonista(position_enemie.center_x, position_enemie.center_y, 0, 0)
+            self.enemies_list.append(enemie)
+
+        # COSITAS SOBRE LAS BALAS Y EL INVENTARIO QUE TENGO QUE MIRAR
         self.FIREBULLET_INV = Bullet_num("rojo", 1145, 41)
         self.WATERBULLET_INV = Bullet_num("azul", 1195, 41)
         self.WATERBULLET_INV.angle = 90
@@ -135,25 +143,8 @@ class MainGame(arcade.View):
         self.escudo = Escudo(1300, 41)
         self.Setas=setas(1350,41)
 
-        #Carga de mapa
-        #map_name = "assets/tilemaps/pruebaMapa/mapa.tmx"
-        map_name = "assets/tilemaps/pruebaMapa2/mapa.tmx"
 
-        #Creamos el mapa
 
-        layer_options = {
-            "suelo":{
-                "use_spatial_hash": True
-            },
-            "cajas":{
-                "use_spatial_hash": True,
-            },
-            "enemigos":{
-                "use_spatial_hash": True,
-            },
-        }
-        my_map = arcade.load_tilemap(map_name,1,layer_options)
-        self.scene = arcade.Scene.from_tilemap(my_map)
 
 
         #self.physics_engine = arcade.PhysicsEngineSimple(self.protagonist,self.scene["cajas"]) # no se usará por ahora esto debido a los distintos cambios que he comentado sobre las colisiones, esto se usará probablemente para paredes.
@@ -168,6 +159,8 @@ class MainGame(arcade.View):
 
         self.scene.draw()
         self.protagonist.draw()
+        for enemie in self.enemies_list:
+             enemie.draw()
         self.bullet_list.draw()
         self.escudo.draw()
         self.Setas.draw()
@@ -189,6 +182,7 @@ class MainGame(arcade.View):
         self.timer += delta_time
 
         self.protagonist_list.update()
+        self.enemies_list.update()
         self.bullet_list.update()
 
         for bullet in self.bullet_list:
@@ -201,23 +195,23 @@ class MainGame(arcade.View):
 
 
         #self.physics_engine.update() # no se usará por ahora esto debido a los distintos cambios que he comentado sobre las colisiones, esto se usará probablemente para paredes.
-        #edna_hit_list = arcade.check_for_collision_with_list(self.protagonist,self.scene["edna"])
-#
-        ## PARA PRUEBAS. cada vez que se interactua con edna se imprime la ubicación de donde está esa edna
-        #for edna in edna_hit_list:
-        #    print ("(",edna.center_x,",",edna.center_y,")")
+        edna_hit_list = arcade.check_for_collision_with_list(self.protagonist,self.scene["edna"])
+
+        # PARA PRUEBAS. cada vez que se interactua con edna se imprime la ubicación de donde está esa edna
+        for edna in edna_hit_list:
+            print ("(",edna.center_x,",",edna.center_y,")")
 
         # Cuando se dispara a edna, edna y la bala desaparecen
-        #for bullet in self.bullet_list:
-        #    hit_list = arcade.check_for_collision_with_list(bullet, self.scene["edna"])
-        #    if len(hit_list) > 0:
-        #        bullet.remove_from_sprite_lists()
-        #    for edna in hit_list:
-        #        edna.remove_from_sprite_lists()
-        #        print ("edna is hit")
-        #if len(self.scene["edna"]) == 0:
-        #    game_view = GameOverWindow()
-        #    self.window.show_view(game_view)
+        for bullet in self.bullet_list:
+            hit_list = arcade.check_for_collision_with_list(bullet, self.scene["edna"])
+            if len(hit_list) > 0:
+                bullet.remove_from_sprite_lists()
+            for edna in hit_list:
+                edna.remove_from_sprite_lists()
+                print ("edna is hit")
+        if len(self.scene["edna"]) == 0:
+            game_view = GameOverWindow()
+            self.window.show_view(game_view)
 
             # Cuando tengamos nivels con paredes miraremos si la bala choca con la pared y si lo hace desaparece
             #if bullet.bottom > SCREEN_HEIGHT:
