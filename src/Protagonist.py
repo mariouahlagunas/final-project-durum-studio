@@ -13,6 +13,12 @@ class Protagonista(arcade.Sprite):
 
         super().__init__(IMG_PROTAGONIST, SCALE_PROTAGONIST)
 
+        self.shift_pressed = False
+        self.left_pressed = False
+        self.right_pressed = False
+        self.up_pressed = False
+        self.down_pressed = False
+
         self.center_x = center_x
         self.center_y = center_y
         self.change_x = change_x
@@ -24,13 +30,32 @@ class Protagonista(arcade.Sprite):
         self.hp_max = HP_PROTAGONIST
         self.hp_now = HP_PROTAGONIST
 
-
     def draw(self):
 
         super().draw()
 
         self.print_life()
 
+    def update(self):
+        super().update()
+        self.change_movement_speed(self.calculate_movement_speed(1))
+        self.protagonist_movement()
+
+    def protagonist_movement(self):
+        self.not_move()
+        if self.up_pressed and not self.down_pressed:
+            self.move_up()
+        elif self.down_pressed and not self.up_pressed:
+            self.move_down()
+        if self.left_pressed and not self.right_pressed:
+            self.move_left()
+        elif self.right_pressed and not self.left_pressed:
+            self.move_right()
+
+    def calculate_movement_speed(self, multiplier):
+        if self.shift_pressed:
+            multiplier *= 1.5
+        return multiplier
 
     def change_movement_speed(self, multiplier):
         self.movement_speed_now = self.movement_speed_normal * multiplier
@@ -64,7 +89,7 @@ class Protagonista(arcade.Sprite):
 
     def gain_life(self, amount):
         self.hp_now += amount
-        #Completar con el tema de que no se puede superar el hp_max nunca.
+        # Completar con el tema de que no se puede superar el hp_max nunca.
 
     def print_life(self):
         healthbar_height = HEALTHBAR_HEIGHT
@@ -80,21 +105,20 @@ class Protagonista(arcade.Sprite):
             healthbar_color = arcade.color.RED
         healthbar_color_framework = arcade.color.BLACK
 
-        arcade.draw_rectangle_filled(center_x = self.center_x,
-                                     center_y = self.top + 5,
-                                     width = healthbar_width_framework,
-                                     height = healthbar_height_framework,
-                                     color = healthbar_color_framework)
+        arcade.draw_rectangle_filled(center_x=self.center_x,
+                                     center_y=self.top + 5,
+                                     width=healthbar_width_framework,
+                                     height=healthbar_height_framework,
+                                     color=healthbar_color_framework)
 
-        arcade.draw_rectangle_filled(center_x = self.center_x - HEALTHBAR_WIDTH * 0.5 * (self.hp_max - self.hp_now),
-                                     center_y = self.top + 5,
-                                     width = healthbar_width,
-                                     height = healthbar_height,
-                                     color = healthbar_color)
+        arcade.draw_rectangle_filled(center_x=self.center_x - HEALTHBAR_WIDTH * 0.5 * (self.hp_max - self.hp_now),
+                                     center_y=self.top + 5,
+                                     width=healthbar_width,
+                                     height=healthbar_height,
+                                     color=healthbar_color)
         # Con lo que tenemos ahora mismo, en función de la vida maxima del personaje se imprime la barra.
         # Por lo que a más vida, la barra más grande. Y a menos vida, más pequeña.
         # Y si ponemos vidas diferentes, puede que quede raro
-
 
     def shoot(self, end_x, end_y, type):
 
