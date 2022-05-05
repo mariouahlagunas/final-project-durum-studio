@@ -148,12 +148,13 @@ class MainGame(arcade.View):
             "cajas":{
                 "use_spatial_hash": True,
             },
-            "edna":{
+            "enemigos":{
                 "use_spatial_hash": True,
             },
         }
         my_map = arcade.load_tilemap(map_name,1,layer_options)
         self.scene = arcade.Scene.from_tilemap(my_map)
+
 
         #self.physics_engine = arcade.PhysicsEngineSimple(self.protagonist,self.scene["cajas"]) # no se usará por ahora esto debido a los distintos cambios que he comentado sobre las colisiones, esto se usará probablemente para paredes.
 
@@ -200,23 +201,23 @@ class MainGame(arcade.View):
 
 
         #self.physics_engine.update() # no se usará por ahora esto debido a los distintos cambios que he comentado sobre las colisiones, esto se usará probablemente para paredes.
-        edna_hit_list = arcade.check_for_collision_with_list(self.protagonist,self.scene["edna"])
-
-        # PARA PRUEBAS. cada vez que se interactua con edna se imprime la ubicación de donde está esa edna
-        for edna in edna_hit_list:
-            print ("(",edna.center_x,",",edna.center_y,")")
+        #edna_hit_list = arcade.check_for_collision_with_list(self.protagonist,self.scene["edna"])
+#
+        ## PARA PRUEBAS. cada vez que se interactua con edna se imprime la ubicación de donde está esa edna
+        #for edna in edna_hit_list:
+        #    print ("(",edna.center_x,",",edna.center_y,")")
 
         # Cuando se dispara a edna, edna y la bala desaparecen
-        for bullet in self.bullet_list:
-            hit_list = arcade.check_for_collision_with_list(bullet, self.scene["edna"])
-            if len(hit_list) > 0:
-                bullet.remove_from_sprite_lists()
-            for edna in hit_list:
-                edna.remove_from_sprite_lists()
-                print ("edna is hit")
-        if len(self.scene["edna"]) == 0:
-            game_view = GameOverWindow()
-            self.window.show_view(game_view)
+        #for bullet in self.bullet_list:
+        #    hit_list = arcade.check_for_collision_with_list(bullet, self.scene["edna"])
+        #    if len(hit_list) > 0:
+        #        bullet.remove_from_sprite_lists()
+        #    for edna in hit_list:
+        #        edna.remove_from_sprite_lists()
+        #        print ("edna is hit")
+        #if len(self.scene["edna"]) == 0:
+        #    game_view = GameOverWindow()
+        #    self.window.show_view(game_view)
 
             # Cuando tengamos nivels con paredes miraremos si la bala choca con la pared y si lo hace desaparece
             #if bullet.bottom > SCREEN_HEIGHT:
