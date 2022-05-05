@@ -116,7 +116,6 @@ class MainGame(arcade.View):
         self.setup()
 
     def setup(self):
-
         # Cargamos el mapa generado con Tiled Map
         self.tile_map = arcade.load_tilemap(map_file=MAP_NAME, scaling= MAP_SCALE, layer_options=MAP_LAYER_OPTIONS)
         self.scene = arcade.Scene.from_tilemap(self.tile_map)
@@ -144,30 +143,29 @@ class MainGame(arcade.View):
         self.Setas=setas(1350,41)
 
 
-
-
-
-        #self.physics_engine = arcade.PhysicsEngineSimple(self.protagonist,self.scene["cajas"]) # no se usará por ahora esto debido a los distintos cambios que he comentado sobre las colisiones, esto se usará probablemente para paredes.
-
-
     def on_draw(self):
-
         self.clear()
         arcade.start_render()
 
+        # Imprimimos el contenido del videojuego.
         self.camera_for_sprites.use()
 
         self.scene.draw()
-        self.protagonist.draw()
+
+        for protagonist in self.protagonist_list:
+            protagonist.draw()
         for enemie in self.enemies_list:
-             enemie.draw()
-        self.bullet_list.draw()
+            enemie.draw()
+        for bullet in self.bullet_list:
+            bullet.draw()
+
+
         self.escudo.draw()
         self.Setas.draw()
         self.FIREBULLET_INV.draw()
         self.WATERBULLET_INV.draw()
 
-
+        # Imprimimos la GUI del videojuego
         self.camera_for_gui.use()
         arcade.draw_text(f"Health:{self.protagonist.now_hp()} / {self.protagonist.max_hp()}", 10, 30, arcade.color.WHITE, 24)
         #Imprimimos en la pantalla los numeros de setas y escudos que hay encima del objeto
@@ -181,34 +179,47 @@ class MainGame(arcade.View):
 
         self.timer += delta_time
 
+
+
+
         self.protagonist_list.update()
         self.enemies_list.update()
         self.bullet_list.update()
 
         for bullet in self.bullet_list:
-
+            # Si la bala sale de los margenes de la pantalla la eliminamos
             if bullet.bottom > SCREEN_HEIGHT or bullet.top < 0 or bullet.right < 0 or bullet.left > SCREEN_WIDTH:
                 bullet.remove_from_sprite_lists()
+
+            # Si la bala cocha contra un obstáculo del entorno la borramos
+            bullet_hit_env_list = arcade.check_for_collision_with_list(bullet, self.scene["cajas"])
+            if len(bullet_hit_env_list) > 0:
+                bullet.remove_from_sprite_lists()
+
+            # Si una bala cocha contra un enemigo del entorno la borramos y le quitamos vida al personaje
+            bullet_hit_enemie_list = arcade.check_for_collision_with_list(bullet, self.enemies_list)
+            if len(bullet_hit_enemie_list) > 0:
+                bullet.remove_from_sprite_lists()
+            for enemie in bullet_hit_enemie_list:
+                enemie.lose_life(bullet.get_damage())
+                # if enemie.alive():
+                #     enemie.remove_from_sprite_list()
+
+
+
+
+
+
+
+
+
+
+
 
         if (self.timer - self.time_for_comparing) > 5:
             self.speed_potion_activated = False
 
 
-        #self.physics_engine.update() # no se usará por ahora esto debido a los distintos cambios que he comentado sobre las colisiones, esto se usará probablemente para paredes.
-        edna_hit_list = arcade.check_for_collision_with_list(self.protagonist,self.scene["edna"])
-
-        # PARA PRUEBAS. cada vez que se interactua con edna se imprime la ubicación de donde está esa edna
-        for edna in edna_hit_list:
-            print ("(",edna.center_x,",",edna.center_y,")")
-
-        # Cuando se dispara a edna, edna y la bala desaparecen
-        for bullet in self.bullet_list:
-            hit_list = arcade.check_for_collision_with_list(bullet, self.scene["edna"])
-            if len(hit_list) > 0:
-                bullet.remove_from_sprite_lists()
-            for edna in hit_list:
-                edna.remove_from_sprite_lists()
-                print ("edna is hit")
         if len(self.scene["edna"]) == 0:
             game_view = GameOverWindow()
             self.window.show_view(game_view)

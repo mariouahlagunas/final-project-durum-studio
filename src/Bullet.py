@@ -44,5 +44,5 @@ class Bullet(arcade.Sprite):
         self.damage = damage
 
 
-    def damage(self):
+    def get_damage(self):
         return self.damage

@@ -30,7 +30,7 @@ HEALTHBAR_WIDTH = 0.4
 IMG_BULLET_FIRE = ":resources:images/space_shooter/laserRed01.png"
 SCALE_BULLET_FIRE = 2
 DAMAGE_BULLET_FIRE = 20
-SPEED_BULLET_FIRE = 10
+SPEED_BULLET_FIRE = 100
 
 IMG_BULLET_WATER = ":resources:images/space_shooter/laserBlue01.png"
 SCALE_BULLET_WATER = 1.75
