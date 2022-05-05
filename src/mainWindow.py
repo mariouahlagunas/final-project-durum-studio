@@ -119,12 +119,12 @@ class MainGame(arcade.View):
         self.bullet_list = arcade.SpriteList()
 
         # Cargamos a nuestro protagonista en la escena
-        self.protagonist = Protagonista(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 0, 0)
+        self.protagonist = Protagonist(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 0, 0)
         self.protagonist_list.append(self.protagonist)
 
         # Cargamos a los enemigos en la escena
         for position_enemie in self.scene["enemigos"]:
-            enemie = Protagonista(position_enemie.center_x, position_enemie.center_y, 0, 0)
+            enemie = Protagonist(position_enemie.center_x, position_enemie.center_y, 0, 0)
             self.enemies_list.append(enemie)
 
         # COSITAS SOBRE LAS BALAS Y EL INVENTARIO QUE TENGO QUE MIRAR
@@ -259,15 +259,15 @@ class MainGame(arcade.View):
     def on_key_press(self, key, modifiers):
 
         if key == arcade.key.LSHIFT:
-            self.protagonist.shift_pressed = True
+            self.protagonist.want_run(True)
         if key == arcade.key.A:
-            self.protagonist.left_pressed = True
+            self.protagonist.want_move_left(True)
         elif key == arcade.key.D:
-            self.protagonist.right_pressed = True
+            self.protagonist.want_move_right(True)
         elif key == arcade.key.W:
-            self.protagonist.up_pressed = True
+            self.protagonist.want_move_up(True)
         elif key == arcade.key.S:
-            self.protagonist.down_pressed = True
+            self.protagonist.want_move_down(True)
 
         # En el keypress solo debería haber variables de teclas presionadas. Pendiente cambiar esta parte para que la
         # gestión de elementos, setas, etc se haga en otro lado (preferiblemente en la clase protagonist)
@@ -302,20 +302,17 @@ class MainGame(arcade.View):
     def on_key_release(self, key, modifiers):
 
         if key == arcade.key.LSHIFT:
-            self.shift_pressed = False
-            self.protagonist_movement()
-        if key == arcade.key.W:
-            self.up_pressed = False
-            self.protagonist_movement()
-        elif key == arcade.key.S:
-            self.down_pressed = False
-            self.protagonist_movement()
-        elif key == arcade.key.A:
-            self.left_pressed = False
-            self.protagonist_movement()
+            self.protagonist.want_run(False)
+        if key == arcade.key.A:
+            self.protagonist.want_move_left(False)
         elif key == arcade.key.D:
-            self.right_pressed = False
-            self.protagonist_movement()
+            self.protagonist.want_move_right(False)
+        elif key == arcade.key.W:
+            self.protagonist.want_move_up(False)
+        elif key == arcade.key.S:
+            self.protagonist.want_move_down(False)
+
+
 
 
     def on_mouse_press(self, x, y, button, modifiers):
