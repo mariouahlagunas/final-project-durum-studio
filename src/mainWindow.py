@@ -203,8 +203,8 @@ class MainGame(arcade.View):
                 bullet.remove_from_sprite_lists()
             for enemie in bullet_hit_enemie_list:
                 enemie.lose_life(bullet.get_damage())
-                # if enemie.alive():
-                #     enemie.remove_from_sprite_list()
+                if not enemie.alive():
+                    enemie.remove_from_sprite_lists()
 
 
 

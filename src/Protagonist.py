@@ -82,14 +82,23 @@ class Protagonista(arcade.Sprite):
     def now_hp(self):
         return self.hp_now
 
+    def alive(self):
+        if self.hp_now > 0:
+            return True
+        else:
+            return False
+
     def lose_life(self, amount):
         self.hp_now -= amount
-        # Mirar el método en el que implementemos esto, ya que si la vida llega a 0 se pierde la partida.
-        # Y depende de como se haga ese, ver como completamos este
+
+        if self.hp_now < 0:
+            self.hp_now = 0
 
     def gain_life(self, amount):
         self.hp_now += amount
-        # Completar con el tema de que no se puede superar el hp_max nunca.
+
+        if self.hp_now > self.hp_max:
+            self.hp_max
 
     def print_life(self):
         healthbar_height = HEALTHBAR_HEIGHT
