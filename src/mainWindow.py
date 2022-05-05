@@ -123,7 +123,7 @@ class MainGame(arcade.View):
         self.protagonist_list.append(self.protagonist)
 
         # Cargamos a los enemigos en la escena
-        for position_enemie in self.scene["edna"]:
+        for position_enemie in self.scene["enemigos"]:
             enemie = Protagonista(position_enemie.center_x, position_enemie.center_y, 0, 0)
             self.enemies_list.append(enemie)
 
@@ -136,14 +136,13 @@ class MainGame(arcade.View):
         self.Setas = setas(1350, 41)
 
 
-<<<<<<< HEAD
-=======
+
 
 
 
         # self.physics_engine = arcade.PhysicsEngineSimple(self.protagonist,self.scene["cajas"]) # no se usará por ahora esto debido a los distintos cambios que he comentado sobre las colisiones, esto se usará probablemente para paredes.
 
->>>>>>> c7aecb6b275e978ba62680a3c34e57663c6e67f4
+
     def on_draw(self):
         self.clear()
         arcade.start_render()
@@ -221,28 +220,11 @@ class MainGame(arcade.View):
         if (self.timer - self.time_for_comparing) > 5:
             self.speed_potion_activated = False
 
-<<<<<<< HEAD
 
-=======
-        # self.physics_engine.update() # no se usará por ahora esto debido a los distintos cambios que he comentado sobre las colisiones, esto se usará probablemente para paredes.
-        edna_hit_list = arcade.check_for_collision_with_list(self.protagonist, self.scene["edna"])
 
-        # PARA PRUEBAS. cada vez que se interactua con edna se imprime la ubicación de donde está esa edna
-        for edna in edna_hit_list:
-            print("(", edna.center_x, ",", edna.center_y, ")")
-
-        # Cuando se dispara a edna, edna y la bala desaparecen
-        for bullet in self.bullet_list:
-            hit_list = arcade.check_for_collision_with_list(bullet, self.scene["edna"])
-            if len(hit_list) > 0:
-                bullet.remove_from_sprite_lists()
-            for edna in hit_list:
-                edna.remove_from_sprite_lists()
-                print("edna is hit")
->>>>>>> c7aecb6b275e978ba62680a3c34e57663c6e67f4
-        if len(self.scene["edna"]) == 0:
-            game_view = GameOverWindow()
-            self.window.show_view(game_view)
+        # if len(self.scene["enemies"]) == 0:
+        #     game_view = GameOverWindow()
+        #     self.window.show_view(game_view)
 
             # Cuando tengamos nivels con paredes miraremos si la bala choca con la pared y si lo hace desaparece
             # if bullet.bottom > SCREEN_HEIGHT:

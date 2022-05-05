@@ -2,12 +2,12 @@ import arcade
 import os
 
 # VARIABLES PARA CARGAR EL MAPA
-MAP_NAME = 'assets' + os.path.sep + 'tilemaps' + os.path.sep + 'pruebaMapa2' + os.path.sep + 'mapa.tmx'
+MAP_NAME = 'assets' + os.path.sep + 'tilemaps' + os.path.sep + 'pruebaMapa3' + os.path.sep + 'mapa3.tmx'
 MAP_SCALE = 1
 MAP_LAYER_OPTIONS = {
     "suelo": {"use_spatial_hash": True},
     "cajas": {"use_spatial_hash": True},
-    "edna": {"use_spatial_hash": True, },
+    "enemigos": {"use_spatial_hash": True, },
 }
 
 
