@@ -9,9 +9,9 @@ from src.Armeria import *
 
 class Character(arcade.Sprite):
 
-    def __init__(self, img, scale, center_x, center_y, change_x, change_y):
+    def __init__(self, scale, center_x, center_y, change_x, change_y):
 
-        super().__init__(img, scale)
+        super().__init__(scale=scale)
 
         self.center_x = center_x
         self.center_y = center_y
@@ -25,13 +25,19 @@ class Character(arcade.Sprite):
         self.hp_now = HP_PROTAGONIST
 
 
+        # Default to face-right
+        self.face_direction = RIGHT_FACING
+        # Used for flipping between image sequences
+        self.cur_texture = 0
+
+
 
 
     def draw(self):
 
         super().draw()
 
-        self.print_life()
+        #self.print_life()
 
 
 
@@ -41,6 +47,28 @@ class Character(arcade.Sprite):
         super().update()
 
 
+
+
+    def update_animation(self, idle_textures, walk_textures, delta_time: float = 1/60, ):
+
+        # Comprobamos la dirección de movimiento
+        if self.change_x < 0 and self.face_direction == RIGHT_FACING:
+            self.face_direction = LEFT_FACING
+        elif self.change_x > 0 and self.face_direction == LEFT_FACING:
+            self.face_direction = RIGHT_FACING
+
+        # Animación de parado
+        if self.change_x == 0 and self.change_y == 0:
+            self.texture = idle_textures[self.face_direction]
+            return
+
+        # Animación de andar
+        self.cur_texture += 1
+        if self.cur_texture > (len(walk_textures)-1) * UPDATES_PER_FRAME:
+            self.cur_texture = 0
+        frame = self.cur_texture // UPDATES_PER_FRAME
+        direction = self.face_direction
+        self.texture = self.walk_textures[frame][direction]
 
 
     # def calculate_movement_speed(self, multiplier):

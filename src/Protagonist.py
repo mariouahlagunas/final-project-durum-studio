@@ -7,13 +7,24 @@ class Protagonist(Character):
 
     def __init__(self, center_x, center_y, change_x, change_y):
 
-        super().__init__(IMG_PROTAGONIST, SCALE_PROTAGONIST, center_x, center_y, change_x, change_y)
+        super().__init__(SCALE_PROTAGONIST, center_x, center_y, change_x, change_y)
 
         self.shift_pressed = False
         self.left_pressed = False
         self.right_pressed = False
         self.up_pressed = False
         self.down_pressed = False
+
+        texture_path = ":resources:images/animated_characters/male_person/malePerson"
+
+        self.idle_textures = [arcade.load_texture(f"{texture_path}_idle.png"),
+                              arcade.load_texture(f"{texture_path}_idle.png", flipped_horizontally=True)]
+
+        self.walk_textures = []
+        for i in range(8):
+            texture = [arcade.load_texture(f"{texture_path}_walk{i}.png"),
+                       arcade.load_texture(f"{texture_path}_walk{i}.png", flipped_horizontally=True)]
+            self.walk_textures.append(texture)
 
 
 
@@ -43,6 +54,8 @@ class Protagonist(Character):
             self.move_left()
         elif self.right_pressed and not self.left_pressed:
             self.move_right()
+
+        super().update_animation(self.idle_textures, self.walk_textures)
 
 
 

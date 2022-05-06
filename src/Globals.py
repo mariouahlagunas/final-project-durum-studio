@@ -10,6 +10,9 @@ MAP_LAYER_OPTIONS = {
     "enemigos": {"use_spatial_hash": True, },
 }
 
+RIGHT_FACING = 0
+LEFT_FACING = 1
+UPDATES_PER_FRAME = 5
 
 # Variables de la pantalla de juego
 SCREEN_HEIGHT = 800
