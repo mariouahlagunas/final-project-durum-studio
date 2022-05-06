@@ -7,7 +7,7 @@ class Protagonist(Character):
 
     def __init__(self, center_x, center_y, change_x, change_y):
 
-        super().__init__(SCALE_PROTAGONIST, center_x, center_y, change_x, change_y)
+        super().__init__(SCALE_PROTAGONIST, SPEED_PROTAGONIST, HP_PROTAGONIST, center_x, center_y, change_x, change_y)
 
         self.shift_pressed = False
         self.left_pressed = False
@@ -25,6 +25,12 @@ class Protagonist(Character):
             texture = [arcade.load_texture(f"{texture_path}_walk{i}.png"),
                        arcade.load_texture(f"{texture_path}_walk{i}.png", flipped_horizontally=True)]
             self.walk_textures.append(texture)
+
+        self.attack_textures = []
+        for i in range(2):
+            texture = [arcade.load_texture(f"{texture_path}_climb{i}.png"),
+                       arcade.load_texture(f"{texture_path}_climb{i}.png", flipped_horizontally=True)]
+            self.attack_textures.append(texture)
 
     def draw(self):
 
@@ -44,7 +50,8 @@ class Protagonist(Character):
         elif self.right_pressed and not self.left_pressed:
             self.move_right()
 
-        super().update_animation(self.idle_textures, self.walk_textures)
+        super().update_animation_walk(self.idle_textures, self.walk_textures)
+        super().update_animation_attack(self.attack_textures)
 
     def want_run(self, pressed):
         if pressed:

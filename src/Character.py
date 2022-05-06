@@ -7,8 +7,7 @@ from src.Armeria import *
 
 class Character(arcade.Sprite):
 
-    def __init__(self, scale, center_x, center_y, change_x, change_y):
-
+    def __init__(self, scale, speed, hp, center_x, center_y, change_x, change_y):
         super().__init__(scale=scale)
 
         self.center_x = center_x
@@ -16,47 +15,70 @@ class Character(arcade.Sprite):
         self.change_x = change_x
         self.change_y = change_y
 
-        self.movement_speed_normal = SPEED_PROTAGONIST
-        self.movement_speed_now = SPEED_PROTAGONIST
+        self.movement_speed_normal = speed
+        self.movement_speed_now = speed
 
-        self.hp_max = HP_PROTAGONIST
-        self.hp_now = HP_PROTAGONIST
+        self.hp_max = hp
+        self.hp_now = hp
 
-        # Default to face-right
+        self.texture = None
         self.face_direction = RIGHT_FACING
-        # Used for flipping between image sequences
-        self.cur_texture = 0
+        self.walk = True
+        self.cur_texture_walk = 0
+        self.attack = False
+        self.cur_texture_attack = 0
 
-    def draw(self):
 
-        super().draw()
+    def sprite_walk(self):
+        self.walk = True
+        self.attack = False
 
-        # self.print_life()
 
-    def update(self):
+    def sprite_attack(self):
+        self.walk = False
+        self.attack = True
 
-        super().update()
 
-    def update_animation(self, idle_textures, walk_textures, delta_time: float = 1 / 60, ):
+    def update_animation_walk(self, idle_textures, walk_textures, delta_time: float = 1 / 60):
+        if self.walk:
+            # Comprobamos la dirección de movimiento
+            if self.change_x < 0 and self.face_direction == RIGHT_FACING:
+                self.face_direction = LEFT_FACING
+            elif self.change_x > 0 and self.face_direction == LEFT_FACING:
+                self.face_direction = RIGHT_FACING
 
-        # Comprobamos la dirección de movimiento
-        if self.change_x < 0 and self.face_direction == RIGHT_FACING:
-            self.face_direction = LEFT_FACING
-        elif self.change_x > 0 and self.face_direction == LEFT_FACING:
-            self.face_direction = RIGHT_FACING
+            # Animación de parado
+            if self.change_x == 0 and self.change_y == 0:
+                self.texture = idle_textures[self.face_direction]
+                return
 
-        # Animación de parado
-        if self.change_x == 0 and self.change_y == 0:
-            self.texture = idle_textures[self.face_direction]
-            return
+            # Animación de andar
+            self.cur_texture_walk += 1
+            if self.cur_texture_walk > (len(walk_textures) - 1) * UPDATES_PER_FRAME:
+                self.cur_texture_walk = 0
+            frame = self.cur_texture_walk // UPDATES_PER_FRAME
+            direction = self.face_direction
+            self.texture = self.walk_textures[frame][direction]
 
-        # Animación de andar
-        self.cur_texture += 1
-        if self.cur_texture > (len(walk_textures) - 1) * UPDATES_PER_FRAME:
-            self.cur_texture = 0
-        frame = self.cur_texture // UPDATES_PER_FRAME
-        direction = self.face_direction
-        self.texture = self.walk_textures[frame][direction]
+
+    def update_animation_attack(self, attack_textures, delta_time: float = 1 / 60):
+        if self.attack:
+            # Comprobamos la dirección de movimiento
+            if self.change_x < 0 and self.face_direction == RIGHT_FACING:
+                self.face_direction = LEFT_FACING
+            elif self.change_x > 0 and self.face_direction == LEFT_FACING:
+                self.face_direction = RIGHT_FACING
+
+            # Animación de atacar
+            self.cur_texture_attack += 1
+            if self.cur_texture_attack > (len(attack_textures) - 1) * UPDATES_PER_FRAME:
+                self.cur_texture_attack = 0
+            frame = self.cur_texture_attack // UPDATES_PER_FRAME
+            direction = self.face_direction
+            self.texture = self.attack_textures[frame][direction]
+            if self.cur_texture_attack == 0:
+                self.sprite_walk()
+
 
     def calculate_movement_speed(self, multiplier):
         if self.shift_pressed:
@@ -139,6 +161,8 @@ class Character(arcade.Sprite):
         # Y si ponemos vidas diferentes, puede que quede raro
 
     def shoot(self, end_x, end_y, type):
+
+        self.sprite_attack()
 
         start_x = self.center_x
         start_y = self.center_y
