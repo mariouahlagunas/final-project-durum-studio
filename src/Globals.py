@@ -12,7 +12,8 @@ MAP_LAYER_OPTIONS = {
 
 RIGHT_FACING = 0
 LEFT_FACING = 1
-UPDATES_PER_FRAME = 5
+UPDATES_PER_FRAME_WALK = 5
+UPDATES_PER_FRAME_ATTACK = 10
 
 # Variables de la pantalla de juego
 SCREEN_HEIGHT = 800
@@ -20,7 +21,9 @@ SCREEN_WIDTH = 1400
 SCREEN_TITLE = "Juego de equipo Durum studio"
 
 # Variables del protagonista
-IMG_PROTAGONIST = ":resources:images/animated_characters/female_person/femalePerson_idle.png"
+TEXTURES_PATH_PROTAGONIST = ":resources:images/animated_characters/male_person/malePerson"
+NUM_WALK_TEXTURES_PROTAGONIST = 8
+NUM_ATTACK_TEXTURES_PROTAGONIST = 2
 SCALE_PROTAGONIST = 0.5
 HP_PROTAGONIST = 100
 SPEED_PROTAGONIST = 5

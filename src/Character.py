@@ -54,16 +54,16 @@ class Character(arcade.Sprite):
 
             # Animación de andar
             self.cur_texture_walk += 1
-            if self.cur_texture_walk > (len(walk_textures) - 1) * UPDATES_PER_FRAME:
+            if self.cur_texture_walk > (len(walk_textures) - 1) * UPDATES_PER_FRAME_WALK:
                 self.cur_texture_walk = 0
-            frame = self.cur_texture_walk // UPDATES_PER_FRAME
+            frame = self.cur_texture_walk // UPDATES_PER_FRAME_WALK
             direction = self.face_direction
             self.texture = self.walk_textures[frame][direction]
 
 
     def update_animation_attack(self, attack_textures, delta_time: float = 1 / 60):
         if self.attack:
-            # Comprobamos la dirección de movimiento
+            # Comprobamos la dirección del ataque
             if self.change_x < 0 and self.face_direction == RIGHT_FACING:
                 self.face_direction = LEFT_FACING
             elif self.change_x > 0 and self.face_direction == LEFT_FACING:
@@ -71,47 +71,47 @@ class Character(arcade.Sprite):
 
             # Animación de atacar
             self.cur_texture_attack += 1
-            if self.cur_texture_attack > (len(attack_textures) - 1) * UPDATES_PER_FRAME:
+            if self.cur_texture_attack > (len(attack_textures) - 1) * UPDATES_PER_FRAME_ATTACK:
                 self.cur_texture_attack = 0
-            frame = self.cur_texture_attack // UPDATES_PER_FRAME
+            frame = self.cur_texture_attack // UPDATES_PER_FRAME_ATTACK
             direction = self.face_direction
             self.texture = self.attack_textures[frame][direction]
             if self.cur_texture_attack == 0:
                 self.sprite_walk()
 
 
-    def calculate_movement_speed(self, multiplier):
-        if self.shift_pressed:
-            multiplier *= 1.5
-        if (self.up_pressed or self.down_pressed) and (self.left_pressed or self.right_pressed):
-            multiplier *= 0.7071  # dividir por raiz de 2
-        print(multiplier)
-        return multiplier
-
     def change_movement_speed(self, multiplier):
         self.movement_speed_now = self.movement_speed_normal * multiplier
+
 
     def not_move(self):
         self.change_x = 0
         self.change_y = 0
 
+
     def move_up(self):
         self.change_y = self.movement_speed_now
+
 
     def move_down(self):
         self.change_y = -self.movement_speed_now
 
+
     def move_left(self):
         self.change_x = -self.movement_speed_now
+
 
     def move_right(self):
         self.change_x = self.movement_speed_now
 
+
     def max_hp(self):
         return self.hp_max
 
+
     def now_hp(self):
         return self.hp_now
+
 
     def alive(self):
         if self.hp_now > 0:
@@ -119,17 +119,18 @@ class Character(arcade.Sprite):
         else:
             return False
 
+
     def lose_life(self, amount):
         self.hp_now -= amount
-
         if self.hp_now < 0:
             self.hp_now = 0
 
+
     def gain_life(self, amount):
         self.hp_now += amount
-
         if self.hp_now > self.hp_max:
             self.hp_max
+
 
     def print_life(self):
         healthbar_height = HEALTHBAR_HEIGHT
@@ -156,12 +157,9 @@ class Character(arcade.Sprite):
                                      width=healthbar_width,
                                      height=healthbar_height,
                                      color=healthbar_color)
-        # Con lo que tenemos ahora mismo, en función de la vida maxima del personaje se imprime la barra.
-        # Por lo que a más vida, la barra más grande. Y a menos vida, más pequeña.
-        # Y si ponemos vidas diferentes, puede que quede raro
+
 
     def shoot(self, end_x, end_y, type):
-
         self.sprite_attack()
 
         start_x = self.center_x
