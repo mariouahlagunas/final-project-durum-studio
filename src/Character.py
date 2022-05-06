@@ -5,8 +5,6 @@ from src.Bullet import *
 from src.Armeria import *
 
 
-
-
 class Character(arcade.Sprite):
 
     def __init__(self, scale, center_x, center_y, change_x, change_y):
@@ -24,32 +22,22 @@ class Character(arcade.Sprite):
         self.hp_max = HP_PROTAGONIST
         self.hp_now = HP_PROTAGONIST
 
-
         # Default to face-right
         self.face_direction = RIGHT_FACING
         # Used for flipping between image sequences
         self.cur_texture = 0
 
-
-
-
     def draw(self):
 
         super().draw()
 
-        #self.print_life()
-
-
-
+        # self.print_life()
 
     def update(self):
 
         super().update()
 
-
-
-
-    def update_animation(self, idle_textures, walk_textures, delta_time: float = 1/60, ):
+    def update_animation(self, idle_textures, walk_textures, delta_time: float = 1 / 60, ):
 
         # Comprobamos la dirección de movimiento
         if self.change_x < 0 and self.face_direction == RIGHT_FACING:
@@ -64,22 +52,22 @@ class Character(arcade.Sprite):
 
         # Animación de andar
         self.cur_texture += 1
-        if self.cur_texture > (len(walk_textures)-1) * UPDATES_PER_FRAME:
+        if self.cur_texture > (len(walk_textures) - 1) * UPDATES_PER_FRAME:
             self.cur_texture = 0
         frame = self.cur_texture // UPDATES_PER_FRAME
         direction = self.face_direction
         self.texture = self.walk_textures[frame][direction]
 
-
-    # def calculate_movement_speed(self, multiplier):
-    #     if self.shift_pressed:
-    #         multiplier *= 1.5
-    #     return multiplier
-
+    def calculate_movement_speed(self, multiplier):
+        if self.shift_pressed:
+            multiplier *= 1.5
+        if (self.up_pressed or self.down_pressed) and (self.left_pressed or self.right_pressed):
+            multiplier *= 0.7071  # dividir por raiz de 2
+        print(multiplier)
+        return multiplier
 
     def change_movement_speed(self, multiplier):
         self.movement_speed_now = self.movement_speed_normal * multiplier
-
 
     def not_move(self):
         self.change_x = 0
@@ -96,9 +84,6 @@ class Character(arcade.Sprite):
 
     def move_right(self):
         self.change_x = self.movement_speed_now
-
-
-
 
     def max_hp(self):
         return self.hp_max

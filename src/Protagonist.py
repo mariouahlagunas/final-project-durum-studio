@@ -26,25 +26,14 @@ class Protagonist(Character):
                        arcade.load_texture(f"{texture_path}_walk{i}.png", flipped_horizontally=True)]
             self.walk_textures.append(texture)
 
-
-
-
     def draw(self):
 
         super().draw()
 
-
-
-
     def update(self):
 
         super().update()
-
-        if self.shift_pressed:
-            self.change_movement_speed(1.5)
-        else:
-            self.change_movement_speed(1)
-
+        self.change_movement_speed(self.calculate_movement_speed(1))
         self.not_move()
         if self.up_pressed and not self.down_pressed:
             self.move_up()
@@ -56,9 +45,6 @@ class Protagonist(Character):
             self.move_right()
 
         super().update_animation(self.idle_textures, self.walk_textures)
-
-
-
 
     def want_run(self, pressed):
         if pressed:
