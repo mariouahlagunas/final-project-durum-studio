@@ -1,34 +1,12 @@
 import arcade
 import math
 
-from src.Globals import *
-
 
 class Bullet(arcade.Sprite):
 
-    def __init__(self, start_x, start_y, end_x, end_y, type, multiplier_scale, multiplier_damage, multiplier_speed):
+    def __init__(self, start_x, start_y, end_x, end_y, scale, damage, speed):
 
-        if type == "fire":
-            img = IMG_BULLET_FIRE
-            scale = SCALE_BULLET_FIRE * multiplier_scale
-            damage = DAMAGE_BULLET_FIRE * multiplier_damage
-            speed =  SPEED_BULLET_FIRE * multiplier_speed
-        elif type == "water":
-            img = IMG_BULLET_WATER
-            scale = SCALE_BULLET_WATER * multiplier_scale
-            damage = DAMAGE_BULLET_WATER * multiplier_damage
-            speed = SPEED_BULLET_WATER * multiplier_speed
-        elif type == "electricity":
-            printf("electricidad")
-            #completar
-        elif type == "air":
-            printf("aire")
-            #completar
-        else:
-            printf("Error")
-            #completar
-
-        super().__init__(img, scale)
+        super().__init__(scale=scale)
 
         self.center_x = start_x
         self.center_y = start_y

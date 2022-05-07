@@ -1,8 +1,7 @@
 import arcade
 
 from src.Globals import *
-from src.Bullet import *
-from src.Armeria import *
+from src.Bullet_Electricity import *
 
 
 class Character(arcade.Sprite):
@@ -159,17 +158,20 @@ class Character(arcade.Sprite):
                                      color=healthbar_color)
 
 
-    def shoot(self, end_x, end_y, type):
+    def shoot(self, end_x, end_y, type, multiplier_scale, multiplier_damage, multiplier_speed):
         self.sprite_attack()
 
         start_x = self.center_x
         start_y = self.center_y
 
-        # Esto, obvio hay que hacerlo pillando el tipo de arma y los potenciadores que tenga el personaje
-        multiplier_scale = 1
-        multiplier_damage = 1
-        multiplier_speed = 1
-
-        bullet = Bullet(start_x, start_y, end_x, end_y, type, multiplier_scale, multiplier_damage, multiplier_speed)
+        bullet = None
+        if type == "fire":
+            bullet = Bullet_Fire(start_x, start_y, end_x, end_y, multiplier_scale, multiplier_damage, multiplier_speed)
+        elif type == "water":
+            bullet = Bullet_Water(start_x, start_y, end_x, end_y, multiplier_scale, multiplier_damage, multiplier_speed)
+        elif type == "electricity":
+            bullet = Bullet_Electricity(start_x, start_y, end_x, end_y, multiplier_scale, multiplier_damage, multiplier_speed)
+        elif type == "air":
+            bullet = Bullet_Air(start_x, start_y, end_x, end_y, multiplier_scale, multiplier_damage, multiplier_speed)
 
         return bullet

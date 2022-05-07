@@ -98,3 +98,14 @@ class Protagonist(Character):
             self.right_pressed = True
         else:
             self.right_pressed = False
+
+
+    def shoot(self, end_x, end_y):
+        type = "electricity"
+        multiplier_scale = 1
+        multiplier_damage = 1
+        multiplier_speed = 1
+
+        bullet = super().shoot(end_x, end_y, type, multiplier_scale, multiplier_damage, multiplier_speed)
+
+        return bullet
