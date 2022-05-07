@@ -100,8 +100,9 @@ class Protagonist(Character):
             self.right_pressed = False
 
 
-    def shoot(self, end_x, end_y):
-        type = "electricity"
+    def shoot(self, type, end_x, end_y):
+        #El parametro se borra y se saca del arma que lleve, pero estoy en pruebas
+        #type = "electricity"
         multiplier_scale = 1
         multiplier_damage = 1
         multiplier_speed = 1

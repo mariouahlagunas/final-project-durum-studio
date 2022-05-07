@@ -1,6 +1,3 @@
-import arcade
-
-from src.Globals import *
 from src.Bullet import *
 
 class Bullet_Electricity(Bullet):
@@ -12,13 +9,7 @@ class Bullet_Electricity(Bullet):
 
         super().__init__(start_x, start_y, end_x, end_y, scale, damage, speed)
 
-        self.texture = None
-        self.cur_texture = 0
-
-        self.move_textures = []
-        for i in range(NUM_MOVE_TEXTURES_BULLET_ELECTRICITY):
-            texture = arcade.load_texture(f"{TEXTURES_PATH_ELECTRICITY}_move{i}.png")
-            self.move_textures.append(texture)
+        self.move_textures = super().load_textures(TEXTURES_PATH_BULLET_ELECTRICITY,"move", NUM_MOVE_TEXTURES_BULLET_ELECTRICITY)
 
 
     def draw(self):
@@ -28,8 +19,4 @@ class Bullet_Electricity(Bullet):
     def update(self):
         super().update()
 
-        self.cur_texture += 1
-        if self.cur_texture > (len(self.move_textures) - 1) * UPDATES_PER_FRAME_SHOOT:
-            self.cur_texture = 0
-        frame = self.cur_texture // UPDATES_PER_FRAME_SHOOT
-        self.texture = self.move_textures[frame]
+        super().update_animation_move(self.move_textures)

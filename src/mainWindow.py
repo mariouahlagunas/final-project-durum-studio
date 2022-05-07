@@ -89,6 +89,7 @@ class MainGame(arcade.View):
         self.Bullet_water = None
         self.FIREBULLET_INV = None
         self.WATERBULLET_INV = None
+        self.type_bullet = "electricity"   #Para pruebas, cuando las acabe lo borro
 
         # self.physics_engine = None # no se usará por ahora esto debido a los distintos cambios que he comentado sobre las colisiones, esto se usará probablemente para paredes.
 
@@ -199,12 +200,15 @@ class MainGame(arcade.View):
 
             # Si una bala cocha contra un enemigo del entorno la borramos y le quitamos vida al personaje
             bullet_hit_enemie_list = arcade.check_for_collision_with_list(bullet, self.enemies_list)
-            if len(bullet_hit_enemie_list) > 0:
+            if bullet.alive() and len(bullet_hit_enemie_list) > 0:
                 bullet.remove_from_sprite_lists()
             for enemie in bullet_hit_enemie_list:
                 enemie.lose_life(bullet.get_damage())
                 if not enemie.alive():
                     enemie.remove_from_sprite_lists()
+
+            if bullet.dead():
+                bullet.remove_from_sprite_lists()
 
 
 
@@ -298,6 +302,15 @@ class MainGame(arcade.View):
         # elif key == arcade.key.E:
         # self.protagonist.gain_life(5)
 
+        # Para probar una cosa de las balas, cuando lo acabe lo borro
+        elif key == arcade.key.KEY_1:
+            self.type_bullet = "air"
+        elif key == arcade.key.KEY_2:
+            self.type_bullet = "electricity"
+        elif key == arcade.key.KEY_3:
+            self.type_bullet = "water"
+        elif key == arcade.key.KEY_4:
+            self.type_bullet = "fire"
 
     def on_key_release(self, key, modifiers):
 
@@ -319,27 +332,31 @@ class MainGame(arcade.View):
         # Mirar con que arma se está disparando
         # Mirar potenciadores que pueda tener el personaje
         # Mirar si hay munición de esa arma en el inventario
-        Armeria = Armas(self.Type)
-        if Armeria.get_arma() == "fuego":
-            type = "fire"
-            if self.Inventario.get_fire() > 0:
-                self.Inventario.set_fire((self.Inventario.get_fire()) - 1)
-                bullet = self.protagonist.shoot(x, y, type)
-                self.bullet_list.append(bullet)
+        # Armeria = Armas(self.Type)
+        # if Armeria.get_arma() == "fuego":
+        #     type = "fire"
+        #     if self.Inventario.get_fire() > 0:
+        #         self.Inventario.set_fire((self.Inventario.get_fire()) - 1)
+        #         bullet = self.protagonist.shoot(x, y, type)
+        #         self.bullet_list.append(bullet)
+        #
+        #     else:
+        #         print("No hay municion de esta arma")
+        # if Armeria.get_arma() == "agua":
+        #     type = "water"
+        #     if self.Inventario.get_water() > 0:
+        #         self.Inventario.set_water((self.Inventario.get_water()) - 1)
+        #         bullet = self.protagonist.shoot(x, y)
+        #         self.bullet_list.append(bullet)
+        #
+        #     else:
+        #         print("No hay municion de esta arma")
 
-            else:
-                print("No hay municion de esta arma")
-        if Armeria.get_arma() == "agua":
-            type = "water"
-            if self.Inventario.get_water() > 0:
-                self.Inventario.set_water((self.Inventario.get_water()) - 1)
-                bullet = self.protagonist.shoot(x, y)
-                self.bullet_list.append(bullet)
 
-            else:
-                print("No hay municion de esta arma")
+        bullet = self.protagonist.shoot(self.type_bullet, x, y)
+        self.bullet_list.append(bullet)
 
-        
+
 
 
 class GameOverWindow(arcade.View):

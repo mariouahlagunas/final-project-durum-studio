@@ -1,6 +1,7 @@
 import arcade
 
 from src.Globals import *
+from src.Bullet_Air import *
 from src.Bullet_Electricity import *
 
 
