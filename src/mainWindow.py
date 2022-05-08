@@ -1,6 +1,7 @@
 import arcade
 
 from src.Globals import *
+from src.Character import *
 from src.Protagonist import *
 from src.Bullet import *
 from src.Inventario import *
@@ -213,6 +214,11 @@ class MainGame(arcade.View):
                 enemie.lose_life(bullet.get_damage())
                 if not enemie.alive():
                     enemie.remove_from_sprite_lists()
+
+            bullet_hit_protagonist = arcade.check_for_collision_with_list(bullet, self.protagonist_list)
+            if not bullet.alive() and len(bullet_hit_protagonist) > 0:
+                if type(bullet) == src.Bullet_Water.Bullet_Water:
+                    self.protagonist.gain_life(bullet.get_damage())
 
             if bullet.dead():
                 bullet.remove_from_sprite_lists()

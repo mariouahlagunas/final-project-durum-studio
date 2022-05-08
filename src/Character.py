@@ -4,6 +4,7 @@ from src.Globals import *
 from src.Bullet_Air import *
 from src.Bullet_Fire import *
 from src.Bullet_Electricity import *
+from src.Bullet_Water import *
 
 
 class Character(arcade.Sprite):
@@ -20,7 +21,7 @@ class Character(arcade.Sprite):
         self.movement_speed_now = speed
 
         self.hp_max = hp
-        self.hp_now = hp
+        self.hp_now = 10
 
         self.texture = None
         self.face_direction = RIGHT_FACING

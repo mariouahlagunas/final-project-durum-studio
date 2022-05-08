@@ -51,6 +51,7 @@ UPDATES_PER_FRAME_SHOOT = 5
 # Balas de aire
 TEXTURES_PATH_BULLET_AIR = 'assets' + os.path.sep + 'sprites' + os.path.sep + 'bullets' + os.path.sep + 'bullet_air'
 NUM_MOVE_TEXTURES_BULLET_AIR = 6
+NUM_NOT_MOVE_TEXTURES_BULLET_AIR = 6
 SCALE_BULLET_AIR = 0.1
 DAMAGE_BULLET_AIR = 5
 SPEED_BULLET_AIR = 5
@@ -65,10 +66,14 @@ DAMAGE_BULLET_ELECTRICITY = 20
 SPEED_BULLET_ELECTRICITY = 10
 
 # Balas de agua
-IMG_BULLET_WATER = ":resources:images/space_shooter/laserBlue01.png"
-SCALE_BULLET_WATER = 1.75
-DAMAGE_BULLET_WATER = 10
-SPEED_BULLET_WATER = 20
+TEXTURES_PATH_BULLET_WATER = 'assets' + os.path.sep + 'sprites' + os.path.sep + 'bullets' + os.path.sep + 'bullet_water'
+NUM_MOVE_TEXTURES_BULLET_WATER = 2
+NUM_NOT_MOVE_TEXTURES_BULLET_WATER = 4
+SCALE_BULLET_WATER = 0.1
+DAMAGE_BULLET_WATER = 0.1
+SPEED_BULLET_WATER = 5
+TIME_LIFE_MOVE_BULLET_WATER = 50
+TIME_DEATH_MOVE_BULLET_WATER = 100
 
 # Balas de fuego
 IMG_BULLET_FIRE = ":resources:images/space_shooter/laserRed01.png"
