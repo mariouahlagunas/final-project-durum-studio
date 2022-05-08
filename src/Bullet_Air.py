@@ -10,7 +10,7 @@ class Bullet_Air(Bullet):
         super().__init__(start_x, start_y, end_x, end_y, scale, damage, speed)
 
         self.life_move_textures = super().load_textures(TEXTURES_PATH_BULLET_AIR,"move", NUM_MOVE_TEXTURES_BULLET_AIR)
-        self.death_move_textures = super().load_textures(TEXTURES_PATH_BULLET_ELECTRICITY, "move", NUM_MOVE_TEXTURES_BULLET_ELECTRICITY)
+        self.death_move_textures = super().load_textures(TEXTURES_PATH_BULLET_AIR, "move", NUM_MOVE_TEXTURES_BULLET_AIR)
 
         self.time_life_move = TIME_LIFE_MOVE_BULLET_AIR
         self.time_death_move = TIME_DEATH_MOVE_BULLET_AIR
