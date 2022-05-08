@@ -8,6 +8,7 @@ from src.escudo import *
 from src.Setas import *
 from src.Armeria import *
 from src.Bullet_Inventario import *
+from src.Bullet_Fire import *
 
 
 class MenuScreen(arcade.View):
@@ -132,7 +133,7 @@ class MainGame(arcade.View):
         self.FIREBULLET_INV = Bullet_num("rojo", 1145, 41)
         self.WATERBULLET_INV = Bullet_num("azul", 1195, 41)
         self.WATERBULLET_INV.angle = 90
-        self.Inventario = inventario(2, 1, 30, 30)
+        self.Inventario = inventario(2, 1, 30, 30,30,30)
         self.escudo = Escudo(1300, 41)
         self.Setas = setas(1350, 41)
 
@@ -175,6 +176,8 @@ class MainGame(arcade.View):
         arcade.draw_text(f"{self.Inventario.get_setas()}", 1340, 30, arcade.color.WHITE, 24)
         arcade.draw_text(f"{self.Inventario.get_water()}", 1200, 30, arcade.color.WHITE, 24)
         arcade.draw_text(f"{self.Inventario.get_fire()}", 1150, 30, arcade.color.WHITE, 24)
+        arcade.draw_text(f"{self.Inventario.get_electricity()}", 1100, 30, arcade.color.WHITE, 24)
+        arcade.draw_text(f"{self.Inventario.get_Air()}", 1050, 30, arcade.color.WHITE, 24)
 
 
     def on_update(self, delta_time):
@@ -329,32 +332,42 @@ class MainGame(arcade.View):
 
 
     def on_mouse_press(self, x, y, button, modifiers):
-        # Mirar con que arma se está disparando
+        #Mirar con que arma se está disparando
         # Mirar potenciadores que pueda tener el personaje
         # Mirar si hay munición de esa arma en el inventario
-        # Armeria = Armas(self.Type)
-        # if Armeria.get_arma() == "fuego":
-        #     type = "fire"
-        #     if self.Inventario.get_fire() > 0:
-        #         self.Inventario.set_fire((self.Inventario.get_fire()) - 1)
-        #         bullet = self.protagonist.shoot(x, y, type)
-        #         self.bullet_list.append(bullet)
-        #
-        #     else:
-        #         print("No hay municion de esta arma")
-        # if Armeria.get_arma() == "agua":
-        #     type = "water"
-        #     if self.Inventario.get_water() > 0:
-        #         self.Inventario.set_water((self.Inventario.get_water()) - 1)
-        #         bullet = self.protagonist.shoot(x, y)
-        #         self.bullet_list.append(bullet)
-        #
-        #     else:
-        #         print("No hay municion de esta arma")
+        if self.type_bullet == "fire":
+            if self.Inventario.get_fire() > 0:
+                self.Inventario.set_fire((self.Inventario.get_fire()) - 1)
+                bullet = self.protagonist.shoot(self.type_bullet, x, y)
+                self.bullet_list.append(bullet)
 
+            else:
+                 print("No hay municion de esta arma")
+        if self.type_bullet == "water":
+            if self.Inventario.get_water() > 0:
+                self.Inventario.set_water((self.Inventario.get_water()) - 1)
+                bullet = self.protagonist.shoot(self.type_bullet, x, y)
+                self.bullet_list.append(bullet)
 
-        bullet = self.protagonist.shoot(self.type_bullet, x, y)
-        self.bullet_list.append(bullet)
+            else:
+                 print("No hay municion de esta arma")
+        if self.type_bullet == "electricity":
+            if self.Inventario.get_electricity() > 0:
+                self.Inventario.set_electricity((self.Inventario.get_electricity()) - 1)
+                bullet = self.protagonist.shoot(self.type_bullet, x, y)
+                self.bullet_list.append(bullet)
+
+            else:
+                print("No hay municion de esta arma")
+        if self.type_bullet == "air":
+            if self.Inventario.get_Air() > 0:
+                self.Inventario.set_Air((self.Inventario.get_Air()) - 1)
+                bullet = self.protagonist.shoot(self.type_bullet, x, y)
+                self.bullet_list.append(bullet)
+
+            else:
+                print("No hay municion de esta arma")
+
 
 
 

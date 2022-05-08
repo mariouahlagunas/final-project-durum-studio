@@ -1,6 +1,7 @@
 import arcade
 
 from src.Globals import *
+from src.Bullet import *
 
 
 class Bullet_Fire(Bullet):
