@@ -2,7 +2,8 @@ import arcade
 
 
 class inventario(arcade.Sprite):
-    def __init__(self, num_escudos, num_setas, num_fire, num_water, num_electricity, num_Air):
+    def __init__(self, num_escudos, num_setas, num_fire, num_water, num_electricity, num_Air, money):
+        self.money=money
         self.num_electricity= num_electricity
         self.num_Air=num_Air
         self.num_fire = num_fire
@@ -12,6 +13,10 @@ class inventario(arcade.Sprite):
 
     def get_escudos(self):
         return self.num_escudos
+    def get_money(self):
+        return self.money
+    def set_money(self,num_money):
+        self.money=num_money
     def get_fire(self):
         return self.num_fire
     def get_Air(self):

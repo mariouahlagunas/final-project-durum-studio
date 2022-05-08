@@ -86,6 +86,7 @@ class MainGame(arcade.View):
         self.Inventario = None
         self.escudo = None
         self.Setas = None
+        self.money_imagen=None
         self.Bullet_fire = None
         self.Bullet_water = None
         self.FIREBULLET_INV = None
@@ -133,8 +134,9 @@ class MainGame(arcade.View):
         self.FIREBULLET_INV = Bullet_num("rojo", 1145, 41)
         self.WATERBULLET_INV = Bullet_num("azul", 1195, 41)
         self.WATERBULLET_INV.angle = 90
-        self.Inventario = inventario(2, 1, 30, 30,30,30)
+        self.Inventario = inventario(2, 1, 30, 30,30,30,100)
         self.escudo = Escudo(1300, 41)
+        self.money_imagen = Escudo(1300, 770)
         self.Setas = setas(1350, 41)
 
 
@@ -163,6 +165,7 @@ class MainGame(arcade.View):
 
 
         self.escudo.draw()
+        self.money_imagen.draw()
         self.Setas.draw()
         self.FIREBULLET_INV.draw()
         self.WATERBULLET_INV.draw()
@@ -178,6 +181,7 @@ class MainGame(arcade.View):
         arcade.draw_text(f"{self.Inventario.get_fire()}", 1150, 30, arcade.color.WHITE, 24)
         arcade.draw_text(f"{self.Inventario.get_electricity()}", 1100, 30, arcade.color.WHITE, 24)
         arcade.draw_text(f"{self.Inventario.get_Air()}", 1050, 30, arcade.color.WHITE, 24)
+        arcade.draw_text(f"{self.Inventario.get_money()}", 1320, 758, arcade.color.WHITE, 24)
 
 
     def on_update(self, delta_time):
