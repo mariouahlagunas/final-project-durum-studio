@@ -94,7 +94,7 @@ SCALE_ESCUDO = 0.6
 IMG_SETAS = ":resources:images/topdown_tanks/tank_green.png"
 SCALE_SETAS = 0.8
 
-<<<<<<< HEAD
+
 #Variables de inventario
 NUM_ESCUDOS = 2
 NUM_SETAS = 2
@@ -104,8 +104,5 @@ NUM_ELECTRICITY = 30
 NUM_AIR = 30
 NUM_MONEY = 100
 
-=======
-#xor
->>>>>>> 40b23bb498c08965ae064b083b58ff1f9d20a7e9
 def xor(x, y):
     return bool((x and not y) or (not x and y))
