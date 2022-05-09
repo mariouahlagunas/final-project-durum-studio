@@ -58,7 +58,7 @@ class Protagonist(Character):
         if self.shift_pressed:
             multiplier *= 1.5
 
-        if (self.up_pressed or self.down_pressed) and (self.left_pressed or self.right_pressed):
+        if (xor(self.up_pressed, self.down_pressed)) and (xor(self.left_pressed, self.right_pressed)):
             # Dividir por raiz de 2
             multiplier *= 0.7071
 
