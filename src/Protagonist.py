@@ -1,6 +1,7 @@
 import arcade
 
 from src.Character import *
+from src.Inventario import *
 
 
 class Protagonist(Character):
@@ -29,10 +30,10 @@ class Protagonist(Character):
         self.up_pressed = False
         self.down_pressed = False
 
-
     def draw(self):
         super().draw()
-
+    def set_up(self):
+        self.Inventario = inventario(NUM_ESCUDOS, NUM_SETAS, NUM_FIRE, NUM_WATER, NUM_ELECTRICITY, NUM_AIR, NUM_MONEY)
 
     def update(self):
         super().update()
@@ -53,17 +54,15 @@ class Protagonist(Character):
         super().update_animation_walk(self.idle_textures, self.walk_textures)
         super().update_animation_attack(self.attack_textures)
 
-
-    def calculate_movement_speed(self, multiplier = 1):
+    def calculate_movement_speed(self, multiplier=1):
         if self.shift_pressed:
             multiplier *= 1.5
 
-        if (self.up_pressed or self.down_pressed) and (self.left_pressed or self.right_pressed):
+        if (xor(self.up_pressed, self.down_pressed)) and (xor(self.left_pressed, self.right_pressed)):
             # Dividir por raiz de 2
             multiplier *= 0.7071
 
         return multiplier
-
 
     def want_run(self, pressed):
         if pressed:
@@ -71,13 +70,11 @@ class Protagonist(Character):
         else:
             self.shift_pressed = False
 
-
     def want_move_up(self, pressed):
         if pressed:
             self.up_pressed = True
         else:
             self.up_pressed = False
-
 
     def want_move_down(self, pressed):
         if pressed:
@@ -85,13 +82,11 @@ class Protagonist(Character):
         else:
             self.down_pressed = False
 
-
     def want_move_left(self, pressed):
         if pressed:
             self.left_pressed = True
         else:
             self.left_pressed = False
-
 
     def want_move_right(self, pressed):
         if pressed:
@@ -99,10 +94,9 @@ class Protagonist(Character):
         else:
             self.right_pressed = False
 
-
     def shoot(self, type, end_x, end_y):
-        #El parametro se borra y se saca del arma que lleve, pero estoy en pruebas
-        #type = "electricity"
+        # El parametro se borra y se saca del arma que lleve, pero estoy en pruebas
+        # type = "electricity"
         multiplier_scale = 1
         multiplier_damage = 1
         multiplier_speed = 1

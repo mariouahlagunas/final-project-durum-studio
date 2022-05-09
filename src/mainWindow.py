@@ -83,7 +83,6 @@ class MainGame(arcade.View):
         self.bullet_list = None
 
         self.protagonist = None
-        self.Inventario = None
         self.escudo = None
         self.Setas = None
         self.money_imagen=None
@@ -134,10 +133,10 @@ class MainGame(arcade.View):
         self.FIREBULLET_INV = Bullet_num("rojo", 1145, 41)
         self.WATERBULLET_INV = Bullet_num("azul", 1195, 41)
         self.WATERBULLET_INV.angle = 90
-        self.Inventario = inventario(2, 1, 30, 30,30,30,100)
         self.escudo = Escudo(1300, 41)
         self.money_imagen = Escudo(1300, 770)
         self.Setas = setas(1350, 41)
+        self.protagonist.set_up()
 
 
 
@@ -175,13 +174,13 @@ class MainGame(arcade.View):
         arcade.draw_text(f"Health:{self.protagonist.now_hp()} / {self.protagonist.max_hp()}", 10, 30,
                          arcade.color.WHITE, 24)
         # Imprimimos en la pantalla los numeros de setas y escudos que hay encima del objeto
-        arcade.draw_text(f"{self.Inventario.get_escudos()}", 1290, 30, arcade.color.WHITE, 24)
-        arcade.draw_text(f"{self.Inventario.get_setas()}", 1340, 30, arcade.color.WHITE, 24)
-        arcade.draw_text(f"{self.Inventario.get_water()}", 1200, 30, arcade.color.WHITE, 24)
-        arcade.draw_text(f"{self.Inventario.get_fire()}", 1150, 30, arcade.color.WHITE, 24)
-        arcade.draw_text(f"{self.Inventario.get_electricity()}", 1100, 30, arcade.color.WHITE, 24)
-        arcade.draw_text(f"{self.Inventario.get_Air()}", 1050, 30, arcade.color.WHITE, 24)
-        arcade.draw_text(f"{self.Inventario.get_money()}", 1320, 758, arcade.color.WHITE, 24)
+        arcade.draw_text(f"{self.protagonist.Inventario.get_escudos()}", 1290, 30, arcade.color.WHITE, 24)
+        arcade.draw_text(f"{self.protagonist.Inventario.get_setas()}", 1340, 30, arcade.color.WHITE, 24)
+        arcade.draw_text(f"{self.protagonist.Inventario.get_water()}", 1200, 30, arcade.color.WHITE, 24)
+        arcade.draw_text(f"{self.protagonist.Inventario.get_fire()}", 1150, 30, arcade.color.WHITE, 24)
+        arcade.draw_text(f"{self.protagonist.Inventario.get_electricity()}", 1100, 30, arcade.color.WHITE, 24)
+        arcade.draw_text(f"{self.protagonist.Inventario.get_Air()}", 1050, 30, arcade.color.WHITE, 24)
+        arcade.draw_text(f"{self.protagonist.Inventario.get_money()}", 1320, 758, arcade.color.WHITE, 24)
 
 
     def on_update(self, delta_time):
@@ -283,24 +282,36 @@ class MainGame(arcade.View):
         # En el keypress solo debería haber variables de teclas presionadas. Pendiente cambiar esta parte para que la
         # gestión de elementos, setas, etc se haga en otro lado (preferiblemente en la clase protagonist)
         if key == arcade.key.R:
-            self.Type = "agua"
+            if self.protagonist.Inventario.get_money() >= 20:
+                self.protagonist.Inventario.set_money(self.protagonist.Inventario.get_money()-20)
+                self.protagonist.Inventario.set_fire(self.protagonist.Inventario.get_fire()+10)
         if key == arcade.key.T:
-            self.Type = "fuego"
+            if self.protagonist.Inventario.get_money() >= 20:
+                self.protagonist.Inventario.set_money(self.protagonist.Inventario.get_money()-20)
+                self.protagonist.Inventario.set_water(self.protagonist.Inventario.get_water()+10)
+        if key == arcade.key.Y:
+            if self.protagonist.Inventario.get_money() >= 20:
+                self.protagonist.Inventario.set_money(self.protagonist.Inventario.get_money()-20)
+                self.protagonist.Inventario.set_electricity(self.protagonist.Inventario.get_electricity()+10)
+        if key == arcade.key.F:
+            if self.protagonist.Inventario.get_money() >= 20:
+                self.protagonist.Inventario.set_money(self.protagonist.Inventario.get_money()-20)
+                self.protagonist.Inventario.set_Air(self.protagonist.Inventario.get_Air()+10)
         elif key == arcade.key.Q:
             # Vemos si tenemos escudos en el inventario
-            if self.Inventario.get_escudos() > 0:
+            if self.protagonist.Inventario.get_escudos() > 0:
                 # Si tiene, realiza su accion y encima se resta uno del inventario
                 self.protagonist.gain_life(20)
-                self.Inventario.set_escudo((self.Inventario.get_escudos()) - 1)
+                self.protagonist.Inventario.set_escudo((self.protagonist.Inventario.get_escudos()) - 1)
         elif key == arcade.key.E:
             self.speed_potion_activated = True
             ##Vemos si tenemos setas en el inventario
-            if self.Inventario.get_setas() > 0:
+            if self.protagonist.Inventario.get_setas() > 0:
                 # Si tiene, realiza su accion y se gasta 1 en el inventario
                 print(self.protagonist.movement_speed_now)
                 self.protagonist.change_movement_speed(2.5)
                 print(self.protagonist.movement_speed_now)
-                self.Inventario.set_setas((self.Inventario.get_setas()) - 1)
+                self.protagonist.Inventario.set_setas((self.protagonist.Inventario.get_setas()) - 1)
                 self.time_for_comparing = self.timer
 
         # Son solo para probar el tema de la vida (para eliminar)
@@ -340,32 +351,32 @@ class MainGame(arcade.View):
         # Mirar potenciadores que pueda tener el personaje
         # Mirar si hay munición de esa arma en el inventario
         if self.type_bullet == "fire":
-            if self.Inventario.get_fire() > 0:
-                self.Inventario.set_fire((self.Inventario.get_fire()) - 1)
+            if self.protagonist.Inventario.get_fire() > 0:
+                self.protagonist.Inventario.set_fire((self.protagonist.Inventario.get_fire()) - 1)
                 bullet = self.protagonist.shoot(self.type_bullet, x, y)
                 self.bullet_list.append(bullet)
 
             else:
-                 print("No hay municion de esta arma")
+                print("No hay municion de esta arma")
         if self.type_bullet == "water":
-            if self.Inventario.get_water() > 0:
-                self.Inventario.set_water((self.Inventario.get_water()) - 1)
+            if self.protagonist.Inventario.get_water() > 0:
+                self.protagonist.Inventario.set_water((self.protagonist.Inventario.get_water()) - 1)
                 bullet = self.protagonist.shoot(self.type_bullet, x, y)
                 self.bullet_list.append(bullet)
 
             else:
-                 print("No hay municion de esta arma")
+                print("No hay municion de esta arma")
         if self.type_bullet == "electricity":
-            if self.Inventario.get_electricity() > 0:
-                self.Inventario.set_electricity((self.Inventario.get_electricity()) - 1)
+            if self.protagonist.Inventario.get_electricity() > 0:
+                self.protagonist.Inventario.set_electricity((self.protagonist.Inventario.get_electricity()) - 1)
                 bullet = self.protagonist.shoot(self.type_bullet, x, y)
                 self.bullet_list.append(bullet)
 
             else:
                 print("No hay municion de esta arma")
         if self.type_bullet == "air":
-            if self.Inventario.get_Air() > 0:
-                self.Inventario.set_Air((self.Inventario.get_Air()) - 1)
+            if self.protagonist.Inventario.get_Air() > 0:
+                self.protagonist.Inventario.set_Air((self.protagonist.Inventario.get_Air()) - 1)
                 bullet = self.protagonist.shoot(self.type_bullet, x, y)
                 self.bullet_list.append(bullet)
 
