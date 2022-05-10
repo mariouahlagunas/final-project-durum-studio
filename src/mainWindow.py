@@ -10,7 +10,7 @@ from src.Setas import *
 from src.Armeria import *
 from src.Bullet_Inventario import *
 from src.Bullet_Fire import *
-
+from src.Mascota import *
 
 class MenuScreen(arcade.View):
 
@@ -273,7 +273,16 @@ class MainGame(arcade.View):
 
 
     def on_key_press(self, key, modifiers):
-
+        if key == arcade.key.F3:
+            self.F3_pressed = True
+            self.mascota_movement()
+            self.protagonist.not_move()
+ 
+        elif key == arcade.key.F4:
+            self.F3_pressed = True
+            self.mascota.not_move()
+            self.protagonist_movement()
+            self.mascota.follow_sprite()
         if key == arcade.key.LSHIFT:
             self.protagonist.want_run(True)
         if key == arcade.key.A:
