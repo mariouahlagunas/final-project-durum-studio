@@ -1,19 +1,32 @@
 import arcade
 import main
+from Clases.Protagonist import *
+
    
 
 
 class mascota(arcade.Sprite):
+    def __init__(self, center_x, center_y, change_x, change_y):
+   
+        super().__init__(IMG_MASCOTA, SCALE_MASCOTA)
+
+        self.center_x = center_x
+        self.center_y = center_y
+        self.change_x = change_x
+        self.change_y = change_y
+
+        self.movement_speed_normal = SPEED_MASCOTA
+        self.movement_speed_now = SPEED_MASCOTA
 
     def follow_sprite(self, player_sprite):
         # Esta función es para que la mascota (self) se mueva hacia el personaje (player.sprite).
-
-        if self.center_y < player_sprite.center_y:
-            self.center_y += min(MASCOTA_SPEED, player_sprite.center_y - self.center_y)
-        elif self.center_y > player_sprite.center_y:
-            self.center_y -= min(MASCOTA_SPEED, self.center_y - player_sprite.center_y)
-
-        if self.center_x < player_sprite.center_x:
-            self.center_x += min(MASCOTA_SPEED, player_sprite.center_x - self.center_x)
-        elif self.center_x > player_sprite.center_x:
-            self.center_x -= min(MASCOTA_SPEED, self.center_x - player_sprite.center_x)
+        while math.fabs(self.center_y)- math.fabs(player_sprite.center_y)>=1 or math.fabs(self.center_x)- math.fabs(player_sprite.center_x) >=1 :
+            if self.center_y < player_sprite.center_y:
+                self.center_y += min(MASCOTA_SPEED, player_sprite.center_y - self.center_y)
+            elif self.center_y > player_sprite.center_y:
+                self.center_y -= min(MASCOTA_SPEED, self.center_y - player_sprite.center_y)
+          
+            if self.center_x < player_sprite.center_x:
+                self.center_x += min(MASCOTA_SPEED, player_sprite.center_x - self.center_x)
+            elif self.center_x > player_sprite.center_x:
+                self.center_x -= min(MASCOTA_SPEED, self.center_x - player_sprite.center_x) 
