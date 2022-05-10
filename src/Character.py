@@ -131,7 +131,7 @@ class Character(arcade.Sprite):
     def gain_life(self, amount):
         self.hp_now += amount
         if self.hp_now > self.hp_max:
-            self.hp_max
+            self.hp_now = self.hp_max
 
 
     def print_life(self):
