@@ -447,6 +447,8 @@ class GameOverWindow(arcade.View):
 
     def on_key_press(self, key, modifiers):
 
+        if key == arcade.key.ESCAPE:
+            self.window.show_view(MainGame())
         if key == arcade.key.ENTER:
             self.enter_pressed = True
         elif (key == arcade.key.A or key == arcade.key.LEFT) and (self.option_hovered_on == 1):
@@ -464,5 +466,70 @@ class GameOverWindow(arcade.View):
 
     def on_key_release(self, key, modifiers):
 
+        if key == arcade.key.ENTER:
+            self.enter_pressed = False
+
+class PauseMenu(arcade.View):
+
+    def __init__(self):
+
+        super().__init__()
+
+        self.enter_pressed = False
+
+        self.option_hovered_on = 1
+
+        arcade.set_background_color(arcade.color.BLACK)
+
+    def on_draw(self):
+
+        self.clear()
+        arcade.start_render()
+
+        if  self.option_hovered_on == 1:
+            arcade.draw_rectangle_filled(615, 310, 150, 50, arcade.color.GRAY)
+        if  self.option_hovered_on == 2:
+            arcade.draw_rectangle_filled(777, 310, 70, 50, arcade.color.GRAY)
+        if  self.option_hovered_on == 3:
+            arcade.draw_rectangle_filled(700, 210, 200, 50, arcade.color.GRAY)
+        arcade.draw_text("GAME PAUSED", 340, 600, arcade.color.WHITE, 80)
+        arcade.draw_text("Continue", 550, 300, arcade.color.WHITE, 24)
+        arcade.draw_text("Exit", 750, 300, arcade.color.WHITE, 24)
+        arcade.draw_text("MAIN MENU", 605, 200, arcade.color.WHITE, 24)
+
+    def on_update(self, delta_time):
+
+        #if self.option_hovered_on > 2:
+        #    self.option_hovered_on = 1
+        #if self.option_hovered_on < 1:
+        #    self.option_hovered_on = 2
+        if self.enter_pressed == True:
+            if self.option_hovered_on == 1:
+                self.window.show_view(MainGame())
+            if self.option_hovered_on == 2:
+                self.window.close()
+            if self.option_hovered_on == 3:
+                self.window.show_view(MenuScreen())
+
+    def on_key_press(self, key, modifiers):
+
+        if key == arcade.key.ESCAPE:
+            self.window.show_view(MainGame())
+        if key == arcade.key.ENTER:
+            self.enter_pressed = True
+        elif (key == arcade.key.A or key == arcade.key.LEFT) and (self.option_hovered_on == 1):
+            self.option_hovered_on = 2
+        elif (key == arcade.key.D or key == arcade.key.RIGHT) and (self.option_hovered_on == 1):
+            self.option_hovered_on = 2
+        elif (key == arcade.key.A or key == arcade.key.LEFT) and (self.option_hovered_on == 2):
+            self.option_hovered_on = 1
+        elif (key == arcade.key.D or key == arcade.key.RIGHT) and (self.option_hovered_on == 2):
+            self.option_hovered_on = 1
+        elif key == arcade.key.S or key == arcade.key.DOWN:
+            self.option_hovered_on = 3
+        elif key == arcade.key.W or key == arcade.key.UP:
+            self.option_hovered_on = 1
+
+    def on_key_release(self, key, modifiers):
         if key == arcade.key.ENTER:
             self.enter_pressed = False
