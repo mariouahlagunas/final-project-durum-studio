@@ -10,7 +10,7 @@ from src.Setas import *
 from src.Armeria import *
 from src.Bullet_Inventario import *
 from src.Bullet_Fire import *
-from src.Mascota import *
+from src.Mascota import * #arreglar por favor
 
 class MenuScreen(arcade.View):
 
