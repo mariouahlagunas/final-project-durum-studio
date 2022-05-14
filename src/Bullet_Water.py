@@ -7,13 +7,21 @@ class Bullet_Water(Bullet):
         damage = DAMAGE_BULLET_WATER * multiplier_damage
         speed = SPEED_BULLET_WATER * multiplier_speed
 
-        super().__init__(start_x, start_y, end_x, end_y, scale, damage, speed)
+        super().__init__(start_x, start_y, scale, damage, speed)
 
-        self.life_move_textures = super().load_textures(TEXTURES_PATH_BULLET_WATER,"move", NUM_MOVE_TEXTURES_BULLET_WATER)
-        self.death_move_textures = super().load_textures(TEXTURES_PATH_BULLET_WATER, "not_move", NUM_NOT_MOVE_TEXTURES_BULLET_WATER)
+        super().liner_move_with_rotation(start_x, start_y, end_x, end_y)
 
-        self.time_life_move = TIME_LIFE_MOVE_BULLET_WATER
-        self.time_death_move = TIME_DEATH_MOVE_BULLET_WATER
+        self.moved_textures = super().load_textures(TEXTURES_PATH_BULLET_WATER, "move", NUM_MOVE_TEXTURES_BULLET_WATER)
+        self.moved_time = TIME_MOVE_BULLET_WATER
+
+        self.moved_stopped_transaction_textures = super().load_textures(TEXTURES_PATH_BULLET_WATER, "transaction", NUM_TRANSACTION_TEXTURES_BULLET_WATER)
+
+        self.stopped_textures = super().load_textures(TEXTURES_PATH_BULLET_WATER, "not_move", NUM_STOP_TEXTURES_BULLET_WATER)
+        self.stopped_time = TIME_STOP_BULLET_WATER
+
+        self.hit_textures = self.moved_stopped_transaction_textures
+
+        super().set_textures(self.moved_textures)
 
 
     def draw(self):
@@ -22,16 +30,33 @@ class Bullet_Water(Bullet):
 
     def update(self):
         super().update()
+        super().update_animation()
 
-        if self.time_life_move >= 0:
-            if self.time_life_move == 0:
-                super().not_move()
-                super().sprite_death()
-            self.time_life_move -= 1
-            super().update_animation_move(self.life_move_textures)
-        else:
-            if self.time_death_move >= 0:
-                self.time_death_move -= 1
-                super().update_animation_move(self.death_move_textures)
+        if super().is_moved():
+            if self.moved_time > 0:
+                self.moved_time -= 1
+            elif self.moved_time == 0:
+                self.moved_time -= 1
+                super().set_textures(self.moved_stopped_transaction_textures, loop_textures = False)
             else:
-                super().spite_death_of_death()
+                if not super().is_animated():
+                    super().set_textures(self.stopped_textures)
+                    super().stop_move()
+                    super().stopped_bullet()
+
+        if super().is_stopped():
+            if self.stopped_time > 0:
+                self.stopped_time -= 1
+            else:
+                super().dead_bullet()
+
+        if super().is_hit():
+            if not super().is_animated():
+                super().set_textures(self.stopped_textures)
+                super().stopped_bullet()
+
+
+    def collision(self):
+        super().set_textures(self.hit_textures, loop_textures = False)
+        super().stop_move()
+        super().hit_bullet()

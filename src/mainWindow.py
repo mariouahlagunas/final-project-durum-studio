@@ -73,6 +73,10 @@ class MenuScreen(arcade.View):
             self.enter_pressed = False
 
 
+
+
+
+
 class MainGame(arcade.View):
 
     def __init__(self):
@@ -92,6 +96,7 @@ class MainGame(arcade.View):
         self.FIREBULLET_INV = None
         self.WATERBULLET_INV = None
         self.type_bullet = "electricity"   #Para pruebas, cuando las acabe lo borro
+        self.timer_mouse = 0
 
         # self.physics_engine = None # no se usará por ahora esto debido a los distintos cambios que he comentado sobre las colisiones, esto se usará probablemente para paredes.
 
@@ -187,6 +192,7 @@ class MainGame(arcade.View):
     def on_update(self, delta_time):
 
         self.timer += delta_time
+        self.timer_mouse += 1
 
 
 
@@ -195,31 +201,44 @@ class MainGame(arcade.View):
         self.enemies_list.update()
         self.bullet_list.update()
 
+
+
+
         for bullet in self.bullet_list:
             # Si la bala sale de los margenes de la pantalla la eliminamos
             if bullet.bottom > SCREEN_HEIGHT or bullet.top < 0 or bullet.right < 0 or bullet.left > SCREEN_WIDTH:
                 bullet.remove_from_sprite_lists()
 
-            # Si la bala cocha contra un obstáculo del entorno la borramos
+            # Tratamiento de la bala en caso de chocar con un obstáculo
             bullet_hit_env_list = arcade.check_for_collision_with_list(bullet, self.scene["cajas"])
             if len(bullet_hit_env_list) > 0:
-                bullet.remove_from_sprite_lists()
+                if bullet.is_moved():
+                    bullet.collision()
 
-            # Si una bala cocha contra un enemigo del entorno la borramos y le quitamos vida al personaje
+            # Tratamiento de la bala y del enemigo en caso de chocar entre ellos.
             bullet_hit_enemie_list = arcade.check_for_collision_with_list(bullet, self.enemies_list)
-            if bullet.alive() and len(bullet_hit_enemie_list) > 0:
-                bullet.remove_from_sprite_lists()
             for enemie in bullet_hit_enemie_list:
-                enemie.lose_life(bullet.get_damage())
+                if type(bullet) == src.Bullet_Water.Bullet_Water:
+                    if bullet.is_stopped():
+                        enemie.gain_life(bullet.get_damage())
+                    elif bullet.is_moved():
+                        bullet.collision()
+                else:
+                    if bullet.is_moved() or bullet.is_stopped():
+                        enemie.lose_life(bullet.get_damage())
+                        bullet.collision()
                 if not enemie.alive():
                     enemie.remove_from_sprite_lists()
 
+            # Tratamiento de la bala en caso de chocar con el protagonista
             bullet_hit_protagonist = arcade.check_for_collision_with_list(bullet, self.protagonist_list)
-            if not bullet.alive() and len(bullet_hit_protagonist) > 0:
+            if len(bullet_hit_protagonist) > 0:
                 if type(bullet) == src.Bullet_Water.Bullet_Water:
-                    self.protagonist.gain_life(bullet.get_damage())
+                    if bullet.is_stopped():
+                        self.protagonist.gain_life(bullet.get_damage())
 
-            if bullet.dead():
+            # Eliminamos aquellas balas que estén muertas, y por tanto ya no tengan utilidad
+            if bullet.is_dead():
                 bullet.remove_from_sprite_lists()
 
 
@@ -359,44 +378,45 @@ class MainGame(arcade.View):
             self.protagonist.want_move_down(False)
 
 
-
-
     def on_mouse_press(self, x, y, button, modifiers):
-        #Mirar con que arma se está disparando
-        # Mirar potenciadores que pueda tener el personaje
-        # Mirar si hay munición de esa arma en el inventario
-        if self.type_bullet == "fire":
-            if self.protagonist.Inventario.get_fire() > 0:
-                self.protagonist.Inventario.set_fire((self.protagonist.Inventario.get_fire()) - 1)
-                bullet = self.protagonist.shoot(self.type_bullet, x, y)
-                self.bullet_list.append(bullet)
-
-            else:
-                print("No hay municion de esta arma")
-        if self.type_bullet == "water":
-            if self.protagonist.Inventario.get_water() > 0:
-                self.protagonist.Inventario.set_water((self.protagonist.Inventario.get_water()) - 1)
-                bullet = self.protagonist.shoot(self.type_bullet, x, y)
-                self.bullet_list.append(bullet)
-
-            else:
-                print("No hay municion de esta arma")
-        if self.type_bullet == "electricity":
-            if self.protagonist.Inventario.get_electricity() > 0:
-                self.protagonist.Inventario.set_electricity((self.protagonist.Inventario.get_electricity()) - 1)
-                bullet = self.protagonist.shoot(self.type_bullet, x, y)
-                self.bullet_list.append(bullet)
-
-            else:
-                print("No hay municion de esta arma")
         if self.type_bullet == "air":
             if self.protagonist.Inventario.get_Air() > 0:
                 self.protagonist.Inventario.set_Air((self.protagonist.Inventario.get_Air()) - 1)
                 bullet = self.protagonist.shoot(self.type_bullet, x, y)
                 self.bullet_list.append(bullet)
-
             else:
                 print("No hay municion de esta arma")
+
+        if self.type_bullet == "electricity":
+            if self.protagonist.Inventario.get_electricity() > 0:
+                self.protagonist.Inventario.set_electricity((self.protagonist.Inventario.get_electricity()) - 1)
+                bullet = self.protagonist.shoot(self.type_bullet, x, y)
+                self.bullet_list.append(bullet)
+            else:
+                print("No hay municion de esta arma")
+
+        if self.type_bullet == "water":
+            if self.protagonist.Inventario.get_water() > 0:
+                self.protagonist.Inventario.set_water((self.protagonist.Inventario.get_water()) - 1)
+                bullet = self.protagonist.shoot(self.type_bullet, x, y)
+                self.bullet_list.append(bullet)
+            else:
+                print("No hay municion de esta arma")
+
+        if self.type_bullet == "fire":
+            self.timer_mouse = 0
+
+    def on_mouse_release(self, x, y, button, modifiers):
+        if self.type_bullet == "fire":
+            if self.protagonist.Inventario.get_fire() > 0:
+                self.protagonist.Inventario.set_fire((self.protagonist.Inventario.get_fire()) - 1)
+                print(self.timer_mouse)
+                bullet = self.protagonist.shoot(self.type_bullet, x, y, self.timer_mouse)
+                self.bullet_list.append(bullet)
+            else:
+                print("No hay municion de esta arma")
+
+
 
 
 

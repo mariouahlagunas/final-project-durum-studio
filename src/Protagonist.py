@@ -94,13 +94,13 @@ class Protagonist(Character):
         else:
             self.right_pressed = False
 
-    def shoot(self, type, end_x, end_y):
+    def shoot(self, type, end_x, end_y, timer_mouse = 0):
         # El parametro se borra y se saca del arma que lleve, pero estoy en pruebas
         # type = "electricity"
         multiplier_scale = 1
         multiplier_damage = 1
         multiplier_speed = 1
 
-        bullet = super().shoot(end_x, end_y, type, multiplier_scale, multiplier_damage, multiplier_speed)
+        bullet = super().shoot(end_x, end_y, type, timer_mouse, multiplier_scale, multiplier_damage, multiplier_speed)
 
         return bullet

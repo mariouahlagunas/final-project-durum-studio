@@ -6,29 +6,54 @@ from src.Globals import *
 
 class Bullet(arcade.Sprite):
 
-    def __init__(self, start_x, start_y, end_x, end_y, scale, damage, speed):
-
+    def __init__(self, center_x, center_y, scale, damage, speed):
         super().__init__(scale=scale)
 
-        self.center_x = start_x
-        self.center_y = start_y
+        self.center_x = center_x
+        self.center_y = center_y
+        self.change_x = 0
+        self.change_y = 0
 
+        self.damage = damage
+        self.speed = speed
+
+        self.texture = None
+        self.textures = None
+        self.cur_texture = 0
+        self.loop_textures = True
+        self.animated = True
+
+        self.moved = True
+        self.stopped = False
+        self.hit = False
+
+        self.alive = True
+        self.dead = False
+
+
+    def liner_move_without_rotation(self, start_x, start_y, end_x, end_y):
         x_diff = end_x - start_x
         y_diff = end_y - start_y
         angle = math.atan2(y_diff, x_diff)
+
+        self.change_x = math.cos(angle) * self.speed
+        self.change_y = math.sin(angle) * self.speed
+
+
+    def liner_move_with_rotation(self, start_x, start_y, end_x, end_y):
+        x_diff = end_x - start_x
+        y_diff = end_y - start_y
+        angle = math.atan2(y_diff, x_diff)
+
         self.angle = math.degrees(angle)
 
-        self.change_x = math.cos(angle) * speed
-        self.change_y = math.sin(angle) * speed
+        self.change_x = math.cos(angle) * self.speed
+        self.change_y = math.sin(angle) * self.speed
 
-        self.damage = damage
 
-        self.texture = None
-        self.cur_texture = 0
-
-        self.death = False
-        self.death_of_death = False
-
+    def stop_move(self):
+        self.change_x = 0
+        self.change_y = 0
 
 
     def load_textures(self, path_textures, type_textures, num_textures):
@@ -40,41 +65,69 @@ class Bullet(arcade.Sprite):
         return textures
 
 
-    def update_animation_move(self, textures, delta_time: float = 1 / 60):
+    def set_textures(self, textures, cur_texture = 0, loop_textures = True):
+        self.textures = textures
+        self.cur_texture = cur_texture
+        self.loop_textures = loop_textures
+        self.animated = True
+
+
+    def update_animation(self):
         # Animación del movimiento de la bala
-        self.cur_texture += 1
-        if self.cur_texture > (len(textures) - 1) * UPDATES_PER_FRAME_SHOOT:
-            self.cur_texture = 0
         frame = self.cur_texture // UPDATES_PER_FRAME_SHOOT
-        self.texture = textures[frame]
+        self.texture = self.textures[frame]
+
+        self.cur_texture += 1
+        if self.cur_texture > (len(self.textures) - 1) * UPDATES_PER_FRAME_SHOOT:
+            if self.loop_textures:
+                self.cur_texture = 0
+            else:
+                self.animated = False
+
+
+    def is_animated(self):
+        return self.animated
 
 
     def get_damage(self):
         return self.damage
 
 
-    def not_move(self):
-        self.change_x = 0
-        self.change_y = 0
+    def get_speed(self):
+        return self.speed
 
 
-    def alive(self):
-        if self.death:
-            return False
-        else:
-            return True
+    def stopped_bullet(self):
+        self.moved = False
+        self.stopped = True
 
 
-    def dead(self):
-        if self.death_of_death:
-            return True
-        else:
-            return False
+    def hit_bullet(self):
+        self.moved = False
+        self.stopped = False
+        self.hit = True
 
 
-    def sprite_death(self):
-        self.death = True
+    def is_moved(self):
+        return self.moved
 
 
-    def spite_death_of_death(self):
-        self.death_of_death = True
+    def is_stopped(self):
+        return self.stopped
+
+
+    def is_hit(self):
+        return self.hit
+
+
+    def dead_bullet(self):
+        self.alive = False
+        self.dead = True
+
+
+    def is_alive(self):
+        return self.alive
+
+
+    def is_dead(self):
+        return self.dead

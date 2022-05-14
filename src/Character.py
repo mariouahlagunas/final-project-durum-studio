@@ -21,7 +21,7 @@ class Character(arcade.Sprite):
         self.movement_speed_now = speed
 
         self.hp_max = hp
-        self.hp_now = 10
+        self.hp_now = hp
 
         self.texture = None
         self.face_direction = RIGHT_FACING
@@ -161,7 +161,7 @@ class Character(arcade.Sprite):
                                      color=healthbar_color)
 
 
-    def shoot(self, end_x, end_y, type, multiplier_scale, multiplier_damage, multiplier_speed):
+    def shoot(self, end_x, end_y, type, timer_mouse, multiplier_scale, multiplier_damage, multiplier_speed):
         self.sprite_attack()
 
         start_x = self.center_x
@@ -169,7 +169,7 @@ class Character(arcade.Sprite):
 
         bullet = None
         if type == "fire":
-            bullet = Bullet_Fire(start_x, start_y, end_x, end_y, multiplier_scale, multiplier_damage, multiplier_speed)
+            bullet = Bullet_Fire(start_x, start_y, end_x, end_y, timer_mouse, multiplier_scale, multiplier_damage, multiplier_speed)
         elif type == "water":
             bullet = Bullet_Water(start_x, start_y, end_x, end_y, multiplier_scale, multiplier_damage, multiplier_speed)
         elif type == "electricity":
