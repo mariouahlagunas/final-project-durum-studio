@@ -9,7 +9,7 @@ class Bullet_Fire(Bullet):
         elif multiplier_timer > MAX_MULTIPLIER_TIMER_BULLET_FIRE:
             multiplier_timer = MAX_MULTIPLIER_TIMER_BULLET_FIRE
 
-        scale = SCALE_BULLET_FIRE * multiplier_scale
+        scale = SCALE_BULLET_FIRE * multiplier_scale * multiplier_timer
         damage = DAMAGE_BULLET_FIRE * multiplier_damage * multiplier_timer
         speed = SPEED_BULLET_FIRE * multiplier_speed
 

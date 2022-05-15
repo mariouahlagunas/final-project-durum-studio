@@ -13,6 +13,7 @@ class Bullet(arcade.Sprite):
         self.center_y = center_y
         self.change_x = 0
         self.change_y = 0
+        self.angle = 0
 
         self.damage = damage
         self.speed = speed
@@ -54,12 +55,13 @@ class Bullet(arcade.Sprite):
     def stop_move(self):
         self.change_x = 0
         self.change_y = 0
+        self.angle = 0
 
 
     def load_textures(self, path_textures, type_textures, num_textures):
         textures = []
         for i in range(num_textures):
-            texture = arcade.load_texture(f"{path_textures}_{type_textures}{i}.png")
+            texture = arcade.load_texture(f"{path_textures}{type_textures}_{i}.png")
             textures.append(texture)
 
         return textures

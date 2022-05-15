@@ -410,7 +410,6 @@ class MainGame(arcade.View):
         if self.type_bullet == "fire":
             if self.protagonist.Inventario.get_fire() > 0:
                 self.protagonist.Inventario.set_fire((self.protagonist.Inventario.get_fire()) - 1)
-                print(self.timer_mouse)
                 bullet = self.protagonist.shoot(self.type_bullet, x, y, self.timer_mouse)
                 self.bullet_list.append(bullet)
             else:
