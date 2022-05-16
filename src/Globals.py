@@ -28,16 +28,17 @@ MAP_LAYER_OPTIONS = {
 # Personaje generico
 RIGHT_FACING = 0
 LEFT_FACING = 1
-UPDATES_PER_FRAME_WALK = 5
+UPDATES_PER_FRAME_WALK = 10
 UPDATES_PER_FRAME_ATTACK = 10
 HEALTHBAR_HEIGHT = 5
 HEALTHBAR_WIDTH = 0.4
 
 # Protagonista
-TEXTURES_PATH_PROTAGONIST = ":resources:images/animated_characters/male_person/malePerson"
-NUM_WALK_TEXTURES_PROTAGONIST = 8
+TEXTURES_PATH_PROTAGONIST = 'assets' + os.path.sep + 'sprites' + os.path.sep + 'enemigos' + os.path.sep + 'lord' + os.path.sep
+# TEXTURES_PATH_PROTAGONIST = ":resources:images/animated_characters/male_person/malePerson"
+NUM_WALK_TEXTURES_PROTAGONIST = 2
 NUM_ATTACK_TEXTURES_PROTAGONIST = 2
-SCALE_PROTAGONIST = 0.75
+SCALE_PROTAGONIST = 1
 HP_PROTAGONIST = 100
 SPEED_PROTAGONIST = 5
 
