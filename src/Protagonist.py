@@ -2,6 +2,7 @@ import arcade
 
 from src.Character import *
 from src.Inventario import *
+from src.Gemas import *
 
 
 class Protagonist(Character):
@@ -34,6 +35,7 @@ class Protagonist(Character):
         super().draw()
     def set_up(self):
         self.Inventario = inventario(NUM_ESCUDOS, NUM_SETAS, NUM_FIRE, NUM_WATER, NUM_ELECTRICITY, NUM_AIR, NUM_MONEY)
+        self.gemas=Gemas(3,3)
 
     def update(self):
         super().update()
@@ -94,7 +96,7 @@ class Protagonist(Character):
         else:
             self.right_pressed = False
 
-    def shoot(self, type, end_x, end_y, timer_mouse = 0):
+    def shoot(self, type, end_x, end_y, timer_mouse=0):
         # El parametro se borra y se saca del arma que lleve, pero estoy en pruebas
         # type = "electricity"
         multiplier_scale = 1

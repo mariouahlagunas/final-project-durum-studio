@@ -28,16 +28,17 @@ MAP_LAYER_OPTIONS = {
 # Personaje generico
 RIGHT_FACING = 0
 LEFT_FACING = 1
-UPDATES_PER_FRAME_WALK = 5
+UPDATES_PER_FRAME_WALK = 10
 UPDATES_PER_FRAME_ATTACK = 10
 HEALTHBAR_HEIGHT = 5
 HEALTHBAR_WIDTH = 0.4
 
 # Protagonista
-TEXTURES_PATH_PROTAGONIST = ":resources:images/animated_characters/male_person/malePerson"
-NUM_WALK_TEXTURES_PROTAGONIST = 8
+TEXTURES_PATH_PROTAGONIST = 'assets' + os.path.sep + 'sprites' + os.path.sep + 'enemigos' + os.path.sep + 'lord' + os.path.sep
+# TEXTURES_PATH_PROTAGONIST = ":resources:images/animated_characters/male_person/malePerson"
+NUM_WALK_TEXTURES_PROTAGONIST = 2
 NUM_ATTACK_TEXTURES_PROTAGONIST = 2
-SCALE_PROTAGONIST = 0.75
+SCALE_PROTAGONIST = 1
 HP_PROTAGONIST = 100
 SPEED_PROTAGONIST = 5
 
@@ -50,45 +51,45 @@ SPEED_MASCOTA = 5
 # VARIABLES DE LAS BALAS
 
 # Balas genéricas
-UPDATES_PER_FRAME_SHOOT = 5
+UPDATES_PER_FRAME_SHOOT = 10
 
 # Balas de aire
-TEXTURES_PATH_BULLET_AIR = 'assets' + os.path.sep + 'sprites' + os.path.sep + 'bullets' + os.path.sep + 'bullet_air'
-NUM_MOVE_TEXTURES_BULLET_AIR = 6
+TEXTURES_PATH_BULLET_AIR = 'assets' + os.path.sep + 'sprites' + os.path.sep + 'bullets' + os.path.sep + 'bullet_air' + os.path.sep
+NUM_MOVE_TEXTURES_BULLET_AIR = 4
 NUM_HIT_TEXTURES_BULLET_AIR = 4
 TIME_MOVE_BULLET_AIR = 75
 TIME_STOP_BULLET_AIR = 40
-SCALE_BULLET_AIR = 0.1
+SCALE_BULLET_AIR = 0.2
 DAMAGE_BULLET_AIR = 10
 SPEED_BULLET_AIR = 5
 
 # Balas de electricidad
-TEXTURES_PATH_BULLET_ELECTRICITY = 'assets' + os.path.sep + 'sprites' + os.path.sep + 'bullets' + os.path.sep + 'bullet_electricity'
-NUM_MOVE_TEXTURES_BULLET_ELECTRICITY = 4
+TEXTURES_PATH_BULLET_ELECTRICITY = 'assets' + os.path.sep + 'sprites' + os.path.sep + 'bullets' + os.path.sep + 'bullet_electricity' + os.path.sep
+NUM_MOVE_TEXTURES_BULLET_ELECTRICITY = 7
 NUM_HIT_TEXTURES_BULLET_ELECTRICITY = 4
-SCALE_BULLET_ELECTRICITY = 0.035
+SCALE_BULLET_ELECTRICITY = 0.2
 DAMAGE_BULLET_ELECTRICITY = 20
 SPEED_BULLET_ELECTRICITY = 10
 
 # Balas de agua
-TEXTURES_PATH_BULLET_WATER = 'assets' + os.path.sep + 'sprites' + os.path.sep + 'bullets' + os.path.sep + 'bullet_water'
-NUM_MOVE_TEXTURES_BULLET_WATER = 2
+TEXTURES_PATH_BULLET_WATER = 'assets' + os.path.sep + 'sprites' + os.path.sep + 'bullets' + os.path.sep + 'bullet_water' + os.path.sep
+NUM_MOVE_TEXTURES_BULLET_WATER = 6
 NUM_TRANSACTION_TEXTURES_BULLET_WATER = 4
-NUM_STOP_TEXTURES_BULLET_WATER = 4
-TIME_MOVE_BULLET_WATER = 50
+NUM_STOP_TEXTURES_BULLET_WATER = 7
+TIME_MOVE_BULLET_WATER = 25
 TIME_STOP_BULLET_WATER = 100
 SCALE_BULLET_WATER = 0.1
 DAMAGE_BULLET_WATER = 0.15
 SPEED_BULLET_WATER = 5
 
 # Balas de fuego
-TEXTURES_PATH_BULLET_FIRE = 'assets' + os.path.sep + 'sprites' + os.path.sep + 'bullets' + os.path.sep + 'bullet_fire'
-NUM_MOVE_TEXTURES_BULLET_FIRE = 3
-NUM_HIT_TEXTURES_BULLET_FIRE = 2
-SCALE_BULLET_FIRE = 1
+TEXTURES_PATH_BULLET_FIRE = 'assets' + os.path.sep + 'sprites' + os.path.sep + 'bullets' + os.path.sep + 'bullet_fire' + os.path.sep
+NUM_MOVE_TEXTURES_BULLET_FIRE = 10
+NUM_HIT_TEXTURES_BULLET_FIRE = 9
+SCALE_BULLET_FIRE = 0.2
 DAMAGE_BULLET_FIRE = 50
 SPEED_BULLET_FIRE = 10
-MAX_MULTIPLIER_TIMER_BULLET_FIRE = 4
+MAX_MULTIPLIER_TIMER_BULLET_FIRE = 3
 
 
 
@@ -102,16 +103,3 @@ SCALE_ESCUDO = 0.6
 #Variables para setas
 IMG_SETAS = ":resources:images/topdown_tanks/tank_green.png"
 SCALE_SETAS = 0.8
-
-
-#Variables de inventario
-NUM_ESCUDOS = 2
-NUM_SETAS = 2
-NUM_FIRE = 30
-NUM_WATER = 30
-NUM_ELECTRICITY = 30
-NUM_AIR = 30
-NUM_MONEY = 100
-
-def xor(x, y):
-    return bool((x and not y) or (not x and y))

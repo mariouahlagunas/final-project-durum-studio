@@ -700,3 +700,5 @@ class PauseMenu(arcade.View):
     def on_key_release(self, key, modifiers):
         if key == arcade.key.ENTER:
             self.enter_pressed = False
+
+

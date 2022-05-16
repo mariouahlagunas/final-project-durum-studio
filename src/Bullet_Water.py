@@ -9,7 +9,7 @@ class Bullet_Water(Bullet):
 
         super().__init__(start_x, start_y, scale, damage, speed)
 
-        super().liner_move_with_rotation(start_x, start_y, end_x, end_y)
+        super().liner_move_without_rotation(start_x, start_y, end_x, end_y)
 
         self.moved_textures = super().load_textures(TEXTURES_PATH_BULLET_WATER, "move", NUM_MOVE_TEXTURES_BULLET_WATER)
         self.moved_time = TIME_MOVE_BULLET_WATER

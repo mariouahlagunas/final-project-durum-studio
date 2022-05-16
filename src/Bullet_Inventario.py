@@ -13,6 +13,13 @@ class Bullet_num(arcade.Sprite):
         if tipo=="rojo":
             imagen_b = ":resources:images/space_shooter/laserRed01.png"
             scala_b = .6
+        if tipo=="gema_azul":
+            imagen_b=":resources:images/items/gemBlue.png"
+            scala_b=.6
+        if tipo=="gema_roja":
+            imagen_b=":resources:images/items/gemRed.png"
+            scala_b=.6
+
         super().__init__(imagen_b, scala_b)
 
         self.center_x = x_BULLET
