@@ -103,3 +103,6 @@ SCALE_ESCUDO = 0.6
 #Variables para setas
 IMG_SETAS = ":resources:images/topdown_tanks/tank_green.png"
 SCALE_SETAS = 0.8
+
+def xor(x, y):
+    return bool((x and not y) or (not x and y))
