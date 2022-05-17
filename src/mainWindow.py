@@ -5,6 +5,7 @@ import arcade.gui
 from src.Globals import *
 from src.Character import *
 from src.Protagonist import *
+from src.Enemy import *
 from src.Bullet import *
 from src.Inventario import *
 from src.escudo import *
@@ -258,6 +259,7 @@ class MainGame(arcade.View):
         self.protagonist_list = None
         self.enemies_list = None
         self.bullet_list = None
+        self.bullet_enemy_list = None
 
         self.protagonist = None
         self.escudo = None
@@ -299,6 +301,7 @@ class MainGame(arcade.View):
         self.protagonist_list = arcade.SpriteList()
         self.enemies_list = arcade.SpriteList()
         self.bullet_list = arcade.SpriteList()
+        self.bullet_enemy_list = arcade.SpriteList()
 
         # Cargamos a nuestro protagonista en la escena
         self.protagonist = Protagonist(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0, 0)
@@ -319,12 +322,8 @@ class MainGame(arcade.View):
 
         for i in range(num_enemies):
             selected = enemies.pop(random.randint(0, len(enemies) - 1))
-            enemy = Protagonist(selected.center_x, selected.center_y, 0, 0)
+            enemy = Enemy(selected.center_x, selected.center_y, 0, 0)
             self.enemies_list.append(enemy)
-
-        # for position_enemie in self.scene["enemigos"]:
-        #     enemie = Protagonist(position_enemie.center_x, position_enemie.center_y, 0, 0)
-        #     self.enemies_list.append(enemie)
 
 
         # COSITAS SOBRE LAS BALAS Y EL INVENTARIO QUE TENGO QUE MIRAR
@@ -354,6 +353,8 @@ class MainGame(arcade.View):
         for enemie in self.enemies_list:
             enemie.draw()
         for bullet in self.bullet_list:
+            bullet.draw()
+        for bullet in self.bullet_enemy_list:
             bullet.draw()
 
         self.escudo.draw()
@@ -387,7 +388,17 @@ class MainGame(arcade.View):
         self.protagonist_list.update()
         self.enemies_list.update()
         self.bullet_list.update()
+        self.bullet_enemy_list.update()
 
+
+        for enemy in self.enemies_list:
+            bullet = enemy.updateIA(self.protagonist.center_x, self.protagonist.center_y)
+            if type(bullet) == src.Bullet_Electricity.Bullet_Electricity:
+                self.bullet_enemy_list.append(bullet)
+
+
+
+        """ Motor de colisiones """
         for bullet in self.bullet_list:
             # Si la bala sale de los margenes de la pantalla la eliminamos
             if bullet.bottom > SCREEN_HEIGHT or bullet.top < 0 or bullet.right < 0 or bullet.left > SCREEN_WIDTH:

@@ -1,5 +1,3 @@
-import arcade
-
 from src.Character import *
 from src.Inventario import *
 from src.Gemas import *
