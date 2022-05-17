@@ -1,4 +1,5 @@
 import arcade
+import random
 import arcade.gui
 
 from src.Globals import *
@@ -303,10 +304,28 @@ class MainGame(arcade.View):
         self.protagonist = Protagonist(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0, 0)
         self.protagonist_list.append(self.protagonist)
 
-        # Cargamos a los enemigos en la escena
-        for position_enemie in self.scene["enemigos"]:
-            enemie = Protagonist(position_enemie.center_x, position_enemie.center_y, 0, 0)
-            self.enemies_list.append(enemie)
+        #Cargamos a los enemigos en la escena
+        enemies = self.scene["enemigos"]
+        num_enemies = 0
+        if DIFFICULTY == "easy":
+            num_enemies = int(len(enemies) * (1/3))
+        elif DIFFICULTY == "normal":
+            num_enemies = int(len(enemies) * (1/2))
+        else:   # DIFFICULTY == "hard"
+            num_enemies = int(len(enemies) * (2/3))
+        #Simulamos la tirada de un dado, en caso de que salga 10,11o12 añadimos un enemigo más
+        if random.randint(1, 12) > 9:
+            num_enemies += 1
+
+        for i in range(num_enemies):
+            selected = enemies.pop(random.randint(0, len(enemies) - 1))
+            enemy = Protagonist(selected.center_x, selected.center_y, 0, 0)
+            self.enemies_list.append(enemy)
+
+        # for position_enemie in self.scene["enemigos"]:
+        #     enemie = Protagonist(position_enemie.center_x, position_enemie.center_y, 0, 0)
+        #     self.enemies_list.append(enemie)
+
 
         # COSITAS SOBRE LAS BALAS Y EL INVENTARIO QUE TENGO QUE MIRAR
         self.FIREBULLET_INV = Bullet_num("rojo", 1145, 41)
