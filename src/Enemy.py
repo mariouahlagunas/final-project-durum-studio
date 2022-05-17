@@ -1,10 +1,11 @@
 import random
+import math
 
 from src.Character import *
 
 class Enemy(Character):
 
-    def __init__(self, center_x, center_y, change_x, change_y):
+    def __init__(self, center_x, center_y, change_x, change_y, objetive):
         super().__init__(SCALE_ENEMY, SPEED_ENEMY, HP_ENEMY, center_x, center_y, change_x, change_y)
 
         self.idle_textures = [arcade.load_texture(f"{TEXTURES_PATH_ENEMY}_idle.png"),
@@ -22,24 +23,33 @@ class Enemy(Character):
                        arcade.load_texture(f"{TEXTURES_PATH_ENEMY}_climb{i}.png", flipped_horizontally=True)]
             self.attack_textures.append(texture)
 
-
-        self.time_for_shoot = 0
+        self.objetive = objetive
+        self.time_for_shoot = random.randint(100, 500)
 
 
     def draw(self):
         super().draw()
+        super().print_life()
 
 
     def update(self):
         super().update()
         super().update_animation_walk(self.idle_textures, self.walk_textures)
 
+
     def updateIA(self, end_x, end_y):
-        if self.time_for_shoot == 0:
-            self.time_for_shoot = random.randint(100, 500)
-            return self.attack_shoot(end_x, end_y)
-        else:
-            self.time_for_shoot -= 1
+        distancia = self.distance()
+
+        if distancia < 600:
+            if self.time_for_shoot == 0:
+                self.time_for_shoot = random.randint(100, 500)
+                return self.attack_shoot(end_x, end_y)
+            else:
+                self.time_for_shoot -= 1
+
+
+    def distance(self):
+        return math.sqrt((self.center_x - self.objetive.center_x) ** 2 + (self.center_y - self.objetive.center_y) ** 2)
 
 
 

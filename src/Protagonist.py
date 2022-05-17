@@ -31,6 +31,8 @@ class Protagonist(Character):
 
     def draw(self):
         super().draw()
+        super().print_life()
+
     def set_up(self):
         self.Inventario = inventario(2, 2, 30, 30, 30, 30, 100)
         self.gemas=Gemas(3,3)
