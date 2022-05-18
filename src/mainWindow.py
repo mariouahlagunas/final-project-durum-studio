@@ -350,8 +350,8 @@ class MainGame(arcade.View):
 
         for protagonist in self.protagonist_list:
             protagonist.draw()
-        for enemie in self.enemies_list:
-            enemie.draw()
+        for enemy in self.enemies_list:
+            enemy.draw()
         for bullet in self.bullet_list:
             bullet.draw()
         for bullet in self.bullet_enemy_list:
@@ -364,6 +364,23 @@ class MainGame(arcade.View):
         self.WATERBULLET_INV.draw()
         self.gema_roja.draw()
         self.gema_azul.draw()
+
+
+        # Simplemente es para probar, en teoría lo voy a borrar
+        for enemy in self.enemies_list:
+            if enemy.line_of_sight():
+                arcade.draw_line(self.protagonist.position[0],
+                                 self.protagonist.position[1],
+                                 enemy.position[0],
+                                 enemy.position[1],
+                                 arcade.color.RED, 2)
+            if enemy.distance() < 600:
+                arcade.draw_rectangle_outline(enemy.position[0],
+                                              enemy.position[1],
+                                              20,
+                                              40,
+                                              arcade.color.RED, 2)
+
 
         # Imprimimos la GUI del videojuego
         self.camera_for_gui.use()

@@ -114,4 +114,4 @@ SCALE_SETAS = 0.8
 def xor(x, y):
     return bool((x and not y) or (not x and y))
 
-DIFFICULTY = "normal"
+DIFFICULTY = "easy"

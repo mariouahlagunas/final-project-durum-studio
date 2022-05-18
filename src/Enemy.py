@@ -27,8 +27,6 @@ class Enemy(Character):
 
         # Objetivo dinámico de nuestra IA
         self.objetive = objetive
-        self.past_objetive_x = None
-        self.past_objetive_y = None
 
         # Entorno estático de nuestra IA
         self.map = map
@@ -36,13 +34,22 @@ class Enemy(Character):
         # Variables de ataque
         self.time_for_shoot = random.randint(100, 300)
 
+        self.objetive_seen = False
+        self.objetive_past_position = None
+
 
     def draw(self):
         super().draw()
         super().print_life()
 
+        # MIRAR ESTO -> SI DOS O MÁS PERSONAJES TE VEN AL MISMO TIMEPO, SE BUGEA Y NO IMPRIME NADA POR PANTALLA
+        # Por ahora lo pongo en el main y me dejo de lios
+
         # if self.line_of_sight():
-        #     arcade.draw_line(self.objetive.position[0], self.objetive.position[1], self.center_x, self.center_y,
+        #     arcade.draw_line(self.objetive.position[0],
+        #                      self.objetive.position[1],
+        #                      self.center_x,
+        #                      self.center_y,
         #                      arcade.color.RED, 2)
 
 
@@ -53,17 +60,31 @@ class Enemy(Character):
 
 
     def updateIA(self, end_x, end_y):
+
         if self.distance() < 600:
+
             if self.line_of_sight():
+                if not self.objetive_seen:
+                    self.objetive_seen = True
+                    self.objetive_past_position = None
+
                 if self.time_for_shoot == 0:
                     self.time_for_shoot = random.randint(100, 100)
                     return self.attack_shoot(end_x, end_y)
                 else:
                     self.time_for_shoot -= 1
-            #else:
-                # (IF) Si le he visto antes, voy a buscarle
-                    # Aquí entra la última posición vista del objetivo
-                # (ELSE) Si no le he visto, me pongo a patrullar
+
+            else:
+                if self.objetive_seen:
+                    if not self.objetive_past_position:
+                        self.objetive_past_position = self.objetive.position
+                    else:
+                        self.center_x = self.objetive_past_position[0]
+                        self.center_y = self.objetive_past_position[1]
+                        self.objetive_seen = False
+                        self.objetive_past_position = None
+                # else:
+                #     Hacer el metodo de patrullar
         #else:
             # Me pongo a patrullar
 
@@ -73,10 +94,7 @@ class Enemy(Character):
 
 
     def line_of_sight(self):
-        if arcade.has_line_of_sight(self.position, self.objetive.position, self.map):
-            return True
-        else:
-            return False
+        return arcade.has_line_of_sight(self.position, self.objetive.position, self.map)
 
 
     def attack_shoot(self, end_x, end_y, timer_mouse=0):
