@@ -260,7 +260,11 @@ class MainGame(arcade.View):
         self.enemies_list = None
         self.bullet_list = None
         self.bullet_enemy_list = None
-
+        self.mascota_list= None
+        
+        self.barrier_list = None
+        self.path = None
+        self.mascota = None
         self.protagonist = None
         self.escudo = None
         self.Setas = None
@@ -302,6 +306,7 @@ class MainGame(arcade.View):
         self.enemies_list = arcade.SpriteList()
         self.bullet_list = arcade.SpriteList()
         self.bullet_enemy_list = arcade.SpriteList()
+        #self.macota_list = arcade.SpriteList()
 
         # Cargamos a nuestro protagonista en la escena
         self.protagonist = Protagonist(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0, 0)
