@@ -322,7 +322,7 @@ class MainGame(arcade.View):
 
         for i in range(num_enemies):
             selected = enemies.pop(random.randint(0, len(enemies) - 1))
-            enemy = Enemy(selected.center_x, selected.center_y, 0, 0, self.protagonist)
+            enemy = Enemy(selected.center_x, selected.center_y, 0, 0, self.protagonist, self.scene["cajas"])
             self.enemies_list.append(enemy)
 
 
@@ -381,13 +381,8 @@ class MainGame(arcade.View):
         arcade.draw_text(f"{self.protagonist.gemas.get_tamaño()}", 1327, 698, arcade.color.WHITE, 24)
 
 
-        for enemy in self.enemies_list:
-            if arcade.has_line_of_sight(self.protagonist.position,enemy.position, self.scene["cajas"]):
-                color = arcade.color.RED
-            else:
-                color = arcade.color.WHITE
 
-            arcade.draw_line(self.protagonist.center_x, self.protagonist.center_y, enemy.center_x, enemy.center_y, color, 2)
+
 
     def on_update(self, delta_time):
 
