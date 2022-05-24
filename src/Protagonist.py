@@ -28,6 +28,8 @@ class Protagonist(Character):
         self.right_pressed = False
         self.up_pressed = False
         self.down_pressed = False
+        self.e_pressed = False
+
 
     def draw(self):
         super().draw()
@@ -39,7 +41,6 @@ class Protagonist(Character):
 
     def update(self):
         super().update()
-
         multiplier_speed = self.calculate_movement_speed()
         super().change_movement_speed(multiplier_speed)
 
@@ -56,13 +57,18 @@ class Protagonist(Character):
         super().update_animation_walk(self.idle_textures, self.walk_textures)
         super().update_animation_attack(self.attack_textures)
 
-    def calculate_movement_speed(self, multiplier=1):
+    def calculate_movement_speed(self, multiplier=0.5):
         if self.shift_pressed:
             multiplier *= 1.5
 
         if (xor(self.up_pressed, self.down_pressed)) and (xor(self.left_pressed, self.right_pressed)):
             # Dividir por raiz de 2
             multiplier *= 0.7071
+
+        if self.Inventario.speed_potion_activated:
+            multiplier *= 2
+
+
 
         return multiplier
 
@@ -95,6 +101,12 @@ class Protagonist(Character):
             self.right_pressed = True
         else:
             self.right_pressed = False
+
+    def want_speed_potion(self, pressed):
+        if pressed:
+            self.e_pressed = True
+        else:
+            self.e_pressed = False
 
     def shoot(self, type, end_x, end_y, timer_mouse=0):
         # El parametro se borra y se saca del arma que lleve, pero estoy en pruebas

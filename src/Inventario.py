@@ -10,6 +10,8 @@ class inventario(arcade.Sprite):
         self.num_water = num_water
         self.num_escudos = num_escudos
         self.num_setas = num_setas
+        self.timer_setas = 0
+        self.speed_potion_activated = False
 
     def get_escudos(self):
         return self.num_escudos
@@ -35,9 +37,23 @@ class inventario(arcade.Sprite):
         self.num_water = n_water
     def get_setas(self):
         return self.num_setas
-
     def set_escudo(self, n_escudo):
         self.num_escudos = n_escudo
-
     def set_setas(self, n_setas):
         self.num_setas = n_setas
+
+    def use_setas(self):
+        if not self.speed_potion_activated and self.num_setas > 0:
+            self.speed_potion_activated = True
+            self.num_setas -= 1
+            self.timer_setas = 5
+
+    def update(self, delta_time):
+        if self.timer_setas > 0:
+            self.timer_setas -= delta_time
+            print(self.timer_setas)
+        elif self.speed_potion_activated:
+            self.speed_potion_activated = False
+
+
+

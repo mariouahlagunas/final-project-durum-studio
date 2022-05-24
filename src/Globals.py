@@ -5,6 +5,7 @@ import os
 
 # VARIABLES DE LA PANTALLA DEL JUEGO
 
+
 SCREEN_HEIGHT = 800
 SCREEN_WIDTH = 1400
 SCREEN_TITLE = "Juego de equipo Durum studio"
@@ -18,8 +19,17 @@ MAP_SCALE = 1
 MAP_LAYER_OPTIONS = {
     "suelo": {"use_spatial_hash": True},
     "cajas": {"use_spatial_hash": True},
-    "enemigos": {"use_spatial_hash": True, },
-}
+    "enemigos": {"use_spatial_hash": True}
+    }
+# MAP_PATH = 'assets' + os.path.sep + 'tilemaps' + os.path.sep + 'PruebaMapaGrande3' + os.path.sep + 'mapaprueba3.tmx'
+# MAP_SCALE = 1 ## DEVOLVERLO EL VALOR DE 1
+# MAP_LAYER_OPTIONS = {
+#     "suelo": {"use_spatial_hash": True},
+#     "colisiones": {"use_spatial_hash": True},
+#     "enemigos": {"use_spatial_hash": True},
+#     "puerta": {"use_spatial_hash": True},
+#     "decoracion": {"use_spatial_hash": True}
+#     }
 
 
 
@@ -47,12 +57,19 @@ NUM_WALK_TEXTURES_ENEMY = 8
 NUM_ATTACK_TEXTURES_ENEMY = 2
 SCALE_ENEMY = 0.75
 HP_ENEMY = 100
-SPEED_ENEMY = 5
+SPEED_ENEMY = 1
+
+TIMER_FOR_UPDATE_IA = 0.5
+DISTANCE_TO_ATTACK = 1000
+TIME_FOR_SHOOT_MIN = 1
+TIME_FOR_SHOOT_MAX = 3
 
 #mascota
+TEXTURES_PATH_MASCOTA = ":resources:images/animated_characters/female_person/femalePerson"
 SCALE_MASCOTA = 0.5
 SPEED_MASCOTA = 5
-HP_ENEMY = 75
+HP_MASCOTA = 75
+NUM_WALK_TEXTURES_MASCOTA = 8
 
 
 
@@ -116,4 +133,4 @@ SCALE_SETAS = 0.8
 def xor(x, y):
     return bool((x and not y) or (not x and y))
 
-DIFFICULTY = "easy"
+DIFFICULTY = "hard"

@@ -14,8 +14,8 @@ from src.Armeria import *
 from src.Bullet_Inventario import *
 from src.Bullet_Fire import *
 
+from src.Mascota import *  # arreglar por favor
 
-# from src.Mascota import * #arreglar por favor
 
 class MenuScreen(arcade.View):
 
@@ -47,7 +47,6 @@ class MenuScreen(arcade.View):
         arcade.draw_text("Jugar pero en otra línea", 100, 500, arcade.color.WHITE, 24)
         arcade.draw_text("Salir del juego", 100, 300, arcade.color.WHITE, 24)
 
-
     def on_update(self, delta_time):
 
         if self.option_hovered_on > 3:
@@ -61,7 +60,6 @@ class MenuScreen(arcade.View):
                 self.window.show_view(MainGame())
             if self.option_hovered_on == 3:
                 self.window.close()
-
 
     def on_key_press(self, key, modifiers):
 
@@ -77,6 +75,7 @@ class MenuScreen(arcade.View):
         if key == arcade.key.ENTER:
             self.enter_pressed = False
 
+
 class Inventory(arcade.View):
     def __init__(self):
 
@@ -86,13 +85,13 @@ class Inventory(arcade.View):
 
         # Creating Button using UIFlatButton
         air_bullet = arcade.gui.UIFlatButton(text="20",
-                                               width=40)
+                                             width=40)
         water_bullet = arcade.gui.UIFlatButton(text="20",
                                                width=40)
         fire_bullet = arcade.gui.UIFlatButton(text="20",
-                                               width=40)
+                                              width=40)
         electricity_bullet = arcade.gui.UIFlatButton(text="20",
-                                               width=40)
+                                                     width=40)
 
         # Adding button in our uimanager
         self.uimanager.add(
@@ -126,9 +125,10 @@ class Inventory(arcade.View):
 
         @air_bullet.event("on_click")
         def on_click_air_bullet(event):
-            self.purchase_air_bullet()\
+            self.purchase_air_bullet() \
+ \
+            @ water_bullet.event("on_click")
 
-        @water_bullet.event("on_click")
         def on_click_water_bullet(event):
             self.purchase_water_bullet()
 
@@ -160,7 +160,6 @@ class Inventory(arcade.View):
         self.camera_for_sprites = arcade.Camera(SCREEN_WIDTH, SCREEN_HEIGHT)
         self.camera_for_gui = arcade.Camera(SCREEN_WIDTH, SCREEN_HEIGHT)
 
-
     def on_show(self):
         self.setup()
 
@@ -182,28 +181,32 @@ class Inventory(arcade.View):
         self.protagonist.set_up()
 
         # self.physics_engine = arcade.PhysicsEngineSimple(self.protagonist,self.scene["cajas"]) # no se usará por ahora esto debido a los distintos cambios que he comentado sobre las colisiones, esto se usará probablemente para paredes.
-    def on_key_press(self,key,modifiers):
+
+    def on_key_press(self, key, modifiers):
         if key == arcade.key.I:
             self.window.show_view(MainGame())
         if key == arcade.key.B:
             self.purchase_air_bullet()
+
     def purchase_air_bullet(self):
         if self.protagonist.Inventario.get_money() >= 20:
             self.protagonist.Inventario.set_money(self.protagonist.Inventario.get_money() - 20)
             self.protagonist.Inventario.set_Air(self.protagonist.Inventario.get_Air() + 10)
+
     def purchase_water_bullet(self):
         if self.protagonist.Inventario.get_money() >= 20:
             self.protagonist.Inventario.set_money(self.protagonist.Inventario.get_money() - 20)
             self.protagonist.Inventario.set_water(self.protagonist.Inventario.get_water() + 10)
+
     def purchase_fire_bullet(self):
         if self.protagonist.Inventario.get_money() >= 20:
             self.protagonist.Inventario.set_money(self.protagonist.Inventario.get_money() - 20)
             self.protagonist.Inventario.set_fire(self.protagonist.Inventario.get_fire() + 10)
+
     def purchase_electricity_bullet(self):
         if self.protagonist.Inventario.get_money() >= 20:
             self.protagonist.Inventario.set_money(self.protagonist.Inventario.get_money() - 20)
             self.protagonist.Inventario.set_electricity(self.protagonist.Inventario.get_electricity() + 10)
-
 
     def on_draw(self):
         self.clear()
@@ -260,8 +263,8 @@ class MainGame(arcade.View):
         self.enemies_list = None
         self.bullet_list = None
         self.bullet_enemy_list = None
-        self.mascota_list= None
-        
+        self.mascota_list = None
+
         self.barrier_list = None
         self.path = None
         self.mascota = None
@@ -278,19 +281,16 @@ class MainGame(arcade.View):
         self.gema_roja = None
         self.gema_azul = None
 
-        # self.physics_engine = None # no se usará por ahora esto debido a los distintos cambios que he comentado sobre las colisiones, esto se usará probablemente para paredes.
+        self.physics_engine = None  # no se usará por ahora esto debido a los distintos cambios que he comentado sobre las colisiones, esto se usará probablemente para paredes.
 
         # Track the current state of what key is pressed
 
         self.Type = ""
 
-        self.speed_potion_activated = False
-
         self.camera_for_sprites = arcade.Camera(SCREEN_WIDTH, SCREEN_HEIGHT)
         self.camera_for_gui = arcade.Camera(SCREEN_WIDTH, SCREEN_HEIGHT)
 
         self.timer = 0  # atributo de timer
-        self.time_for_comparing = 0
         self.timer_for_collision = 0
 
     def on_show(self):
@@ -306,30 +306,35 @@ class MainGame(arcade.View):
         self.enemies_list = arcade.SpriteList()
         self.bullet_list = arcade.SpriteList()
         self.bullet_enemy_list = arcade.SpriteList()
-        #self.macota_list = arcade.SpriteList()
+        self.mascota_list = arcade.SpriteList()
 
         # Cargamos a nuestro protagonista en la escena
         self.protagonist = Protagonist(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0, 0)
+        # self.protagonist = Protagonist(450, 650, 0, 0)
         self.protagonist_list.append(self.protagonist)
+        # Cargamos a nuestro mascota en la escena
+        self.mascota = Mascota(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0, 0, self.protagonist, self.scene["cajas"])
+        self.mascota_list.append(self.mascota)
 
-        #Cargamos a los enemigos en la escena
+        # Cargamos a los enemigos en la escena
         enemies = self.scene["enemigos"]
         num_enemies = 0
         if DIFFICULTY == "easy":
-            num_enemies = int(len(enemies) * (1/3))
+            num_enemies = 1
+            # num_enemies = int(len(enemies) * (1/3))
         elif DIFFICULTY == "normal":
-            num_enemies = int(len(enemies) * (1/2))
-        else:   # DIFFICULTY == "hard"
-            num_enemies = int(len(enemies) * (2/3))
-        #Simulamos la tirada de un dado, en caso de que salga 10,11o12 añadimos un enemigo más
-        if random.randint(1, 12) > 9:
-            num_enemies += 1
+            num_enemies = int(len(enemies) * (1 / 2))
+        else:  # DIFFICULTY == "hard"
+            num_enemies = int(len(enemies) * (2 / 3))
+        # Simulamos la tirada de un dado, en caso de que salga 10,11o12 añadimos un enemigo más
+        # if random.randint(1, 12) > 9:
+        #     num_enemies += 1
 
         for i in range(num_enemies):
             selected = enemies.pop(random.randint(0, len(enemies) - 1))
             enemy = Enemy(selected.center_x, selected.center_y, 0, 0, self.protagonist, self.scene["cajas"])
+            # enemy = Enemy(selected.center_x, selected.center_y, 0, 0, self.protagonist, self.scene["colisiones"])
             self.enemies_list.append(enemy)
-
 
         # COSITAS SOBRE LAS BALAS Y EL INVENTARIO QUE TENGO QUE MIRAR
         self.FIREBULLET_INV = Bullet_num("rojo", 1145, 41)
@@ -342,7 +347,8 @@ class MainGame(arcade.View):
         self.Setas = setas(1350, 41)
         self.protagonist.set_up()
 
-        # self.physics_engine = arcade.PhysicsEngineSimple(self.protagonist,self.scene["cajas"]) # no se usará por ahora esto debido a los distintos cambios que he comentado sobre las colisiones, esto se usará probablemente para paredes.
+        self.physics_engine = arcade.PhysicsEngineSimple(self.protagonist, self.scene["cajas"])
+        # self.physics_engine = arcade.PhysicsEngineSimple(self.protagonist,self.scene["colisiones"])
 
     def on_draw(self):
         self.clear()
@@ -361,31 +367,31 @@ class MainGame(arcade.View):
             bullet.draw()
         for bullet in self.bullet_enemy_list:
             bullet.draw()
+        for mascota in self.mascota_list:
+            mascota.draw()
 
-        self.escudo.draw()
-        self.money_imagen.draw()
-        self.Setas.draw()
-        self.FIREBULLET_INV.draw()
-        self.WATERBULLET_INV.draw()
-        self.gema_roja.draw()
-        self.gema_azul.draw()
-
-
-        # Simplemente es para probar, en teoría lo voy a borrar
+        # Es para ver las
+        # for enemy in self.enemies_list:
+        #     if enemy.distance() < DISTANCE_TO_ATTACK:
+        #         arcade.draw_rectangle_outline(enemy.position[0],
+        #                                        enemy.position[1],
+        #                                        20,
+        #                                        40,
+        #                                        arcade.color.RED, 2)
+        #         if enemy.line_of_sight():
+        #             arcade.draw_line(self.protagonist.position[0],
+        #                               self.protagonist.position[1],
+        #                               enemy.position[0],
+        #                               enemy.position[1],
+        #                               arcade.color.RED, 2)
+        #
+        #     path = enemy.path
+        #     if path:
+        #         arcade.draw_line_strip(enemy.path, arcade.color.BLUE, 2)
         for enemy in self.enemies_list:
-            if enemy.line_of_sight():
-                arcade.draw_line(self.protagonist.position[0],
-                                 self.protagonist.position[1],
-                                 enemy.position[0],
-                                 enemy.position[1],
-                                 arcade.color.RED, 2)
-            if enemy.distance() < 600:
-                arcade.draw_rectangle_outline(enemy.position[0],
-                                              enemy.position[1],
-                                              20,
-                                              40,
-                                              arcade.color.RED, 2)
-
+            path = enemy.path
+            if path:
+                arcade.draw_line_strip(enemy.path, arcade.color.BLUE, 2)
 
         # Imprimimos la GUI del videojuego
         self.camera_for_gui.use()
@@ -401,28 +407,45 @@ class MainGame(arcade.View):
         arcade.draw_text(f"{self.protagonist.Inventario.get_money()}", 1320, 758, arcade.color.WHITE, 24)
         arcade.draw_text(f"{self.protagonist.gemas.get_velocidad()}", 1327, 648, arcade.color.WHITE, 24)
         arcade.draw_text(f"{self.protagonist.gemas.get_tamaño()}", 1327, 698, arcade.color.WHITE, 24)
+        self.escudo.draw()
+        self.money_imagen.draw()
+        self.Setas.draw()
+        self.FIREBULLET_INV.draw()
+        self.WATERBULLET_INV.draw()
+        self.gema_roja.draw()
+        self.gema_azul.draw()
 
-
-
-
+    # SACAR ESTO DE COMENTARIO PARA TENER LA CÁMARA MOVIENDO
+    # def center_camera_to_player(self):
+    #     screen_center_x = self.protagonist.center_x - (self.camera_for_sprites.viewport_width / 2)
+    #     screen_center_y = self.protagonist.center_y - (self.camera_for_sprites.viewport_height / 2)
+    #
+    #     #Don't let camera travel past 0
+    #     if screen_center_x < 0:
+    #         screen_center_x = 0
+    #     if screen_center_y < 0:
+    #         screen_center_y = 0
+    #
+    #     player_centered = screen_center_x, screen_center_y
+    #
+    #     self.camera_for_sprites.move_to(player_centered)
 
     def on_update(self, delta_time):
+        # SACAR ESTO DE COMENTARIO PARA TENER LA CÁMARA MOVIENDOa
+        # self.center_camera_to_player()
 
-        self.timer += delta_time
         self.timer_mouse += 1
 
+        self.protagonist.Inventario.update(delta_time)
         self.protagonist_list.update()
-        self.enemies_list.update()
+        for enemy in self.enemies_list:
+            enemy.update()
+            bullet = enemy.shoot()
+            if bullet:
+                self.bullet_enemy_list.append(bullet)
         self.bullet_list.update()
         self.bullet_enemy_list.update()
-
-
-        for enemy in self.enemies_list:
-            bullet = enemy.updateIA(self.protagonist.center_x, self.protagonist.center_y)
-            if type(bullet) == src.Bullet_Electricity.Bullet_Electricity:
-                self.bullet_enemy_list.append(bullet)
-
-
+        self.mascota_list.update()
 
         """ Motor de colisiones """
         for bullet in self.bullet_list:
@@ -432,6 +455,7 @@ class MainGame(arcade.View):
 
             # Tratamiento de la bala en caso de chocar con un obstáculo
             bullet_hit_env_list = arcade.check_for_collision_with_list(bullet, self.scene["cajas"])
+            # bullet_hit_env_list = arcade.check_for_collision_with_list(bullet, self.scene["colisiones"])
             if len(bullet_hit_env_list) > 0:
                 if bullet.is_moved():
                     bullet.collision()
@@ -462,8 +486,31 @@ class MainGame(arcade.View):
             if bullet.is_dead():
                 bullet.remove_from_sprite_lists()
 
-        if (self.timer - self.time_for_comparing) > 5:
-            self.speed_potion_activated = False
+        "Motor de colisiones para las balas de los enemigos...esto hay que mejorarlo, incluso meterlo con lo anterior"
+        for bullet in self.bullet_enemy_list:
+            # Si la bala sale de los margenes de la pantalla la eliminamos
+            if bullet.bottom > SCREEN_HEIGHT or bullet.top < 0 or bullet.right < 0 or bullet.left > SCREEN_WIDTH:
+                bullet.remove_from_sprite_lists()
+
+            # Tratamiento de la bala en caso de chocar con un obstáculo
+            bullet_hit_env_list = arcade.check_for_collision_with_list(bullet, self.scene["cajas"])
+            # bullet_hit_env_list = arcade.check_for_collision_with_list(bullet, self.scene["colisiones"])
+            if len(bullet_hit_env_list) > 0:
+                if bullet.is_moved():
+                    bullet.collision()
+
+            # Tratamiento de la bala y del enemigo en caso de chocar entre ellos.
+            bullet_hit_enemie_list = arcade.check_for_collision_with_list(bullet, self.protagonist_list)
+            if len(bullet_hit_enemie_list) > 0:
+                if bullet.is_moved() or bullet.is_stopped():
+                    self.protagonist.lose_life(bullet.get_damage())
+                    bullet.collision()
+                if not self.protagonist.alive():
+                    self.protagonist.remove_from_sprite_lists()
+
+            # Eliminamos aquellas balas que estén muertas, y por tanto ya no tengan utilidad
+            if bullet.is_dead():
+                bullet.remove_from_sprite_lists()
 
         # if len(self.scene["enemies"]) == 0:
         #     game_view = GameOverWindow()
@@ -473,30 +520,9 @@ class MainGame(arcade.View):
         # if bullet.bottom > SCREEN_HEIGHT:
         #    bullet.remove_from_sprite_lists()
 
-        box_hit_list = arcade.check_for_collision_with_list(self.protagonist, self.scene["cajas"])
+        # box_hit_list = arcade.check_for_collision_with_list(self.protagonist, self.scene["cajas"])
 
-        # Se añadió esto debido a las siguientes razones:
-        # 1.El sistema anterior de:
-        #       self.physics_engine = arcade.PhysicsEngineSimple(self.protagonist,self.scene["cajas"])
-        # solo funciona con paredes, no se puede añadir más objetes con el que el personaje se choca, esto es según la documentación de arcade, si intentas hacer lo siguiente da errores:
-        #       self.physics_engine = arcade.PhysicsEngineSimple(self.protagonist,self.scene["cajas"])
-        #       self.physics_engine = arcade.PhysicsEngineSimple(self.protagonist,self.scene["edna"])
-        # y también esto dará errores:
-        #       #self.physics_engine = arcade.PhysicsEngineSimple(self.protagonist,self.scene["cajas"],self.scene["edna"])
-        # ya que, como he dicho antes, esto es solo para que el personaje no se choque con los que son los paredes del nivel, se podrá utilizar en un futuro con lo que serán las paredes de las habitaciones
-        for collision in box_hit_list:
-            if self.scene["cajas"] in collision.sprite_lists:
-                print("box")
-                # collision.remove_from_sprite_lists()
-                self.protagonist.not_move()
-                if self.protagonist.up_pressed:
-                    self.protagonist.center_y = self.protagonist.center_y - 10
-                if self.protagonist.down_pressed:
-                    self.protagonist.center_y = self.protagonist.center_y + 10
-                if self.protagonist.left_pressed:
-                    self.protagonist.center_x = self.protagonist.center_x + 10
-                if self.protagonist.right_pressed:
-                    self.protagonist.center_x = self.protagonist.center_x - 10
+        self.physics_engine.update()
 
     def on_key_press(self, key, modifiers):
         if key == arcade.key.F3:
@@ -546,16 +572,8 @@ class MainGame(arcade.View):
                 # Si tiene, realiza su accion y encima se resta uno del inventario
                 self.protagonist.gain_life(20)
                 self.protagonist.Inventario.set_escudo((self.protagonist.Inventario.get_escudos()) - 1)
-        elif key == arcade.key.E:
-            self.speed_potion_activated = True
-            ##Vemos si tenemos setas en el inventario
-            if self.protagonist.Inventario.get_setas() > 0:
-                # Si tiene, realiza su accion y se gasta 1 en el inventario
-                print(self.protagonist.movement_speed_now)
-                self.protagonist.change_movement_speed(2.5)
-                print(self.protagonist.movement_speed_now)
-                self.protagonist.Inventario.set_setas((self.protagonist.Inventario.get_setas()) - 1)
-                self.time_for_comparing = self.timer
+        if key == arcade.key.E:
+            self.protagonist.Inventario.use_setas()
 
         # Son solo para probar el tema de la vida (para eliminar)
         # elif key == arcade.key.Q:

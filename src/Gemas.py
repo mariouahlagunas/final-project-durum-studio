@@ -14,4 +14,4 @@ class Gemas():
     def set_tamaño(self,tamaño):
         self.n_tamaño=tamaño
     def set_velocidad(self,velocidad):
-        self.velocidad=velocidad
+        self.n_velocidad=velocidad
