@@ -56,4 +56,3 @@ class inventario(arcade.Sprite):
             self.speed_potion_activated = False
 
 
-

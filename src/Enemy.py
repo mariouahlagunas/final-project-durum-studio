@@ -1,5 +1,4 @@
 import random
-import math
 
 from src.Character import *
 
@@ -25,68 +24,87 @@ class Enemy(Character):
 
 
 
-        # Objetivo dinámico de nuestra IA
-        self.objetive = objetive
+        # Entorno y objetivo de la IA
+        self.map = map                  # Entorno estático por el que se va a mover
+        self.objetive = objetive        # Objetivo dinámico
 
-        # Entorno estático de nuestra IA
-        self.map = map
+        # Parámetros configurables de la IA
+        self.timer_update_IA = TIMER_FOR_UPDATE_IA
+        self.range_of_action = DISTANCE_TO_ATTACK
+        self.time_of_action = random.randint(TIME_FOR_SHOOT_MIN, TIME_FOR_SHOOT_MAX)
 
-        # Variables de ataque
-        self.time_for_shoot = random.randint(100, 300)
-
+        # Parámetros para el funcionamiento de la IA
         self.objetive_seen = False
-        self.objetive_past_position = None
+        self.can_action = False
+        self.can_shoot = False
+        self.path = None
+        self.cur_position = None
+
 
 
     def draw(self):
         super().draw()
         super().print_life()
 
-        # MIRAR ESTO -> SI DOS O MÁS PERSONAJES TE VEN AL MISMO TIMEPO, SE BUGEA Y NO IMPRIME NADA POR PANTALLA
-        # Por ahora lo pongo en el main y me dejo de lios
 
-        # if self.line_of_sight():
-        #     arcade.draw_line(self.objetive.position[0],
-        #                      self.objetive.position[1],
-        #                      self.center_x,
-        #                      self.center_y,
-        #                      arcade.color.RED, 2)
+    def update(self, delta_time: float = 1 / 60):
 
+        if self.timer_update_IA > 0:
+            self.timer_update_IA -= delta_time
+        else:
+            self.timer_update_IA = TIMER_FOR_UPDATE_IA
+            # self.timer_update_IA = 1
+            self.IA()
 
+        self.action()
+        self.move()
 
-    def update(self):
         super().update()
         super().update_animation_walk(self.idle_textures, self.walk_textures)
 
 
-    def updateIA(self, end_x, end_y):
+    def IA(self):
 
-        if self.distance() < 600:
+        if self.distance() < self.range_of_action:
 
             if self.line_of_sight():
-                if not self.objetive_seen:
-                    self.objetive_seen = True
-                    self.objetive_past_position = None
 
-                if self.time_for_shoot == 0:
-                    self.time_for_shoot = random.randint(100, 100)
-                    return self.attack_shoot(end_x, end_y)
-                else:
-                    self.time_for_shoot -= 1
+                if not self.can_action: self.can_action = True
 
-            else:
+                if not self.objetive_seen: self.objetive_seen = True
+
+                # if self.path:
+                #     self.path = None
+
+            else:   # if not self.line_of_sight()
+
                 if self.objetive_seen:
-                    if not self.objetive_past_position:
-                        self.objetive_past_position = self.objetive.position
-                    else:
-                        self.center_x = self.objetive_past_position[0]
-                        self.center_y = self.objetive_past_position[1]
-                        self.objetive_seen = False
-                        self.objetive_past_position = None
-                # else:
-                #     Hacer el metodo de patrullar
-        #else:
-            # Me pongo a patrullar
+                    # if not self.path:
+                    self.path = self.calculate_path(self.objetive.position)
+                    self.cur_position = 0
+
+                else:   # if not self.objetive_seen
+                    if not self.path:
+                        x = random.randint(self.position[0] - 200, self.position[0] + 200)
+                        y = random.randint(self.position[1] - 200, self.position[1] + 200)
+                        self.path = self.calculate_path((x, y))
+                        self.cur_position = 0
+
+                if self.can_action: self.can_action = False
+                if self.objetive_seen: self.objetive_seen = False
+
+
+        else:   # if not self.distance() < self.range_of_action
+            if not self.path:
+                x = random.randint(self.position[0] - 150, self.position[0] + 150)
+                y = random.randint(self.position[1] - 150, self.position[1] + 150)
+                self.path = self.calculate_path((x, y))
+                self.cur_position = 0
+
+            if self.can_action: self.can_action = False
+            if self.objetive_seen: self.objetive_seen = False
+
+
 
 
     def distance(self):
@@ -97,12 +115,73 @@ class Enemy(Character):
         return arcade.has_line_of_sight(self.position, self.objetive.position, self.map)
 
 
-    def attack_shoot(self, end_x, end_y, timer_mouse=0):
-        type = "electricity"
-        multiplier_scale = 1
-        multiplier_damage = 1
-        multiplier_speed = 1
+    def calculate_path(self, position):
+        barrier_list = arcade.AStarBarrierList(self, self.map, 128*0.5, 0 - 50, SCREEN_WIDTH + 50, 0 - 50, SCREEN_HEIGHT + 50)
 
-        bullet = super().shoot(end_x, end_y, type, timer_mouse, multiplier_scale, multiplier_damage, multiplier_speed)
+        return arcade.astar_calculate_path(self.position, position, barrier_list, diagonal_movement = False)
 
-        return bullet
+
+    def move(self):
+        if self.path:
+            if self.cur_position < len(self.path):
+                dest_x = self.path[self.cur_position][0]
+                dest_y = self.path[self.cur_position][1]
+
+                dif_x = dest_x - self.position[0]
+                dif_y = dest_y - self.position[1]
+
+                if dif_x > 0:
+                    super().move_right()
+                else:
+                    super().move_left()
+                if dif_y > 0:
+                    super().move_up()
+                else:
+                    super().move_down()
+
+                distance = math.sqrt((self.position[0] - dest_x) ** 2 + (self.position[1] - dest_y) ** 2)
+
+                if distance <= SPEED_ENEMY:
+                    self.cur_position += 1
+            else:
+                self.path = None
+        else:
+            super().not_move()
+
+
+    # def action(self, delta_time: float = 1 / 60):
+    #     pass
+
+    # def action(self, delta_time: float = 1 / 60):
+    #
+    #     if self.can_action:
+    #         if self.time_of_action > 0:
+    #             self.time_of_action -= delta_time
+    #         else:
+    #             self.time_of_action = random.randint(TIME_FOR_SHOOT_MIN, TIME_FOR_SHOOT_MAX)
+    #             self.can_shoot = True
+
+    def action(self, delta_time: float = 1 / 60):
+        if self.can_action:
+            if self.time_of_action > 0:
+                self.time_of_action -= delta_time
+            else:
+                self.time_of_action = random.randint(TIME_FOR_SHOOT_MIN, TIME_FOR_SHOOT_MAX)
+                self.path = self.calculate_path(self.objetive.position)
+                self.cur_position = 0
+
+
+    def shoot(self, timer_mouse = 0):
+
+        if self.can_shoot:
+
+            self.can_shoot = False
+
+            type = "electricity"
+            multiplier_scale = 1
+            multiplier_damage = 1
+            multiplier_speed = 0.5
+
+            bullet = super().shoot(self.objetive.position[0], self.objetive.position[1], type, timer_mouse, multiplier_scale, multiplier_damage, multiplier_speed)
+
+            return bullet
